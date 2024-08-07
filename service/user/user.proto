@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "./user";
+
+service User {
+  // 用户注册
+  rpc UserRegister() returns();
+  // 用户登录
+  rpc UserLogin() returns();
+  // 修改用户邮箱
+  rpc UpdateUserEmail() returns();
+  // 获取用户权限
+  rpc GetUserPermission() returns ();
+  // 修改用户权限
+  rpc UpdateUserPermission() returns ();
+  // 获取用户所有信息
+  rpc GetUserInfo() returns();
+  // 修改用户所有信息
+  rpc UpdateUserInfo() returns();
+  // 获取所有关注的用户
+  rpc GetFollowingUsers() returns();
+  // 获取所有关注者用户
+  rpc GetFollowerUsers() returns();
+  // 关注其他用户
+  rpc FollowUser() returns();
+}
