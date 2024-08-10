@@ -130,7 +130,8 @@ message City {
 }
 message PersonalWebsite {
   uint64 id = 1;
-  string url = 2;
+  string name = 2;
+  string url = 3;
 }
 message Skill {
   uint64 id = 1;
@@ -143,7 +144,7 @@ message GetUserInfoResp {
   google.protobuf.Timestamp birthday = 4;
   string personalIntroduction = 5;
   City city = 6;
-  repeated PersonalWebsite personalWebsites = 7;
+  repeated PersonalWebsite websites = 7;
   repeated Skill skills = 8;
 }
 message UpdateUserProfileReq {
@@ -157,6 +158,7 @@ message UpdateUserProfileReq {
 message UpdateUserProfileResp {}
 message AddUserPersonalWebsiteReq {
   string name = 1;
+  string url = 2;
 }
 message AddUserPersonalWebsiteResp {}
 message DeleteUserPersonalWebsiteReq {

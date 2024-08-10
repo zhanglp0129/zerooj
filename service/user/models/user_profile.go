@@ -30,6 +30,7 @@ const (
 type PersonalWebsite struct {
 	models.Model
 	UserID uint64 `gorm:"index;not null"`
+	Name   string `gorm:"size:20;commit:网站名称"`
 	URL    string `gorm:"size:128;not null;comment:个人网站URL"`
 }
 
