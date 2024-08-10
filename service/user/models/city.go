@@ -1,8 +1,10 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"zerooj/common/models"
+)
 
 type City struct {
-	gorm.Model
+	models.Model
 	Name string `gorm:"size:10;not null;unique;comment:城市名称"`
 }

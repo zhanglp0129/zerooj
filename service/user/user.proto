@@ -4,25 +4,260 @@ package user;
 
 option go_package = "./user";
 
-service User {
+import "google/protobuf/timestamp.proto";
+
+// 注册登录
+service RegisterLogin {
   // 用户注册
-  rpc UserRegister() returns();
+  rpc UserRegister(UserRegisterReq) returns (UserRegisterResp);
   // 用户登录
-  rpc UserLogin() returns();
-  // 修改用户邮箱
-  rpc UpdateUserEmail() returns();
-  // 获取用户权限
-  rpc GetUserPermission() returns ();
-  // 修改用户权限
-  rpc UpdateUserPermission() returns ();
-  // 获取用户所有信息
-  rpc GetUserInfo() returns();
-  // 修改用户所有信息
-  rpc UpdateUserInfo() returns();
-  // 获取所有关注的用户
-  rpc GetFollowingUsers() returns();
-  // 获取所有关注者用户
-  rpc GetFollowerUsers() returns();
+  rpc UserLogin(UserLoginReq) returns (UserLoginResp);
+}
+message UserRegisterReq {
+  string username = 1;
+  string password = 2;
+  string email = 3;
+  // 邮箱验证码
+  string emailCheckCode = 4;
+}
+message UserRegisterResp {
+  uint64 id = 1;
+}
+message UserLoginReq {
+  // 登陆时，用户名和邮箱只需要提供一个即可，另一个为空字符串
+  string username = 1;
+  string email = 2;
+  string password = 3;
+}
+message UserLoginResp {
+  uint64 id = 1;
+  uint32 permission = 2;
+  string token = 3;
+}
+
+// 用户基本信息
+service BaseInfo {
+  // 获取用户基本信息，不包括密码
+  rpc GetBaseInfo(GetBaseInfoReq) returns (GetBaseInfoResp);
+  // 修改用户名，需重新登录，有30天冷却期
+  rpc UpdateUsername(UpdateUsernameReq) returns (UpdateUsernameResp);
+  // 修改密码，需重新登录
+  rpc UpdatePassword(UpdatePasswordReq) returns (UpdatePasswordResp);
+  // 忘记密码，需重新登录
+  rpc ForgetPassword(ForgetPasswordReq) returns (ForgetPasswordResp);
+  // 修改用户邮箱，需重新登录，有30天冷却期
+  rpc UpdateEmail(UpdateEmailReq) returns (UpdateEmailResp);
+  // 获取用户权限。鉴权时优先使用该接口
+  rpc GetPermission(GetPermissionReq) returns (GetPermissionResp);
+  // 修改用户权限，需要管理员权限
+  rpc UpdatePermission(UpdatePermissionReq) returns (UpdatePermissionResp);
+}
+message GetBaseInfoReq {
+  uint64 id = 1;
+}
+message GetBaseInfoResp {
+  string username = 1;
+  string email = 2;
+  string permission = 3;
+}
+message UpdateUsernameReq {
+  uint64 id = 1;
+  // 修改后的用户名
+  string username = 2;
+}
+message UpdateUsernameResp {}
+message UpdatePasswordReq {
+  uint64 id = 1;
+  string oldPassword = 2;
+  string newPassword = 3;
+}
+message UpdatePasswordResp {}
+message ForgetPasswordReq {
+  uint64 id = 1;
+  string newPassword = 2;
+  // 邮箱验证码
+  string emailCheckCode = 3;
+}
+message ForgetPasswordResp {}
+message UpdateEmailReq {
+  uint64 id = 1;
+  // 旧邮箱验证码
+  string oldEmailCheckCode = 2;
+  // 旧密码。与 旧邮箱验证码 只需一个即可
+  string oldPassword = 3;
+  // 修改后的邮箱
+  string email = 4;
+  // 修改后邮箱的验证码
+  string emailCheckCode = 5;
+}
+message UpdateEmailResp {}
+message GetPermissionReq {
+  uint64 id = 1;
+}
+message GetPermissionResp {
+  uint32 permission = 1;
+}
+message UpdatePermissionReq {
+  // 被修改者id
+  uint64 id = 1;
+  // 操作者id，必须为管理员用户。一般为当前登录的用户
+  uint64 operatorId = 2;
+  uint32 permission = 3;
+}
+message UpdatePermissionResp {}
+
+// 用户简介
+service Profile {
+  // 获取用户简介
+  rpc GetUserProfile(GetUserInfoReq) returns (GetUserInfoResp);
+  // 修改用户简介，不包括个人网站和用户技能
+  rpc UpdateUserProfile(UpdateUserProfileReq) returns (UpdateUserProfileResp);
+  // 添加个人网站，最多5个
+  rpc AddUserPersonalWebsite(AddUserPersonalWebsiteReq) returns (AddUserPersonalWebsiteResp);
+  // 删除个人网站
+  rpc DeleteUserPersonalWebsite(DeleteUserPersonalWebsiteReq) returns (DeleteUserPersonalWebsiteResp);
+  // 添加用户技能，最多10个
+  rpc AddUserSkill(AddUserSkillReq) returns (AddUserSkillResp);
+  // 删除用户技能
+  rpc DeleteUserSkill(DeleteUserSkillReq) returns (DeleteUserSkillResp);
+}
+message GetUserInfoReq {
+  uint64 id = 1;
+}
+message City {
+  uint64 id = 1;
+  string name = 2;
+}
+message PersonalWebsite {
+  uint64 id = 1;
+  string url = 2;
+}
+message Skill {
+  uint64 id = 1;
+  string name = 2;
+}
+message GetUserInfoResp {
+  string nickname = 1;
+  string avatar = 2;
+  uint32 gender = 3;
+  google.protobuf.Timestamp birthday = 4;
+  string personalIntroduction = 5;
+  City city = 6;
+  repeated PersonalWebsite personalWebsites = 7;
+  repeated Skill skills = 8;
+}
+message UpdateUserProfileReq {
+  string nickname = 1;
+  string avatar = 2;
+  uint32 gender = 3;
+  google.protobuf.Timestamp birthday = 4;
+  string personalIntroduction = 5;
+  City city = 6;
+}
+message UpdateUserProfileResp {}
+message AddUserPersonalWebsiteReq {
+  string name = 1;
+}
+message AddUserPersonalWebsiteResp {}
+message DeleteUserPersonalWebsiteReq {
+  uint64 id = 1;
+}
+message DeleteUserPersonalWebsiteResp {}
+message AddUserSkillReq {
+  // 技能id
+  uint64 id = 1;
+}
+message AddUserSkillResp {}
+message DeleteUserSkillReq {
+  uint64 id = 1;
+}
+message DeleteUserSkillResp {}
+
+// 关注
+service Follow {
+  // 获取所有关注，分页查询
+  rpc GetFollowings(GetFollowingsReq) returns (GetFollowingsResp);
+  // 获取所有粉丝，分页查询
+  rpc GetFans(GetFansReq) returns (GetFansResp);
   // 关注其他用户
-  rpc FollowUser() returns();
+  rpc FollowUser(FollowUserReq) returns (FollowUserResp);
+}
+message GetFollowingsReq {
+  uint64 id = 1;
+  int32 pageNum = 2;
+  int32 pageSize = 3;
+}
+message GetFollowingsResp {
+  // 所有关注的id
+  repeated uint64 followings = 1;
+  // 记录总数
+  int64 count = 2;
+}
+message GetFansReq {
+  uint64 id = 1;
+  int32 pageNum = 2;
+  int32 pageSize = 3;
+}
+message GetFansResp {
+  // 所有粉丝id
+  repeated uint64 fans = 1;
+  // 记录总数
+  int64 count = 2;
+}
+message FollowUserReq {
+  // 关注者id，一般为当前登录用户
+  uint64 followerId = 1;
+  // 被关注者id
+  uint64 followedId = 2;
+}
+message FollowUserResp {}
+
+// 其他
+service Other {
+  // 添加和删除城市，只有客服能操作
+  rpc AddCity(AddCityReq) returns (AddCityResp);
+  rpc DeleteCity(DeleteCityReq) returns (DeleteCityResp);
+  // 强行删除城市，必须要管理员权限
+  rpc MustDeleteCity(MustDeleteCityReq) returns (MustDeleteCityResp);
+  // 添加和删除技能，只有客服能操作
+  rpc AddSkill(AddSkillReq) returns (AddSkillResp);
+  rpc DeleteSkill(DeleteSkillReq) returns (DeleteSkillResp);
+  // 强行删除技能，必须要管理员权限
+  rpc MustDeleteSkill(MustDeleteSkillReq) returns (MustDeleteSkillResp);
+}
+message AddCityReq {
+  uint64 operatorId = 1;
+  string cityName = 2;
+}
+message AddCityResp {}
+message DeleteCityReq {
+  uint64 operatorId = 1;
+  uint64 cityId = 2;
+}
+message DeleteCityResp {}
+message AddSkillReq {
+  uint64 operatorId = 1;
+  string skillName = 2;
+}
+message AddSkillResp {}
+message DeleteSkillReq {
+  uint64 operatorId = 1;
+  uint64 skillId = 2;
+}
+message DeleteSkillResp {}
+message MustDeleteCityReq {
+  uint64 operatorId = 1;
+  uint64 cityId = 2;
+}
+message MustDeleteCityResp {
+  // 该城市的用户数量
+  int64 UserCityCount = 1;
+}
+message MustDeleteSkillReq {
+  uint64 operatorId = 1;
+  uint64 skillId = 2;
+}
+message MustDeleteSkillResp {
+  // 拥有该技能的用户数量
+  int64 UserSkillCount = 1;
 }

@@ -1,7 +1,7 @@
 package common
 
 // Permission 用户权限
-type Permission uint8
+type Permission uint32
 
 const (
 	AdminPermission   Permission = 0

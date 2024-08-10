@@ -1,33 +1,40 @@
 package models
 
 import (
-	"gorm.io/gorm"
 	"time"
+	"zerooj/common/models"
 )
 
 // UserProfile 用户附加信息
 type UserProfile struct {
-	gorm.Model
-	UserID               uint      `gorm:"index;not null;unique"`
+	models.Model
+	UserID               uint64    `gorm:"index;not null;unique"`
 	Nickname             string    `gorm:"size:30;comment:昵称"`
 	AvatarURL            string    `gorm:"size:128;comment:头像URL"`
-	Gender               uint8     `gorm:"comment:性别，0不愿意透露，1男，2女"`
+	Gender               Gender    `gorm:"comment:性别，0不愿意透露，1男，2女"`
 	Birthday             time.Time `gorm:"comment:出生日期"`
 	PersonalIntroduction string    `gorm:"size:200;comment:个人介绍"`
-	CityID               uint
+	CityID               uint64
 	City                 City
 }
 
-// UserPersonalWebsite 用户个人网站
-type UserPersonalWebsite struct {
-	gorm.Model
-	UserID uint   `gorm:"index"`
-	URL    string `gorm:"size:128;comment:个人网站URL"`
+type Gender uint32
+
+const (
+	NotKnowGender Gender = iota
+	Male
+	Female
+)
+
+// PersonalWebsite 用户个人网站
+type PersonalWebsite struct {
+	models.Model
+	UserID uint64 `gorm:"index;not null"`
+	URL    string `gorm:"size:128;not null;comment:个人网站URL"`
 }
 
-// UserSkill 用户技能
-type UserSkill struct {
-	gorm.Model
-	UserID uint `gorm:"index"`
-	Skill  string
+// Skill 技能
+type Skill struct {
+	models.Model
+	Name string `gorm:"size:20;unique;not null"`
 }
