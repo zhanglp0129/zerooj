@@ -1,8 +1,8 @@
 package svc
 
 import (
-	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"zerooj/common"
 	"zerooj/service/user/internal/config"
 )
 
@@ -12,7 +12,7 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	db, err := gorm.Open(mysql.Open(c.Mysql.DataSource))
+	db, err := common.InitGorm(c.Gorm)
 	if err != nil {
 		panic(err)
 	}
