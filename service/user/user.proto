@@ -138,7 +138,7 @@ message Skill {
 }
 message GetUserInfoResp {
   string nickname = 1;
-  string avatar = 2;
+  string avatarURL = 2;
   uint32 gender = 3;
   google.protobuf.Timestamp birthday = 4;
   string personalIntroduction = 5;
@@ -148,7 +148,7 @@ message GetUserInfoResp {
 }
 message UpdateUserProfileReq {
   string nickname = 1;
-  string avatar = 2;
+  string avatarURL = 2;
   uint32 gender = 3;
   google.protobuf.Timestamp birthday = 4;
   string personalIntroduction = 5;
@@ -182,14 +182,24 @@ service Follow {
   // 关注其他用户
   rpc FollowUser(FollowUserReq) returns (FollowUserResp);
 }
+message FollowUserInfo {
+  uint64 id = 1;
+  string username = 2;
+  string nickname = 3;
+  string personalIntroduction = 4;
+  string avatarURL = 5;
+  repeated PersonalWebsite websites = 6;
+  repeated Skill skills = 7;
+  google.protobuf.Timestamp followAt = 8;
+}
 message GetFollowingsReq {
   uint64 id = 1;
   int32 pageNum = 2;
   int32 pageSize = 3;
 }
 message GetFollowingsResp {
-  // 所有关注的id
-  repeated uint64 followings = 1;
+  // 所有关注
+  repeated FollowUserInfo followings = 1;
   // 记录总数
   int64 count = 2;
 }
@@ -199,8 +209,8 @@ message GetFansReq {
   int32 pageSize = 3;
 }
 message GetFansResp {
-  // 所有粉丝id
-  repeated uint64 fans = 1;
+  // 所有粉丝
+  repeated FollowUserInfo fans = 1;
   // 记录总数
   int64 count = 2;
 }
