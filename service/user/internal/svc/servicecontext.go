@@ -4,6 +4,7 @@ import (
 	"gorm.io/gorm"
 	"zerooj/common"
 	"zerooj/service/user/internal/config"
+	"zerooj/service/user/models"
 )
 
 type ServiceContext struct {
@@ -13,6 +14,20 @@ type ServiceContext struct {
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	db, err := common.InitGorm(c.Gorm)
+	if err != nil {
+		panic(err)
+	}
+	// 建表
+	db.SetupJoinTable(&models.User{}, "Followings", &models.Follow{})
+	db.SetupJoinTable(&models.User{}, "Fans", &models.Follow{})
+	err = db.AutoMigrate(
+		&models.City{},
+		&models.User{},
+		&models.UserProfile{},
+		&models.PersonalWebsite{},
+		&models.Skill{},
+		&models.Follow{},
+	)
 	if err != nil {
 		panic(err)
 	}

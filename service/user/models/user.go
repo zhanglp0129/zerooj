@@ -15,6 +15,6 @@ type User struct {
 	Profile    UserProfile
 	Websites   []PersonalWebsite
 	Skills     []Skill  `gorm:"many2many:user_skills"`
-	Followings []Follow `gorm:"many2many:follows;foreignKey:FollowerID"` // 关注
-	Fans       []Follow `gorm:"many2many:follows;foreignKey:FollowedID"` // 粉丝
+	Followings []Follow `gorm:"many2many:follows;joinForeignKey:FollowerID;joinReferences:FollowedID"` // 关注
+	Fans       []Follow `gorm:"many2many:follows;joinForeignKey:FollowedID;joinReferences:FollowerID"` // 粉丝
 }
