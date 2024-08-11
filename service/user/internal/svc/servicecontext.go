@@ -18,8 +18,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		panic(err)
 	}
 	// 建表
-	db.SetupJoinTable(&models.User{}, "Followings", &models.Follow{})
-	db.SetupJoinTable(&models.User{}, "Fans", &models.Follow{})
 	err = db.AutoMigrate(
 		&models.City{},
 		&models.User{},
