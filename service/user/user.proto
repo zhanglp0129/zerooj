@@ -32,7 +32,6 @@ message UserLoginReq {
 message UserLoginResp {
   uint64 id = 1;
   uint32 permission = 2;
-  string token = 3;
 }
 
 // 用户基本信息
