@@ -1,8 +1,11 @@
 package svc
 
 import (
+	"errors"
+	"github.com/zeromicro/go-zero/core/stores/redis"
 	"gorm.io/gorm"
 	"zerooj/common"
+	"zerooj/common/constant"
 	"zerooj/service/user/internal/config"
 	"zerooj/service/user/models"
 )
@@ -10,6 +13,7 @@ import (
 type ServiceContext struct {
 	Config config.Config
 	DB     *gorm.DB
+	RDB    *redis.Redis
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -30,8 +34,14 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		panic(err)
 	}
 
+	rdb := redis.MustNewRedis(c.RedisClient)
+	if !rdb.Ping() {
+		panic(errors.New(constant.RedisPingError))
+	}
+
 	return &ServiceContext{
 		Config: c,
 		DB:     db,
+		RDB:    rdb,
 	}
 }
