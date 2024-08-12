@@ -2,6 +2,11 @@ package registerloginlogic
 
 import (
 	"context"
+	"fmt"
+	"zerooj/common"
+	"zerooj/common/constant"
+	"zerooj/service/user/models"
+	"zerooj/utils"
 
 	"zerooj/service/user/internal/svc"
 	"zerooj/service/user/pb/user"
@@ -25,7 +30,29 @@ func NewUserRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *User
 
 // 用户注册
 func (l *UserRegisterLogic) UserRegister(in *user.UserRegisterReq) (*user.UserRegisterResp, error) {
-	// todo: add your logic here and delete this line
+	// 先校验邮箱验证码
+	rdb := l.svcCtx.RDB
+	rdbKey := fmt.Sprintf("/mail_check_code/user/user_register/%s", in.Email)
+	trueCheckCode, err := rdb.Get(rdbKey)
+	if err != nil || in.EmailCheckCode != trueCheckCode {
+		return nil, constant.MailCheckCodeError{}
+	}
 
-	return &user.UserRegisterResp{}, nil
+	pwd, err := utils.PasswordEncrypt(in.Password)
+	if err != nil {
+		return nil, err
+	}
+	// 插入数据
+	db := l.svcCtx.DB
+	u := &models.User{
+		Username:   in.Username,
+		Password:   pwd,
+		Email:      in.Email,
+		Permission: common.DefaultPermission,
+	}
+	if err = db.Create(u).Error; err != nil {
+		return nil, err
+	}
+
+	return &user.UserRegisterResp{Id: u.ID}, nil
 }
