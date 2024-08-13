@@ -1,0 +1,26 @@
+Name: mail.rpc
+ListenOn: 0.0.0.0:8080
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: mail.rpc
+# Redis配置
+RedisClient:
+  # 如果是集群，则每个节点用逗号隔开，例如：host1,host2,host3
+  Host: 127.0.0.1:6379
+  # 如果是集群，改为 cluster
+  Type: node
+# SMTP相关配置
+SMTP:
+  # SMTP服务器地址
+  Host:
+  # 端口
+  Port:
+  # 是否使用SSL
+  SSL: false
+  # 发件人邮箱
+  Sender:
+  # SMTP用户名
+  Username:
+  # SMTP密码
+  Password:

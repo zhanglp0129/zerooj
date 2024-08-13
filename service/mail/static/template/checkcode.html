@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Subject}}</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffffff;
+            color: #000;
+            line-height: 1.8;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #f7f7f7;
+            padding: 30px;
+            border-radius: 5px;
+            border: 1px solid #dddddd;
+        }
+        .code {
+            font-size: 26px;
+            font-weight: bold;
+            color: #ff5722;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555555;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <p>尊敬的用户，</p>
+    <p>您好，您正在进行<b>{{.UserOperation}}</b>操作，我们收到了您的验证码请求。</p>
+    <p>您的验证码为：<span class="code">{{.CheckCode}}</span>。</p>
+    <p>请注意，此验证码将于5分钟后失效。如非本人操作，请忽略此邮件。</p>
+    <p>感谢您的支持与信任！</p>
+    <div class="footer">
+        <p>致敬，<br>ZeroOJ</p>
+    </div>
+</div>
+</body>
+</html>
