@@ -2,6 +2,7 @@ package baseinfologic
 
 import (
 	"context"
+	"zerooj/service/user/models"
 
 	"zerooj/service/user/internal/svc"
 	"zerooj/service/user/pb/user"
@@ -25,7 +26,16 @@ func NewGetBaseInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetBa
 
 // 获取用户基本信息，不包括密码
 func (l *GetBaseInfoLogic) GetBaseInfo(in *user.GetBaseInfoReq) (*user.GetBaseInfoResp, error) {
-	// todo: add your logic here and delete this line
+	db := l.svcCtx.DB
+	u := models.User{}
+	err := db.Take(&u, in.Id).Error
+	if err != nil {
+		return nil, err
+	}
 
-	return &user.GetBaseInfoResp{}, nil
+	return &user.GetBaseInfoResp{
+		Username:   u.Username,
+		Email:      u.Email,
+		Permission: uint32(u.Permission),
+	}, nil
 }
