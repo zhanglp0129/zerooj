@@ -17,7 +17,7 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	db, err := common.InitGorm(c.Gorm)
+	db, err := common.InitGorm(c.Database[0])
 	if err != nil {
 		panic(err)
 	}

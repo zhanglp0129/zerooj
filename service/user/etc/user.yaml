@@ -10,12 +10,11 @@ RedisClient:
   Host: 127.0.0.1:6379
   # 如果是集群，改为 cluster
   Type: node
-Gorm:
-  Mysql:
-    # 数据源
+Database:
+  -
+    # 数据库驱动，目前仅支持mysql。
+    Driver: "mysql"
+    # 数据源。目前尚不支持分布式数据库，只能指定一个数据源
     DataSource: root:1234@tcp(127.0.0.1:3306)/zerooj_user?charset=utf8&parseTime=True&loc=Local
-  Log:
-    # silent(禁用日志)、error、warn、info
-    Level: info
-    # 日志输出文件，为空表示控制台
-    File:
+    # 机器码。目前无意义
+    MachineId: 0

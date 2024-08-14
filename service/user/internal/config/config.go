@@ -8,6 +8,6 @@ import (
 
 type Config struct {
 	zrpc.RpcServerConf
-	Gorm        common.GormConfig
+	Database    []common.DatabaseConfig
 	RedisClient redis.RedisConf
 }
