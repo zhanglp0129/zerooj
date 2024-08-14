@@ -21,7 +21,7 @@ message UserRegisterReq {
   string emailCheckCode = 4;
 }
 message UserRegisterResp {
-  uint64 id = 1;
+  int64 id = 1;
 }
 message UserLoginReq {
   // 登陆时，用户名和邮箱只需要提供一个即可，另一个为空字符串
@@ -30,7 +30,7 @@ message UserLoginReq {
   string password = 3;
 }
 message UserLoginResp {
-  uint64 id = 1;
+  int64 id = 1;
   uint32 permission = 2;
 }
 
@@ -52,7 +52,7 @@ service BaseInfo {
   rpc UpdatePermission(UpdatePermissionReq) returns (UpdatePermissionResp);
 }
 message GetBaseInfoReq {
-  uint64 id = 1;
+  int64 id = 1;
 }
 message GetBaseInfoResp {
   string username = 1;
@@ -60,26 +60,26 @@ message GetBaseInfoResp {
   uint32 permission = 3;
 }
 message UpdateUsernameReq {
-  uint64 id = 1;
+  int64 id = 1;
   // 修改后的用户名
   string username = 2;
 }
 message UpdateUsernameResp {}
 message UpdatePasswordReq {
-  uint64 id = 1;
+  int64 id = 1;
   string oldPassword = 2;
   string newPassword = 3;
 }
 message UpdatePasswordResp {}
 message ForgetPasswordReq {
-  uint64 id = 1;
+  int64 id = 1;
   string newPassword = 2;
   // 邮箱验证码
   string emailCheckCode = 3;
 }
 message ForgetPasswordResp {}
 message UpdateEmailReq {
-  uint64 id = 1;
+  int64 id = 1;
   // 旧邮箱验证码
   string oldEmailCheckCode = 2;
   // 旧密码。与 旧邮箱验证码 只需一个即可
@@ -91,16 +91,16 @@ message UpdateEmailReq {
 }
 message UpdateEmailResp {}
 message GetPermissionReq {
-  uint64 id = 1;
+  int64 id = 1;
 }
 message GetPermissionResp {
   uint32 permission = 1;
 }
 message UpdatePermissionReq {
   // 被修改者id
-  uint64 id = 1;
+  int64 id = 1;
   // 操作者id，必须为管理员用户。一般为当前登录的用户
-  uint64 operatorId = 2;
+  int64 operatorId = 2;
   uint32 permission = 3;
 }
 message UpdatePermissionResp {}
@@ -121,19 +121,19 @@ service Profile {
   rpc DeleteUserSkill(DeleteUserSkillReq) returns (DeleteUserSkillResp);
 }
 message GetUserInfoReq {
-  uint64 id = 1;
+  int64 id = 1;
 }
 message City {
-  uint64 id = 1;
+  int64 id = 1;
   string name = 2;
 }
 message PersonalWebsite {
-  uint64 id = 1;
+  int64 id = 1;
   string name = 2;
   string url = 3;
 }
 message Skill {
-  uint64 id = 1;
+  int64 id = 1;
   string name = 2;
 }
 message GetUserInfoResp {
@@ -161,16 +161,16 @@ message AddUserPersonalWebsiteReq {
 }
 message AddUserPersonalWebsiteResp {}
 message DeleteUserPersonalWebsiteReq {
-  uint64 id = 1;
+  int64 id = 1;
 }
 message DeleteUserPersonalWebsiteResp {}
 message AddUserSkillReq {
   // 技能id
-  uint64 id = 1;
+  int64 id = 1;
 }
 message AddUserSkillResp {}
 message DeleteUserSkillReq {
-  uint64 id = 1;
+  int64 id = 1;
 }
 message DeleteUserSkillResp {}
 
@@ -184,7 +184,7 @@ service Follow {
   rpc FollowUser(FollowUserReq) returns (FollowUserResp);
 }
 message FollowUserInfo {
-  uint64 id = 1;
+  int64 id = 1;
   string username = 2;
   string nickname = 3;
   string personalIntroduction = 4;
@@ -194,7 +194,7 @@ message FollowUserInfo {
   google.protobuf.Timestamp followAt = 8;
 }
 message GetFollowingsReq {
-  uint64 id = 1;
+  int64 id = 1;
   int32 pageNum = 2;
   int32 pageSize = 3;
 }
@@ -205,7 +205,7 @@ message GetFollowingsResp {
   int64 count = 2;
 }
 message GetFansReq {
-  uint64 id = 1;
+  int64 id = 1;
   int32 pageNum = 2;
   int32 pageSize = 3;
 }
@@ -217,9 +217,9 @@ message GetFansResp {
 }
 message FollowUserReq {
   // 关注者id，一般为当前登录用户
-  uint64 followerId = 1;
+  int64 followerId = 1;
   // 被关注者id
-  uint64 followedId = 2;
+  int64 followedId = 2;
 }
 message FollowUserResp {}
 
@@ -237,36 +237,36 @@ service Other {
   rpc MustDeleteSkill(MustDeleteSkillReq) returns (MustDeleteSkillResp);
 }
 message AddCityReq {
-  uint64 operatorId = 1;
+  int64 operatorId = 1;
   string cityName = 2;
 }
 message AddCityResp {}
 message DeleteCityReq {
-  uint64 operatorId = 1;
-  uint64 cityId = 2;
+  int64 operatorId = 1;
+  int64 cityId = 2;
 }
 message DeleteCityResp {}
 message AddSkillReq {
-  uint64 operatorId = 1;
+  int64 operatorId = 1;
   string skillName = 2;
 }
 message AddSkillResp {}
 message DeleteSkillReq {
-  uint64 operatorId = 1;
-  uint64 skillId = 2;
+  int64 operatorId = 1;
+  int64 skillId = 2;
 }
 message DeleteSkillResp {}
 message MustDeleteCityReq {
-  uint64 operatorId = 1;
-  uint64 cityId = 2;
+  int64 operatorId = 1;
+  int64 cityId = 2;
 }
 message MustDeleteCityResp {
   // 该城市的用户数量
   int64 UserCityCount = 1;
 }
 message MustDeleteSkillReq {
-  uint64 operatorId = 1;
-  uint64 skillId = 2;
+  int64 operatorId = 1;
+  int64 skillId = 2;
 }
 message MustDeleteSkillResp {
   // 拥有该技能的用户数量
