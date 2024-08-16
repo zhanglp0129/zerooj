@@ -2,7 +2,10 @@ package constant
 
 const (
 	RedisPingError           = "ping redis error"
+	NotSupportDatabaseType   = "not support the database type"
 	NotSupportDatabaseDriver = "not support the database driver"
+	NumberOfDataSourceError  = "number of data source error"
+	DatabaseMachineIdError   = "database machine id error"
 )
 
 // MailCheckCodeError 邮件验证码错误
