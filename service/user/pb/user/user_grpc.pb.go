@@ -157,11 +157,11 @@ var RegisterLogin_ServiceDesc = grpc.ServiceDesc{
 
 const (
 	BaseInfo_GetBaseInfo_FullMethodName      = "/user.BaseInfo/GetBaseInfo"
+	BaseInfo_SearchByUsername_FullMethodName = "/user.BaseInfo/SearchByUsername"
 	BaseInfo_UpdateUsername_FullMethodName   = "/user.BaseInfo/UpdateUsername"
 	BaseInfo_UpdatePassword_FullMethodName   = "/user.BaseInfo/UpdatePassword"
 	BaseInfo_ForgetPassword_FullMethodName   = "/user.BaseInfo/ForgetPassword"
 	BaseInfo_UpdateEmail_FullMethodName      = "/user.BaseInfo/UpdateEmail"
-	BaseInfo_GetPermission_FullMethodName    = "/user.BaseInfo/GetPermission"
 	BaseInfo_UpdatePermission_FullMethodName = "/user.BaseInfo/UpdatePermission"
 )
 
@@ -171,18 +171,18 @@ const (
 //
 // 用户基本信息
 type BaseInfoClient interface {
-	// 获取用户基本信息，不包括密码
+	// 获取用户基本信息，不包括密码，并缓存
 	GetBaseInfo(ctx context.Context, in *GetBaseInfoReq, opts ...grpc.CallOption) (*GetBaseInfoResp, error)
-	// 修改用户名，需重新登录，有30天冷却期
+	// 根据用户名搜索用户，并缓存
+	SearchByUsername(ctx context.Context, in *SearchByUsernameReq, opts ...grpc.CallOption) (*SearchByUsernameResp, error)
+	// 修改用户名，有30天冷却期
 	UpdateUsername(ctx context.Context, in *UpdateUsernameReq, opts ...grpc.CallOption) (*UpdateUsernameResp, error)
-	// 修改密码，需重新登录
+	// 修改密码
 	UpdatePassword(ctx context.Context, in *UpdatePasswordReq, opts ...grpc.CallOption) (*UpdatePasswordResp, error)
-	// 忘记密码，需重新登录
+	// 忘记密码
 	ForgetPassword(ctx context.Context, in *ForgetPasswordReq, opts ...grpc.CallOption) (*ForgetPasswordResp, error)
-	// 修改用户邮箱，需重新登录，有30天冷却期
+	// 修改用户邮箱，有30天冷却期
 	UpdateEmail(ctx context.Context, in *UpdateEmailReq, opts ...grpc.CallOption) (*UpdateEmailResp, error)
-	// 获取用户权限。鉴权时优先使用该接口
-	GetPermission(ctx context.Context, in *GetPermissionReq, opts ...grpc.CallOption) (*GetPermissionResp, error)
 	// 修改用户权限，需要管理员权限
 	UpdatePermission(ctx context.Context, in *UpdatePermissionReq, opts ...grpc.CallOption) (*UpdatePermissionResp, error)
 }
@@ -199,6 +199,16 @@ func (c *baseInfoClient) GetBaseInfo(ctx context.Context, in *GetBaseInfoReq, op
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetBaseInfoResp)
 	err := c.cc.Invoke(ctx, BaseInfo_GetBaseInfo_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseInfoClient) SearchByUsername(ctx context.Context, in *SearchByUsernameReq, opts ...grpc.CallOption) (*SearchByUsernameResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SearchByUsernameResp)
+	err := c.cc.Invoke(ctx, BaseInfo_SearchByUsername_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -245,16 +255,6 @@ func (c *baseInfoClient) UpdateEmail(ctx context.Context, in *UpdateEmailReq, op
 	return out, nil
 }
 
-func (c *baseInfoClient) GetPermission(ctx context.Context, in *GetPermissionReq, opts ...grpc.CallOption) (*GetPermissionResp, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetPermissionResp)
-	err := c.cc.Invoke(ctx, BaseInfo_GetPermission_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *baseInfoClient) UpdatePermission(ctx context.Context, in *UpdatePermissionReq, opts ...grpc.CallOption) (*UpdatePermissionResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UpdatePermissionResp)
@@ -271,18 +271,18 @@ func (c *baseInfoClient) UpdatePermission(ctx context.Context, in *UpdatePermiss
 //
 // 用户基本信息
 type BaseInfoServer interface {
-	// 获取用户基本信息，不包括密码
+	// 获取用户基本信息，不包括密码，并缓存
 	GetBaseInfo(context.Context, *GetBaseInfoReq) (*GetBaseInfoResp, error)
-	// 修改用户名，需重新登录，有30天冷却期
+	// 根据用户名搜索用户，并缓存
+	SearchByUsername(context.Context, *SearchByUsernameReq) (*SearchByUsernameResp, error)
+	// 修改用户名，有30天冷却期
 	UpdateUsername(context.Context, *UpdateUsernameReq) (*UpdateUsernameResp, error)
-	// 修改密码，需重新登录
+	// 修改密码
 	UpdatePassword(context.Context, *UpdatePasswordReq) (*UpdatePasswordResp, error)
-	// 忘记密码，需重新登录
+	// 忘记密码
 	ForgetPassword(context.Context, *ForgetPasswordReq) (*ForgetPasswordResp, error)
-	// 修改用户邮箱，需重新登录，有30天冷却期
+	// 修改用户邮箱，有30天冷却期
 	UpdateEmail(context.Context, *UpdateEmailReq) (*UpdateEmailResp, error)
-	// 获取用户权限。鉴权时优先使用该接口
-	GetPermission(context.Context, *GetPermissionReq) (*GetPermissionResp, error)
 	// 修改用户权限，需要管理员权限
 	UpdatePermission(context.Context, *UpdatePermissionReq) (*UpdatePermissionResp, error)
 	mustEmbedUnimplementedBaseInfoServer()
@@ -295,6 +295,9 @@ type UnimplementedBaseInfoServer struct {
 func (UnimplementedBaseInfoServer) GetBaseInfo(context.Context, *GetBaseInfoReq) (*GetBaseInfoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBaseInfo not implemented")
 }
+func (UnimplementedBaseInfoServer) SearchByUsername(context.Context, *SearchByUsernameReq) (*SearchByUsernameResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SearchByUsername not implemented")
+}
 func (UnimplementedBaseInfoServer) UpdateUsername(context.Context, *UpdateUsernameReq) (*UpdateUsernameResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUsername not implemented")
 }
@@ -306,9 +309,6 @@ func (UnimplementedBaseInfoServer) ForgetPassword(context.Context, *ForgetPasswo
 }
 func (UnimplementedBaseInfoServer) UpdateEmail(context.Context, *UpdateEmailReq) (*UpdateEmailResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateEmail not implemented")
-}
-func (UnimplementedBaseInfoServer) GetPermission(context.Context, *GetPermissionReq) (*GetPermissionResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPermission not implemented")
 }
 func (UnimplementedBaseInfoServer) UpdatePermission(context.Context, *UpdatePermissionReq) (*UpdatePermissionResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdatePermission not implemented")
@@ -340,6 +340,24 @@ func _BaseInfo_GetBaseInfo_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BaseInfoServer).GetBaseInfo(ctx, req.(*GetBaseInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BaseInfo_SearchByUsername_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchByUsernameReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseInfoServer).SearchByUsername(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BaseInfo_SearchByUsername_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseInfoServer).SearchByUsername(ctx, req.(*SearchByUsernameReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -416,24 +434,6 @@ func _BaseInfo_UpdateEmail_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _BaseInfo_GetPermission_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPermissionReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(BaseInfoServer).GetPermission(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: BaseInfo_GetPermission_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BaseInfoServer).GetPermission(ctx, req.(*GetPermissionReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _BaseInfo_UpdatePermission_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdatePermissionReq)
 	if err := dec(in); err != nil {
@@ -464,6 +464,10 @@ var BaseInfo_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _BaseInfo_GetBaseInfo_Handler,
 		},
 		{
+			MethodName: "SearchByUsername",
+			Handler:    _BaseInfo_SearchByUsername_Handler,
+		},
+		{
 			MethodName: "UpdateUsername",
 			Handler:    _BaseInfo_UpdateUsername_Handler,
 		},
@@ -478,10 +482,6 @@ var BaseInfo_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateEmail",
 			Handler:    _BaseInfo_UpdateEmail_Handler,
-		},
-		{
-			MethodName: "GetPermission",
-			Handler:    _BaseInfo_GetPermission_Handler,
 		},
 		{
 			MethodName: "UpdatePermission",

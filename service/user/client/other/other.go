@@ -41,8 +41,6 @@ type (
 	GetFansResp                   = user.GetFansResp
 	GetFollowingsReq              = user.GetFollowingsReq
 	GetFollowingsResp             = user.GetFollowingsResp
-	GetPermissionReq              = user.GetPermissionReq
-	GetPermissionResp             = user.GetPermissionResp
 	GetUserInfoReq                = user.GetUserInfoReq
 	GetUserInfoResp               = user.GetUserInfoResp
 	MustDeleteCityReq             = user.MustDeleteCityReq
@@ -50,6 +48,8 @@ type (
 	MustDeleteSkillReq            = user.MustDeleteSkillReq
 	MustDeleteSkillResp           = user.MustDeleteSkillResp
 	PersonalWebsite               = user.PersonalWebsite
+	SearchByUsernameReq           = user.SearchByUsernameReq
+	SearchByUsernameResp          = user.SearchByUsernameResp
 	Skill                         = user.Skill
 	UpdateEmailReq                = user.UpdateEmailReq
 	UpdateEmailResp               = user.UpdateEmailResp

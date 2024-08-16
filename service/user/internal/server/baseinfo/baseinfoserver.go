@@ -22,40 +22,40 @@ func NewBaseInfoServer(svcCtx *svc.ServiceContext) *BaseInfoServer {
 	}
 }
 
-// 获取用户基本信息，不包括密码
+// 获取用户基本信息，不包括密码，并缓存
 func (s *BaseInfoServer) GetBaseInfo(ctx context.Context, in *user.GetBaseInfoReq) (*user.GetBaseInfoResp, error) {
 	l := baseinfologic.NewGetBaseInfoLogic(ctx, s.svcCtx)
 	return l.GetBaseInfo(in)
 }
 
-// 修改用户名，需重新登录，有30天冷却期
+// 根据用户名搜索用户，并缓存
+func (s *BaseInfoServer) SearchByUsername(ctx context.Context, in *user.SearchByUsernameReq) (*user.SearchByUsernameResp, error) {
+	l := baseinfologic.NewSearchByUsernameLogic(ctx, s.svcCtx)
+	return l.SearchByUsername(in)
+}
+
+// 修改用户名，有30天冷却期
 func (s *BaseInfoServer) UpdateUsername(ctx context.Context, in *user.UpdateUsernameReq) (*user.UpdateUsernameResp, error) {
 	l := baseinfologic.NewUpdateUsernameLogic(ctx, s.svcCtx)
 	return l.UpdateUsername(in)
 }
 
-// 修改密码，需重新登录
+// 修改密码
 func (s *BaseInfoServer) UpdatePassword(ctx context.Context, in *user.UpdatePasswordReq) (*user.UpdatePasswordResp, error) {
 	l := baseinfologic.NewUpdatePasswordLogic(ctx, s.svcCtx)
 	return l.UpdatePassword(in)
 }
 
-// 忘记密码，需重新登录
+// 忘记密码
 func (s *BaseInfoServer) ForgetPassword(ctx context.Context, in *user.ForgetPasswordReq) (*user.ForgetPasswordResp, error) {
 	l := baseinfologic.NewForgetPasswordLogic(ctx, s.svcCtx)
 	return l.ForgetPassword(in)
 }
 
-// 修改用户邮箱，需重新登录，有30天冷却期
+// 修改用户邮箱，有30天冷却期
 func (s *BaseInfoServer) UpdateEmail(ctx context.Context, in *user.UpdateEmailReq) (*user.UpdateEmailResp, error) {
 	l := baseinfologic.NewUpdateEmailLogic(ctx, s.svcCtx)
 	return l.UpdateEmail(in)
-}
-
-// 获取用户权限。鉴权时优先使用该接口
-func (s *BaseInfoServer) GetPermission(ctx context.Context, in *user.GetPermissionReq) (*user.GetPermissionResp, error) {
-	l := baseinfologic.NewGetPermissionLogic(ctx, s.svcCtx)
-	return l.GetPermission(in)
 }
 
 // 修改用户权限，需要管理员权限

@@ -36,18 +36,18 @@ message UserLoginResp {
 
 // 用户基本信息
 service BaseInfo {
-  // 获取用户基本信息，不包括密码
+  // 获取用户基本信息，不包括密码，并缓存
   rpc GetBaseInfo(GetBaseInfoReq) returns (GetBaseInfoResp);
-  // 修改用户名，需重新登录，有30天冷却期
+  // 根据用户名搜索用户，并缓存
+  rpc SearchByUsername(SearchByUsernameReq) returns (SearchByUsernameResp);
+  // 修改用户名，有30天冷却期
   rpc UpdateUsername(UpdateUsernameReq) returns (UpdateUsernameResp);
-  // 修改密码，需重新登录
+  // 修改密码
   rpc UpdatePassword(UpdatePasswordReq) returns (UpdatePasswordResp);
-  // 忘记密码，需重新登录
+  // 忘记密码
   rpc ForgetPassword(ForgetPasswordReq) returns (ForgetPasswordResp);
-  // 修改用户邮箱，需重新登录，有30天冷却期
+  // 修改用户邮箱，有30天冷却期
   rpc UpdateEmail(UpdateEmailReq) returns (UpdateEmailResp);
-  // 获取用户权限。鉴权时优先使用该接口
-  rpc GetPermission(GetPermissionReq) returns (GetPermissionResp);
   // 修改用户权限，需要管理员权限
   rpc UpdatePermission(UpdatePermissionReq) returns (UpdatePermissionResp);
 }
@@ -58,6 +58,12 @@ message GetBaseInfoResp {
   string username = 1;
   string email = 2;
   uint32 permission = 3;
+}
+message SearchByUsernameReq {
+  string username = 1;
+}
+message SearchByUsernameResp {
+  int64 id = 1;
 }
 message UpdateUsernameReq {
   int64 id = 1;
@@ -90,12 +96,6 @@ message UpdateEmailReq {
   string emailCheckCode = 5;
 }
 message UpdateEmailResp {}
-message GetPermissionReq {
-  int64 id = 1;
-}
-message GetPermissionResp {
-  uint32 permission = 1;
-}
 message UpdatePermissionReq {
   // 被修改者id
   int64 id = 1;
