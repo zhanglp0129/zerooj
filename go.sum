@@ -155,6 +155,8 @@ github.com/zhanglp0129/redis_cache v1.0.1 h1:FoAKI1ml/GQIq8JbFiFPnHbrcPWsM75ids7
 github.com/zhanglp0129/redis_cache v1.0.1/go.mod h1:RdIKQQGaEkw4Q9RV01j6Y82zBVg41I7U4pSRqPa3rYo=
 github.com/zhanglp0129/snowflake v1.0.0 h1:CD11GYYLq5R+o9E2x92m6rwwukFBlKN7UCFX3KWEfNw=
 github.com/zhanglp0129/snowflake v1.0.0/go.mod h1:AbFxGqjgwBbYLEY09UIJP8q8o7OmWLSj5acJmqj0iik=
+github.com/zhanglp0129/snowflake v1.0.1 h1:tErid5jt62u0XQ+mwaKDS99CNNc5/fNSupXgjEUr4sc=
+github.com/zhanglp0129/snowflake v1.0.1/go.mod h1:AbFxGqjgwBbYLEY09UIJP8q8o7OmWLSj5acJmqj0iik=
 go.etcd.io/etcd/api/v3 v3.5.15 h1:3KpLJir1ZEBrYuV2v+Twaa/e2MdDCEZ/70H+lzEiwsk=
 go.etcd.io/etcd/api/v3 v3.5.15/go.mod h1:N9EhGzXq58WuMllgH9ZvnEr7SI9pS0k0+DHZezGp7jM=
 go.etcd.io/etcd/client/pkg/v3 v3.5.15 h1:fo0HpWz/KlHGMCC+YejpiCmyWDEuIpnTDzpJLB5fWlA=

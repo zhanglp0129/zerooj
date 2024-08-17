@@ -30,7 +30,7 @@ func (l *GetBaseInfoLogic) GetBaseInfo(in *user.GetBaseInfoReq) (*user.GetBaseIn
 	key := fmt.Sprintf("/cache/user/get_base_info/%d", in.Id)
 	rdb := l.svcCtx.RDB
 	model := user.GetBaseInfoResp{}
-	hit, err := redis_cache.QueryWithCache(rdb, key, &model, func() (*user.GetBaseInfoResp, error) {
+	_, err := redis_cache.QueryWithCache(rdb, key, &model, func() (*user.GetBaseInfoResp, error) {
 		db := l.svcCtx.DB
 		u := models.User{}
 		err := db.Take(&u, in.Id).Error
@@ -43,6 +43,6 @@ func (l *GetBaseInfoLogic) GetBaseInfo(in *user.GetBaseInfoReq) (*user.GetBaseIn
 			Permission: uint32(u.Permission),
 		}, nil
 	})
-	fmt.Println(hit)
+
 	return &model, err
 }
