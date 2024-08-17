@@ -2,8 +2,6 @@ package baseinfologic
 
 import (
 	"context"
-	"fmt"
-	"zerooj/common"
 	"zerooj/service/user/internal/svc"
 	"zerooj/service/user/models"
 	"zerooj/service/user/pb/user"
@@ -27,26 +25,16 @@ func NewGetBaseInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetBa
 
 // 获取用户基本信息，不包括密码，并缓存
 func (l *GetBaseInfoLogic) GetBaseInfo(in *user.GetBaseInfoReq) (*user.GetBaseInfoResp, error) {
-	m := user.GetBaseInfoResp{}
-	rdb := l.svcCtx.RDB
-	key := fmt.Sprintf("/cache/user/get_base_info/%d", in.Id)
-	// 带着缓存查询
-	err := common.WithCache(rdb, key, &m, func() (*user.GetBaseInfoResp, error) {
-		db := l.svcCtx.DB
-		u := models.User{}
-		err := db.Take(&u, in.Id).Error
-		if err != nil {
-			return nil, err
-		}
-		return &user.GetBaseInfoResp{
-			Username:   u.Username,
-			Email:      u.Email,
-			Permission: uint32(u.Permission),
-		}, nil
-	})
+	// key := fmt.Sprintf("/cache/user/get_base_info/%d", in.Id)
+	db := l.svcCtx.DB
+	u := models.User{}
+	err := db.Take(&u, in.Id).Error
 	if err != nil {
 		return nil, err
 	}
-
-	return &m, nil
+	return &user.GetBaseInfoResp{
+		Username:   u.Username,
+		Email:      u.Email,
+		Permission: uint32(u.Permission),
+	}, nil
 }

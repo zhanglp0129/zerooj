@@ -32,8 +32,8 @@ func NewUserRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *User
 func (l *UserRegisterLogic) UserRegister(in *user.UserRegisterReq) (*user.UserRegisterResp, error) {
 	// 先校验邮箱验证码
 	rdb := l.svcCtx.RDB
-	rdbKey := fmt.Sprintf("/mail_check_code/user/user_register/%s", in.Email)
-	trueCheckCode, err := rdb.Get(rdbKey)
+	key := fmt.Sprintf("/mail_check_code/user/user_register/%s", in.Email)
+	trueCheckCode, err := rdb.Get(context.Background(), key).Result()
 	if err != nil || in.EmailCheckCode != trueCheckCode {
 		return nil, constant.MailCheckCodeError{}
 	}

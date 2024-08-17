@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"math/rand"
 	"net/smtp"
+	"time"
 	"zerooj/service/mail/static"
 
 	"zerooj/service/mail/internal/svc"
@@ -62,7 +63,7 @@ func (l *SendMailCheckCodeLogic) SendMailCheckCode(in *user.SendMailCheckCodeReq
 	// 将验证码写入Redis，有效期5min
 	rdb := l.svcCtx.RDB
 	key := fmt.Sprintf("/mail_check_code/%s/%s/%s", in.ServiceName, in.InterfaceName, in.Email)
-	err = rdb.Setex(key, checkCode, 5*60)
+	err = rdb.SetEx(context.Background(), key, checkCode, 5*60*time.Second).Err()
 	if err != nil {
 		return nil, err
 	}
