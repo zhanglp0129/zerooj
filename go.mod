@@ -3,7 +3,9 @@ module zerooj
 go 1.22
 
 require (
+	github.com/redis/go-redis/v9 v9.6.1
 	github.com/zeromicro/go-zero v1.7.0
+	github.com/zhanglp0129/snowflake v1.0.0
 	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.34.2
 	gorm.io/driver/mysql v1.5.7
@@ -51,9 +53,8 @@ require (
 	github.com/prometheus/client_model v0.5.0 // indirect
 	github.com/prometheus/common v0.48.0 // indirect
 	github.com/prometheus/procfs v0.12.0 // indirect
-	github.com/redis/go-redis/v9 v9.6.1 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
-	github.com/zhanglp0129/snowflake v1.0.0 // indirect
+	github.com/zhanglp0129/redis_cache v1.0.1 // indirect
 	go.etcd.io/etcd/api/v3 v3.5.15 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.5.15 // indirect
 	go.etcd.io/etcd/client/v3 v3.5.15 // indirect

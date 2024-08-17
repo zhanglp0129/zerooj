@@ -151,6 +151,8 @@ github.com/yuin/gopher-lua v1.1.1 h1:kYKnWBjvbNP4XLT3+bPEwAXJx262OhaHDWDVOPjL46M
 github.com/yuin/gopher-lua v1.1.1/go.mod h1:GBR0iDaNXjAgGg9zfCvksxSRnQx76gclCIb7kdAd1Pw=
 github.com/zeromicro/go-zero v1.7.0 h1:B+y7tUVlo3qVQ6F0I0R9bi+Dq4I1QdO9ZB+dz1r0p1s=
 github.com/zeromicro/go-zero v1.7.0/go.mod h1:ypW4PzQI+jUrMcNJDDQ+7YW+pE+tMua9Xj/pmtmS1Dc=
+github.com/zhanglp0129/redis_cache v1.0.1 h1:FoAKI1ml/GQIq8JbFiFPnHbrcPWsM75ids7AvGt8VcA=
+github.com/zhanglp0129/redis_cache v1.0.1/go.mod h1:RdIKQQGaEkw4Q9RV01j6Y82zBVg41I7U4pSRqPa3rYo=
 github.com/zhanglp0129/snowflake v1.0.0 h1:CD11GYYLq5R+o9E2x92m6rwwukFBlKN7UCFX3KWEfNw=
 github.com/zhanglp0129/snowflake v1.0.0/go.mod h1:AbFxGqjgwBbYLEY09UIJP8q8o7OmWLSj5acJmqj0iik=
 go.etcd.io/etcd/api/v3 v3.5.15 h1:3KpLJir1ZEBrYuV2v+Twaa/e2MdDCEZ/70H+lzEiwsk=
