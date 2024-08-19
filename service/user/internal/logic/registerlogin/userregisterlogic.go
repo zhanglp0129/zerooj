@@ -35,7 +35,7 @@ func (l *UserRegisterLogic) UserRegister(in *user.UserRegisterReq) (*user.UserRe
 	key := fmt.Sprintf("/mail_check_code/user/user_register/%s", in.Email)
 	trueCheckCode, err := rdb.Get(context.Background(), key).Result()
 	if err != nil || in.EmailCheckCode != trueCheckCode {
-		return nil, constant.MailCheckCodeError{}
+		return nil, constant.InputDataError{Thing: "邮箱验证码"}
 	}
 
 	pwd, err := utils.PasswordEncrypt(in.Password)

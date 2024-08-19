@@ -37,16 +37,19 @@ func (l *UserLoginLogic) UserLogin(in *user.UserLoginReq) (*user.UserLoginResp, 
 
 	db := l.svcCtx.DB
 	u := &models.User{}
+	var errThing string
 	if in.Username == "" {
 		// 邮箱登录
 		err = db.Where("email = ? and password = ?", in.Email, pwd).Take(u).Error
+		errThing = "邮箱或密码"
 	} else {
 		// 用户名登录
 		err = db.Where("username = ? and password = ?", in.Username, pwd).Take(u).Error
+		errThing = "用户名或密码"
 	}
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		// 没有记录
-		return nil, constant.UsernameEmailPasswordError{}
+		return nil, constant.InputDataError{Thing: errThing}
 	} else if err != nil {
 		return nil, err
 	}

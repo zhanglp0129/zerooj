@@ -10,18 +10,13 @@ const (
 	DatabaseMachineIdError   = "database machine id error"
 )
 
-// MailCheckCodeError 邮件验证码错误
-type MailCheckCodeError struct{}
-
-func (MailCheckCodeError) Error() string {
-	return "邮件验证码错误"
+// InputDataError 输入数据错误
+type InputDataError struct {
+	Thing string
 }
 
-// UsernameEmailPasswordError 用户名、邮箱或密码错误
-type UsernameEmailPasswordError struct{}
-
-func (UsernameEmailPasswordError) Error() string {
-	return "用户名、邮箱或密码错误"
+func (e InputDataError) Error() string {
+	return fmt.Sprintf("%s错误", e.Thing)
 }
 
 // OperationInCoolPeriod 处于冷却期
@@ -31,6 +26,7 @@ func (OperationInCoolPeriod) Error() string {
 	return "当前操作处于冷却期"
 }
 
+// NewEqualsOldError 新旧相等
 type NewEqualsOldError struct {
 	Thing string
 }
