@@ -10,7 +10,7 @@ const (
 	DatabaseMachineIdError   = "database machine id error"
 )
 
-// InputDataError 输入数据错误
+// InputDataError 输入数据错误，需要传入什么东西错误
 type InputDataError struct {
 	Thing string
 }
@@ -26,7 +26,7 @@ func (OperationInCoolPeriod) Error() string {
 	return "当前操作处于冷却期"
 }
 
-// NewEqualsOldError 新旧相等
+// NewEqualsOldError 新旧相等，需要传入什么东西新旧相等
 type NewEqualsOldError struct {
 	Thing string
 }
