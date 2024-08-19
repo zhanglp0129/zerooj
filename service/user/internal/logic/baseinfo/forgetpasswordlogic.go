@@ -3,6 +3,7 @@ package baseinfologic
 import (
 	"context"
 	"fmt"
+	"zerooj/common"
 	"zerooj/common/constant"
 	"zerooj/service/user/models"
 	"zerooj/utils"
@@ -60,6 +61,8 @@ func (l *ForgetPasswordLogic) ForgetPassword(in *user.ForgetPasswordReq) (*user.
 	if err != nil {
 		return nil, err
 	}
+
+	common.FinishMailCheckCode(rdb, key)
 
 	return &user.ForgetPasswordResp{}, nil
 }
