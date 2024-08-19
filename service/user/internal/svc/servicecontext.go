@@ -1,6 +1,7 @@
 package svc
 
 import (
+	"github.com/go-redis/redis_rate/v10"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 	"zerooj/common"
@@ -12,6 +13,7 @@ type ServiceContext struct {
 	Config config.Config
 	DB     *gorm.DB
 	RDB    redis.UniversalClient
+	Lim    *redis_rate.Limiter
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -32,14 +34,18 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		panic(err)
 	}
 
+	// 初始化redis
 	rdb, err := common.InitRedis(c.RedisClient)
 	if err != nil {
 		panic(err)
 	}
+	// 创建限速器
+	lim := redis_rate.NewLimiter(rdb)
 
 	return &ServiceContext{
 		Config: c,
 		DB:     db,
 		RDB:    rdb,
+		Lim:    lim,
 	}
 }

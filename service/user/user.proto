@@ -40,13 +40,13 @@ service BaseInfo {
   rpc GetBaseInfo(GetBaseInfoReq) returns (GetBaseInfoResp);
   // 根据用户名搜索用户，并缓存
   rpc SearchByUsername(SearchByUsernameReq) returns (SearchByUsernameResp);
-  // 修改用户名，有30天冷却期
+  // 修改用户名，有7天冷却期
   rpc UpdateUsername(UpdateUsernameReq) returns (UpdateUsernameResp);
   // 修改密码
   rpc UpdatePassword(UpdatePasswordReq) returns (UpdatePasswordResp);
   // 忘记密码
   rpc ForgetPassword(ForgetPasswordReq) returns (ForgetPasswordResp);
-  // 修改用户邮箱，有30天冷却期
+  // 修改用户邮箱，有7天冷却期
   rpc UpdateEmail(UpdateEmailReq) returns (UpdateEmailResp);
   // 修改用户权限，需要管理员权限
   rpc UpdatePermission(UpdatePermissionReq) returns (UpdatePermissionResp);
@@ -70,7 +70,9 @@ message UpdateUsernameReq {
   // 修改后的用户名
   string username = 2;
 }
-message UpdateUsernameResp {}
+message UpdateUsernameResp {
+  string oldUsername = 1;
+}
 message UpdatePasswordReq {
   int64 id = 1;
   string oldPassword = 2;
@@ -95,7 +97,9 @@ message UpdateEmailReq {
   // 修改后邮箱的验证码
   string emailCheckCode = 5;
 }
-message UpdateEmailResp {}
+message UpdateEmailResp {
+  string oldEmail = 1;
+}
 message UpdatePermissionReq {
   // 被修改者id
   int64 id = 1;
@@ -103,7 +107,9 @@ message UpdatePermissionReq {
   int64 operatorId = 2;
   uint32 permission = 3;
 }
-message UpdatePermissionResp {}
+message UpdatePermissionResp {
+  uint32 oldPermission = 1;
+}
 
 // 用户简介
 service Profile {

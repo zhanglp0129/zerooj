@@ -34,7 +34,7 @@ func (s *BaseInfoServer) SearchByUsername(ctx context.Context, in *user.SearchBy
 	return l.SearchByUsername(in)
 }
 
-// 修改用户名，有30天冷却期
+// 修改用户名，有7天冷却期
 func (s *BaseInfoServer) UpdateUsername(ctx context.Context, in *user.UpdateUsernameReq) (*user.UpdateUsernameResp, error) {
 	l := baseinfologic.NewUpdateUsernameLogic(ctx, s.svcCtx)
 	return l.UpdateUsername(in)
@@ -52,7 +52,7 @@ func (s *BaseInfoServer) ForgetPassword(ctx context.Context, in *user.ForgetPass
 	return l.ForgetPassword(in)
 }
 
-// 修改用户邮箱，有30天冷却期
+// 修改用户邮箱，有7天冷却期
 func (s *BaseInfoServer) UpdateEmail(ctx context.Context, in *user.UpdateEmailReq) (*user.UpdateEmailResp, error) {
 	l := baseinfologic.NewUpdateEmailLogic(ctx, s.svcCtx)
 	return l.UpdateEmail(in)
