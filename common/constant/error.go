@@ -38,6 +38,13 @@ func (e NewEqualsOldError) Error() string {
 // FrequentVisitError 访问过于频繁
 type FrequentVisitError struct{}
 
-func (e FrequentVisitError) Error() string {
+func (FrequentVisitError) Error() string {
 	return "您的访问过于频繁，请稍后再试"
+}
+
+// InsufficientPermissionsError 权限不足
+type InsufficientPermissionsError struct{}
+
+func (InsufficientPermissionsError) Error() string {
+	return "权限不足"
 }
