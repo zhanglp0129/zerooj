@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"math/rand"
 	"net/smtp"
+	"strings"
 	"time"
 	"zerooj/service/mail/static"
 
@@ -60,9 +61,16 @@ func (l *SendMailCheckCodeLogic) SendMailCheckCode(in *user.SendMailCheckCodeReq
 		return nil, err
 	}
 
+	// 构建redis key
+	var builder strings.Builder
+	builder.WriteString(in.RedisKeyPrefix)
+	if !strings.HasSuffix(in.RedisKeyPrefix, "/") {
+		builder.WriteString("/")
+	}
+	builder.WriteString(in.Email)
+	key := builder.String()
 	// 将验证码写入Redis，有效期5min
 	rdb := l.svcCtx.RDB
-	key := in.RedisKey
 	err = rdb.SetEx(context.Background(), key, checkCode, 5*60*time.Second).Err()
 	if err != nil {
 		return nil, err
