@@ -62,7 +62,7 @@ func (l *ForgetPasswordLogic) ForgetPassword(in *user.ForgetPasswordReq) (*user.
 		return nil, err
 	}
 
-	common.FinishMailCheckCode(rdb, key)
+	go common.FinishMailCheckCode(rdb, key)
 
 	return &user.ForgetPasswordResp{}, nil
 }

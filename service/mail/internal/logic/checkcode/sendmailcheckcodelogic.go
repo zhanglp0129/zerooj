@@ -62,7 +62,7 @@ func (l *SendMailCheckCodeLogic) SendMailCheckCode(in *user.SendMailCheckCodeReq
 
 	// 将验证码写入Redis，有效期5min
 	rdb := l.svcCtx.RDB
-	key := in.Email
+	key := in.RedisKey
 	err = rdb.SetEx(context.Background(), key, checkCode, 5*60*time.Second).Err()
 	if err != nil {
 		return nil, err
