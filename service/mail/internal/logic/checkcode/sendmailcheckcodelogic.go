@@ -45,7 +45,7 @@ func (l *SendMailCheckCodeLogic) SendMailCheckCode(in *user.SendMailCheckCodeReq
 	} else if res.Allowed == 0 {
 		return nil, constant.FrequentVisitError{}
 	}
-	res, err = lim.Allow(context.Background(), frequencyKeyHour, redis_rate.PerHour(5))
+	res, err = lim.Allow(context.Background(), frequencyKeyHour, redis_rate.PerHour(10))
 	if err != nil {
 		return nil, err
 	} else if res.Allowed == 0 {
