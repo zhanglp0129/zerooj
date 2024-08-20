@@ -4,11 +4,13 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/go-redis/redis_rate/v10"
 	"html/template"
 	"math/rand"
 	"net/smtp"
 	"strings"
 	"time"
+	"zerooj/common/constant"
 	"zerooj/service/mail/static"
 
 	"zerooj/service/mail/internal/svc"
@@ -33,6 +35,23 @@ func NewSendMailCheckCodeLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 
 // 发送邮箱验证码
 func (l *SendMailCheckCodeLogic) SendMailCheckCode(in *user.SendMailCheckCodeReq) (*user.SendMailCheckCodeResp, error) {
+	// 限制频率
+	lim := l.svcCtx.Lim
+	frequencyKeyMinute := fmt.Sprintf("/frequency_limit/mail/send_mail_check_code/minute/%s", in.Ip)
+	frequencyKeyHour := fmt.Sprintf("/frequency_limit/mail/send_mail_check_code/hour/%s", in.Ip)
+	res, err := lim.Allow(context.Background(), frequencyKeyMinute, redis_rate.PerMinute(1))
+	if err != nil {
+		return nil, err
+	} else if res.Allowed == 0 {
+		return nil, constant.FrequentVisitError{}
+	}
+	res, err = lim.Allow(context.Background(), frequencyKeyHour, redis_rate.PerHour(5))
+	if err != nil {
+		return nil, err
+	} else if res.Allowed == 0 {
+		return nil, constant.FrequentVisitError{}
+	}
+
 	// 准备数据
 	smtpCfg := l.svcCtx.Config.SMTP
 	auth := smtp.PlainAuth("", smtpCfg.Username, smtpCfg.Password, smtpCfg.Host)
@@ -52,7 +71,7 @@ func (l *SendMailCheckCodeLogic) SendMailCheckCode(in *user.SendMailCheckCodeReq
 	buf.WriteString("\r\n")
 	// 再准备邮件体
 	tmpl := template.Must(template.ParseFS(static.MailTemplateFS, "template/checkcode.html"))
-	err := tmpl.Execute(&buf, map[string]string{
+	err = tmpl.Execute(&buf, map[string]string{
 		"Subject":       subject,
 		"UserOperation": in.UserOperation,
 		"CheckCode":     checkCode,

@@ -1,6 +1,7 @@
 package svc
 
 import (
+	"github.com/go-redis/redis_rate/v10"
 	"github.com/redis/go-redis/v9"
 	"zerooj/common"
 	"zerooj/service/mail/internal/config"
@@ -9,6 +10,7 @@ import (
 type ServiceContext struct {
 	Config config.Config
 	RDB    redis.UniversalClient
+	Lim    *redis_rate.Limiter
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -17,8 +19,11 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		panic(err)
 	}
 
+	lim := redis_rate.NewLimiter(rdb)
+
 	return &ServiceContext{
 		Config: c,
 		RDB:    rdb,
+		Lim:    lim,
 	}
 }
