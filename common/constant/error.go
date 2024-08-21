@@ -48,3 +48,12 @@ type InsufficientPermissionsError struct{}
 func (InsufficientPermissionsError) Error() string {
 	return "权限不足"
 }
+
+// QuantityExceedsLimit 数量超出限制，需要传入什么东西的数量超出限制
+type QuantityExceedsLimit struct {
+	Thing string
+}
+
+func (e QuantityExceedsLimit) Error() string {
+	return fmt.Sprintf("%s数量超出限制", e.Thing)
+}

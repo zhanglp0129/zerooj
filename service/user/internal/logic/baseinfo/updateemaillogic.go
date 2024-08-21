@@ -113,8 +113,8 @@ func (l *UpdateEmailLogic) UpdateEmail(in *user.UpdateEmailReq) (*user.UpdateEma
 	}
 
 	// 邮箱验证码使用完成
-	go common.FinishMailCheckCode(rdb, oldKey)
-	go common.FinishMailCheckCode(rdb, newKey)
+	go common.FinishMailCheck(rdb, oldKey)
+	go common.FinishMailCheck(rdb, newKey)
 
 	return &user.UpdateEmailResp{
 		OldEmail: u.Email,

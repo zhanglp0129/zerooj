@@ -55,7 +55,7 @@ func (l *UserRegisterLogic) UserRegister(in *user.UserRegisterReq) (*user.UserRe
 		return nil, err
 	}
 
-	go common.FinishMailCheckCode(rdb, key)
+	go common.FinishMailCheck(rdb, key)
 
 	return &user.UserRegisterResp{Id: u.ID}, nil
 }
