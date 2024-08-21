@@ -49,7 +49,7 @@ func (l *UpdatePermissionLogic) UpdatePermission(in *user.UpdatePermissionReq) (
 
 	err = db.Transaction(func(tx *gorm.DB) error {
 		// 修改数据
-		err = db.Model(&models.User{}).Where("id = ?", in.Id).Update("permission", in.Permission).Error
+		err = tx.Model(&models.User{}).Where("id = ?", in.Id).Update("permission", in.Permission).Error
 		if err != nil {
 			return err
 		}

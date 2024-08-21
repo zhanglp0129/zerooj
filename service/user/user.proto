@@ -127,16 +127,7 @@ service Profile {
   rpc DeleteUserSkill(DeleteUserSkillReq) returns (DeleteUserSkillResp);
 }
 message GetUserProfileReq {
-  int64 id = 1;
-}
-message PersonalWebsite {
-  int64 id = 1;
-  string name = 2;
-  string url = 3;
-}
-message Skill {
-  int64 id = 1;
-  string name = 2;
+  int64 userId = 1;
 }
 message GetUserProfileResp {
   string nickname = 1;
@@ -148,30 +139,46 @@ message GetUserProfileResp {
   repeated PersonalWebsite websites = 6;
   repeated Skill skills = 7;
 }
+message PersonalWebsite {
+  int64 websiteId = 1;
+  string name = 2;
+  string url = 3;
+}
+message Skill {
+  int64 skillId = 1;
+  string name = 2;
+}
 message UpdateUserProfileReq {
-  string nickname = 1;
-  string avatarURL = 2;
-  uint32 gender = 3;
-  google.protobuf.Timestamp birthday = 4;
-  string personalIntroduction = 5;
+  int64 userId = 1;
+  string nickname = 2;
+  string avatarURL = 3;
+  uint32 gender = 4;
+  google.protobuf.Timestamp birthday = 5;
+  string personalIntroduction = 6;
 }
 message UpdateUserProfileResp {}
 message AddUserPersonalWebsiteReq {
-  string name = 1;
-  string url = 2;
+  int64 userId = 1;
+  string name = 2;
+  string url = 3;
 }
-message AddUserPersonalWebsiteResp {}
+message AddUserPersonalWebsiteResp {
+  int64 websiteId = 1;
+}
 message DeleteUserPersonalWebsiteReq {
-  int64 id = 1;
+  // 用户id，用于鉴权。只能删除自己的网站
+  int64 userId = 1;
+  int64 websiteId = 2;
 }
 message DeleteUserPersonalWebsiteResp {}
 message AddUserSkillReq {
-  // 技能id
-  int64 id = 1;
+  int64 userId = 1;
+  int64 skillId = 2;
 }
 message AddUserSkillResp {}
 message DeleteUserSkillReq {
-  int64 id = 1;
+  int64 userId = 1;
+  int64 skillId = 2;
 }
 message DeleteUserSkillResp {}
 
@@ -195,7 +202,7 @@ message FollowUserInfo {
   google.protobuf.Timestamp followAt = 8;
 }
 message GetFollowingsReq {
-  int64 id = 1;
+  int64 userId = 1;
   int32 pageNum = 2;
   int32 pageSize = 3;
 }
@@ -206,7 +213,7 @@ message GetFollowingsResp {
   int64 count = 2;
 }
 message GetFansReq {
-  int64 id = 1;
+  int64 userId = 1;
   int32 pageNum = 2;
   int32 pageSize = 3;
 }
@@ -236,7 +243,9 @@ message AddSkillReq {
   int64 operatorId = 1;
   string skillName = 2;
 }
-message AddSkillResp {}
+message AddSkillResp {
+  int64 skillId = 1;
+}
 message DeleteSkillReq {
   int64 operatorId = 1;
   int64 skillId = 2;
@@ -248,5 +257,5 @@ message MustDeleteSkillReq {
 }
 message MustDeleteSkillResp {
   // 拥有该技能的用户数量
-  int64 UserSkillCount = 1;
+  int64 userSkillCount = 1;
 }

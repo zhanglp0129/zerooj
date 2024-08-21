@@ -33,20 +33,20 @@ func NewGetUserProfileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 func (l *GetUserProfileLogic) GetUserProfile(in *user.GetUserProfileReq) (*user.GetUserProfileResp, error) {
 	// 带着缓存查询
 	rdb := l.svcCtx.RDB
-	key := fmt.Sprintf("/cache/user/get_user_profile/%d", in.Id)
+	key := fmt.Sprintf("/cache/user/get_user_profile/%d", in.UserId)
 	var model user.GetUserProfileResp
 	_, err := redis_cache.QueryWithCache(rdb, key, &model, func() (*user.GetUserProfileResp, error) {
 		// 先查找用户简介表
 		var p models.UserProfile
 		db := l.svcCtx.DB
-		err := db.Where("user_id = ?", in.Id).Take(&p).Error
+		err := db.Where("user_id = ?", in.UserId).Take(&p).Error
 
 		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, err
 		} else if errors.Is(err, gorm.ErrRecordNotFound) {
 			// 没有用户简介，需要插入默认数据
 			p = models.UserProfile{
-				UserID:   in.Id,
+				UserID:   in.UserId,
 				Birthday: time.Now(),
 			}
 			err = db.Create(&p).Error
@@ -57,7 +57,7 @@ func (l *GetUserProfileLogic) GetUserProfile(in *user.GetUserProfileReq) (*user.
 		} else {
 			// 有用户简介，查询其他信息
 			u := models.User{}
-			err = db.Preload("Websites").Preload("Skills").Take(&u, in.Id).Error
+			err = db.Preload("Websites").Preload("Skills").Take(&u, in.UserId).Error
 			if err != nil {
 				return nil, err
 			}
@@ -71,15 +71,15 @@ func (l *GetUserProfileLogic) GetUserProfile(in *user.GetUserProfileReq) (*user.
 			}
 			for _, website := range u.Websites {
 				model.Websites = append(model.Websites, &user.PersonalWebsite{
-					Id:   website.ID,
-					Name: website.Name,
-					Url:  website.URL,
+					WebsiteId: website.ID,
+					Name:      website.Name,
+					Url:       website.URL,
 				})
 			}
 			for _, skill := range u.Skills {
 				model.Skills = append(model.Skills, &user.Skill{
-					Id:   skill.ID,
-					Name: skill.Name,
+					SkillId: skill.ID,
+					Name:    skill.Name,
 				})
 			}
 		}
