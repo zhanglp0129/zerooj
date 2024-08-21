@@ -508,7 +508,7 @@ const (
 // 用户简介
 type ProfileClient interface {
 	// 获取用户简介
-	GetUserProfile(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
+	GetUserProfile(ctx context.Context, in *GetUserProfileReq, opts ...grpc.CallOption) (*GetUserProfileResp, error)
 	// 修改用户简介，不包括个人网站和用户技能
 	UpdateUserProfile(ctx context.Context, in *UpdateUserProfileReq, opts ...grpc.CallOption) (*UpdateUserProfileResp, error)
 	// 添加个人网站，最多5个
@@ -529,9 +529,9 @@ func NewProfileClient(cc grpc.ClientConnInterface) ProfileClient {
 	return &profileClient{cc}
 }
 
-func (c *profileClient) GetUserProfile(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error) {
+func (c *profileClient) GetUserProfile(ctx context.Context, in *GetUserProfileReq, opts ...grpc.CallOption) (*GetUserProfileResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetUserInfoResp)
+	out := new(GetUserProfileResp)
 	err := c.cc.Invoke(ctx, Profile_GetUserProfile_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -596,7 +596,7 @@ func (c *profileClient) DeleteUserSkill(ctx context.Context, in *DeleteUserSkill
 // 用户简介
 type ProfileServer interface {
 	// 获取用户简介
-	GetUserProfile(context.Context, *GetUserInfoReq) (*GetUserInfoResp, error)
+	GetUserProfile(context.Context, *GetUserProfileReq) (*GetUserProfileResp, error)
 	// 修改用户简介，不包括个人网站和用户技能
 	UpdateUserProfile(context.Context, *UpdateUserProfileReq) (*UpdateUserProfileResp, error)
 	// 添加个人网站，最多5个
@@ -614,7 +614,7 @@ type ProfileServer interface {
 type UnimplementedProfileServer struct {
 }
 
-func (UnimplementedProfileServer) GetUserProfile(context.Context, *GetUserInfoReq) (*GetUserInfoResp, error) {
+func (UnimplementedProfileServer) GetUserProfile(context.Context, *GetUserProfileReq) (*GetUserProfileResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserProfile not implemented")
 }
 func (UnimplementedProfileServer) UpdateUserProfile(context.Context, *UpdateUserProfileReq) (*UpdateUserProfileResp, error) {
@@ -646,7 +646,7 @@ func RegisterProfileServer(s grpc.ServiceRegistrar, srv ProfileServer) {
 }
 
 func _Profile_GetUserProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUserInfoReq)
+	in := new(GetUserProfileReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -658,7 +658,7 @@ func _Profile_GetUserProfile_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: Profile_GetUserProfile_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProfileServer).GetUserProfile(ctx, req.(*GetUserInfoReq))
+		return srv.(ProfileServer).GetUserProfile(ctx, req.(*GetUserProfileReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -967,9 +967,6 @@ var Follow_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	Other_AddCity_FullMethodName         = "/user.Other/AddCity"
-	Other_DeleteCity_FullMethodName      = "/user.Other/DeleteCity"
-	Other_MustDeleteCity_FullMethodName  = "/user.Other/MustDeleteCity"
 	Other_AddSkill_FullMethodName        = "/user.Other/AddSkill"
 	Other_DeleteSkill_FullMethodName     = "/user.Other/DeleteSkill"
 	Other_MustDeleteSkill_FullMethodName = "/user.Other/MustDeleteSkill"
@@ -981,11 +978,6 @@ const (
 //
 // 其他
 type OtherClient interface {
-	// 添加和删除城市，只有客服能操作
-	AddCity(ctx context.Context, in *AddCityReq, opts ...grpc.CallOption) (*AddCityResp, error)
-	DeleteCity(ctx context.Context, in *DeleteCityReq, opts ...grpc.CallOption) (*DeleteCityResp, error)
-	// 强行删除城市，必须要管理员权限
-	MustDeleteCity(ctx context.Context, in *MustDeleteCityReq, opts ...grpc.CallOption) (*MustDeleteCityResp, error)
 	// 添加和删除技能，只有客服能操作
 	AddSkill(ctx context.Context, in *AddSkillReq, opts ...grpc.CallOption) (*AddSkillResp, error)
 	DeleteSkill(ctx context.Context, in *DeleteSkillReq, opts ...grpc.CallOption) (*DeleteSkillResp, error)
@@ -999,36 +991,6 @@ type otherClient struct {
 
 func NewOtherClient(cc grpc.ClientConnInterface) OtherClient {
 	return &otherClient{cc}
-}
-
-func (c *otherClient) AddCity(ctx context.Context, in *AddCityReq, opts ...grpc.CallOption) (*AddCityResp, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(AddCityResp)
-	err := c.cc.Invoke(ctx, Other_AddCity_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *otherClient) DeleteCity(ctx context.Context, in *DeleteCityReq, opts ...grpc.CallOption) (*DeleteCityResp, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DeleteCityResp)
-	err := c.cc.Invoke(ctx, Other_DeleteCity_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *otherClient) MustDeleteCity(ctx context.Context, in *MustDeleteCityReq, opts ...grpc.CallOption) (*MustDeleteCityResp, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(MustDeleteCityResp)
-	err := c.cc.Invoke(ctx, Other_MustDeleteCity_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *otherClient) AddSkill(ctx context.Context, in *AddSkillReq, opts ...grpc.CallOption) (*AddSkillResp, error) {
@@ -1067,11 +1029,6 @@ func (c *otherClient) MustDeleteSkill(ctx context.Context, in *MustDeleteSkillRe
 //
 // 其他
 type OtherServer interface {
-	// 添加和删除城市，只有客服能操作
-	AddCity(context.Context, *AddCityReq) (*AddCityResp, error)
-	DeleteCity(context.Context, *DeleteCityReq) (*DeleteCityResp, error)
-	// 强行删除城市，必须要管理员权限
-	MustDeleteCity(context.Context, *MustDeleteCityReq) (*MustDeleteCityResp, error)
 	// 添加和删除技能，只有客服能操作
 	AddSkill(context.Context, *AddSkillReq) (*AddSkillResp, error)
 	DeleteSkill(context.Context, *DeleteSkillReq) (*DeleteSkillResp, error)
@@ -1084,15 +1041,6 @@ type OtherServer interface {
 type UnimplementedOtherServer struct {
 }
 
-func (UnimplementedOtherServer) AddCity(context.Context, *AddCityReq) (*AddCityResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddCity not implemented")
-}
-func (UnimplementedOtherServer) DeleteCity(context.Context, *DeleteCityReq) (*DeleteCityResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteCity not implemented")
-}
-func (UnimplementedOtherServer) MustDeleteCity(context.Context, *MustDeleteCityReq) (*MustDeleteCityResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MustDeleteCity not implemented")
-}
 func (UnimplementedOtherServer) AddSkill(context.Context, *AddSkillReq) (*AddSkillResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddSkill not implemented")
 }
@@ -1113,60 +1061,6 @@ type UnsafeOtherServer interface {
 
 func RegisterOtherServer(s grpc.ServiceRegistrar, srv OtherServer) {
 	s.RegisterService(&Other_ServiceDesc, srv)
-}
-
-func _Other_AddCity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddCityReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(OtherServer).AddCity(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Other_AddCity_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OtherServer).AddCity(ctx, req.(*AddCityReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Other_DeleteCity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteCityReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(OtherServer).DeleteCity(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Other_DeleteCity_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OtherServer).DeleteCity(ctx, req.(*DeleteCityReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Other_MustDeleteCity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MustDeleteCityReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(OtherServer).MustDeleteCity(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Other_MustDeleteCity_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OtherServer).MustDeleteCity(ctx, req.(*MustDeleteCityReq))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _Other_AddSkill_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -1230,18 +1124,6 @@ var Other_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "user.Other",
 	HandlerType: (*OtherServer)(nil),
 	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "AddCity",
-			Handler:    _Other_AddCity_Handler,
-		},
-		{
-			MethodName: "DeleteCity",
-			Handler:    _Other_DeleteCity_Handler,
-		},
-		{
-			MethodName: "MustDeleteCity",
-			Handler:    _Other_MustDeleteCity_Handler,
-		},
 		{
 			MethodName: "AddSkill",
 			Handler:    _Other_AddSkill_Handler,

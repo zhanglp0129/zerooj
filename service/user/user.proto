@@ -114,7 +114,7 @@ message UpdatePermissionResp {
 // 用户简介
 service Profile {
   // 获取用户简介
-  rpc GetUserProfile(GetUserInfoReq) returns (GetUserInfoResp);
+  rpc GetUserProfile(GetUserProfileReq) returns (GetUserProfileResp);
   // 修改用户简介，不包括个人网站和用户技能
   rpc UpdateUserProfile(UpdateUserProfileReq) returns (UpdateUserProfileResp);
   // 添加个人网站，最多5个
@@ -126,12 +126,8 @@ service Profile {
   // 删除用户技能
   rpc DeleteUserSkill(DeleteUserSkillReq) returns (DeleteUserSkillResp);
 }
-message GetUserInfoReq {
+message GetUserProfileReq {
   int64 id = 1;
-}
-message City {
-  int64 id = 1;
-  string name = 2;
 }
 message PersonalWebsite {
   int64 id = 1;
@@ -142,15 +138,15 @@ message Skill {
   int64 id = 1;
   string name = 2;
 }
-message GetUserInfoResp {
+message GetUserProfileResp {
   string nickname = 1;
   string avatarURL = 2;
   uint32 gender = 3;
+  // 出生日期，默认为当天
   google.protobuf.Timestamp birthday = 4;
   string personalIntroduction = 5;
-  City city = 6;
-  repeated PersonalWebsite websites = 7;
-  repeated Skill skills = 8;
+  repeated PersonalWebsite websites = 6;
+  repeated Skill skills = 7;
 }
 message UpdateUserProfileReq {
   string nickname = 1;
@@ -158,7 +154,6 @@ message UpdateUserProfileReq {
   uint32 gender = 3;
   google.protobuf.Timestamp birthday = 4;
   string personalIntroduction = 5;
-  City city = 6;
 }
 message UpdateUserProfileResp {}
 message AddUserPersonalWebsiteReq {
@@ -231,27 +226,12 @@ message FollowUserResp {}
 
 // 其他
 service Other {
-  // 添加和删除城市，只有客服能操作
-  rpc AddCity(AddCityReq) returns (AddCityResp);
-  rpc DeleteCity(DeleteCityReq) returns (DeleteCityResp);
-  // 强行删除城市，必须要管理员权限
-  rpc MustDeleteCity(MustDeleteCityReq) returns (MustDeleteCityResp);
   // 添加和删除技能，只有客服能操作
   rpc AddSkill(AddSkillReq) returns (AddSkillResp);
   rpc DeleteSkill(DeleteSkillReq) returns (DeleteSkillResp);
   // 强行删除技能，必须要管理员权限
   rpc MustDeleteSkill(MustDeleteSkillReq) returns (MustDeleteSkillResp);
 }
-message AddCityReq {
-  int64 operatorId = 1;
-  string cityName = 2;
-}
-message AddCityResp {}
-message DeleteCityReq {
-  int64 operatorId = 1;
-  int64 cityId = 2;
-}
-message DeleteCityResp {}
 message AddSkillReq {
   int64 operatorId = 1;
   string skillName = 2;
@@ -262,14 +242,6 @@ message DeleteSkillReq {
   int64 skillId = 2;
 }
 message DeleteSkillResp {}
-message MustDeleteCityReq {
-  int64 operatorId = 1;
-  int64 cityId = 2;
-}
-message MustDeleteCityResp {
-  // 该城市的用户数量
-  int64 UserCityCount = 1;
-}
 message MustDeleteSkillReq {
   int64 operatorId = 1;
   int64 skillId = 2;

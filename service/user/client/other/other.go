@@ -13,17 +13,12 @@ import (
 )
 
 type (
-	AddCityReq                    = user.AddCityReq
-	AddCityResp                   = user.AddCityResp
 	AddSkillReq                   = user.AddSkillReq
 	AddSkillResp                  = user.AddSkillResp
 	AddUserPersonalWebsiteReq     = user.AddUserPersonalWebsiteReq
 	AddUserPersonalWebsiteResp    = user.AddUserPersonalWebsiteResp
 	AddUserSkillReq               = user.AddUserSkillReq
 	AddUserSkillResp              = user.AddUserSkillResp
-	City                          = user.City
-	DeleteCityReq                 = user.DeleteCityReq
-	DeleteCityResp                = user.DeleteCityResp
 	DeleteSkillReq                = user.DeleteSkillReq
 	DeleteSkillResp               = user.DeleteSkillResp
 	DeleteUserPersonalWebsiteReq  = user.DeleteUserPersonalWebsiteReq
@@ -41,10 +36,8 @@ type (
 	GetFansResp                   = user.GetFansResp
 	GetFollowingsReq              = user.GetFollowingsReq
 	GetFollowingsResp             = user.GetFollowingsResp
-	GetUserInfoReq                = user.GetUserInfoReq
-	GetUserInfoResp               = user.GetUserInfoResp
-	MustDeleteCityReq             = user.MustDeleteCityReq
-	MustDeleteCityResp            = user.MustDeleteCityResp
+	GetUserProfileReq             = user.GetUserProfileReq
+	GetUserProfileResp            = user.GetUserProfileResp
 	MustDeleteSkillReq            = user.MustDeleteSkillReq
 	MustDeleteSkillResp           = user.MustDeleteSkillResp
 	PersonalWebsite               = user.PersonalWebsite
@@ -67,11 +60,6 @@ type (
 	UserRegisterResp              = user.UserRegisterResp
 
 	Other interface {
-		// 添加和删除城市，只有客服能操作
-		AddCity(ctx context.Context, in *AddCityReq, opts ...grpc.CallOption) (*AddCityResp, error)
-		DeleteCity(ctx context.Context, in *DeleteCityReq, opts ...grpc.CallOption) (*DeleteCityResp, error)
-		// 强行删除城市，必须要管理员权限
-		MustDeleteCity(ctx context.Context, in *MustDeleteCityReq, opts ...grpc.CallOption) (*MustDeleteCityResp, error)
 		// 添加和删除技能，只有客服能操作
 		AddSkill(ctx context.Context, in *AddSkillReq, opts ...grpc.CallOption) (*AddSkillResp, error)
 		DeleteSkill(ctx context.Context, in *DeleteSkillReq, opts ...grpc.CallOption) (*DeleteSkillResp, error)
@@ -88,23 +76,6 @@ func NewOther(cli zrpc.Client) Other {
 	return &defaultOther{
 		cli: cli,
 	}
-}
-
-// 添加和删除城市，只有客服能操作
-func (m *defaultOther) AddCity(ctx context.Context, in *AddCityReq, opts ...grpc.CallOption) (*AddCityResp, error) {
-	client := user.NewOtherClient(m.cli.Conn())
-	return client.AddCity(ctx, in, opts...)
-}
-
-func (m *defaultOther) DeleteCity(ctx context.Context, in *DeleteCityReq, opts ...grpc.CallOption) (*DeleteCityResp, error) {
-	client := user.NewOtherClient(m.cli.Conn())
-	return client.DeleteCity(ctx, in, opts...)
-}
-
-// 强行删除城市，必须要管理员权限
-func (m *defaultOther) MustDeleteCity(ctx context.Context, in *MustDeleteCityReq, opts ...grpc.CallOption) (*MustDeleteCityResp, error) {
-	client := user.NewOtherClient(m.cli.Conn())
-	return client.MustDeleteCity(ctx, in, opts...)
 }
 
 // 添加和删除技能，只有客服能操作

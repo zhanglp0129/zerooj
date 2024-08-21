@@ -22,23 +22,6 @@ func NewOtherServer(svcCtx *svc.ServiceContext) *OtherServer {
 	}
 }
 
-// 添加和删除城市，只有客服能操作
-func (s *OtherServer) AddCity(ctx context.Context, in *user.AddCityReq) (*user.AddCityResp, error) {
-	l := otherlogic.NewAddCityLogic(ctx, s.svcCtx)
-	return l.AddCity(in)
-}
-
-func (s *OtherServer) DeleteCity(ctx context.Context, in *user.DeleteCityReq) (*user.DeleteCityResp, error) {
-	l := otherlogic.NewDeleteCityLogic(ctx, s.svcCtx)
-	return l.DeleteCity(in)
-}
-
-// 强行删除城市，必须要管理员权限
-func (s *OtherServer) MustDeleteCity(ctx context.Context, in *user.MustDeleteCityReq) (*user.MustDeleteCityResp, error) {
-	l := otherlogic.NewMustDeleteCityLogic(ctx, s.svcCtx)
-	return l.MustDeleteCity(in)
-}
-
 // 添加和删除技能，只有客服能操作
 func (s *OtherServer) AddSkill(ctx context.Context, in *user.AddSkillReq) (*user.AddSkillResp, error) {
 	l := otherlogic.NewAddSkillLogic(ctx, s.svcCtx)

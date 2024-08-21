@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"zerooj/common"
 	"zerooj/common/constant"
+	common_models "zerooj/common/models"
 	"zerooj/service/user/models"
 	"zerooj/utils"
 
@@ -44,13 +45,13 @@ func (l *UserRegisterLogic) UserRegister(in *user.UserRegisterReq) (*user.UserRe
 	}
 	// 插入数据
 	db := l.svcCtx.DB
-	u := &models.User{
+	u := models.User{
 		Username:   in.Username,
 		Password:   pwd,
 		Email:      in.Email,
-		Permission: common.DefaultPermission,
+		Permission: common_models.DefaultPermission,
 	}
-	if err = db.Create(u).Error; err != nil {
+	if err = db.Create(&u).Error; err != nil {
 		return nil, err
 	}
 

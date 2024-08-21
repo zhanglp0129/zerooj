@@ -1,4 +1,4 @@
-package common
+package models
 
 // Permission 用户权限
 type Permission uint32

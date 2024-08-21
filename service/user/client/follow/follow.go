@@ -13,17 +13,12 @@ import (
 )
 
 type (
-	AddCityReq                    = user.AddCityReq
-	AddCityResp                   = user.AddCityResp
 	AddSkillReq                   = user.AddSkillReq
 	AddSkillResp                  = user.AddSkillResp
 	AddUserPersonalWebsiteReq     = user.AddUserPersonalWebsiteReq
 	AddUserPersonalWebsiteResp    = user.AddUserPersonalWebsiteResp
 	AddUserSkillReq               = user.AddUserSkillReq
 	AddUserSkillResp              = user.AddUserSkillResp
-	City                          = user.City
-	DeleteCityReq                 = user.DeleteCityReq
-	DeleteCityResp                = user.DeleteCityResp
 	DeleteSkillReq                = user.DeleteSkillReq
 	DeleteSkillResp               = user.DeleteSkillResp
 	DeleteUserPersonalWebsiteReq  = user.DeleteUserPersonalWebsiteReq
@@ -41,10 +36,8 @@ type (
 	GetFansResp                   = user.GetFansResp
 	GetFollowingsReq              = user.GetFollowingsReq
 	GetFollowingsResp             = user.GetFollowingsResp
-	GetUserInfoReq                = user.GetUserInfoReq
-	GetUserInfoResp               = user.GetUserInfoResp
-	MustDeleteCityReq             = user.MustDeleteCityReq
-	MustDeleteCityResp            = user.MustDeleteCityResp
+	GetUserProfileReq             = user.GetUserProfileReq
+	GetUserProfileResp            = user.GetUserProfileResp
 	MustDeleteSkillReq            = user.MustDeleteSkillReq
 	MustDeleteSkillResp           = user.MustDeleteSkillResp
 	PersonalWebsite               = user.PersonalWebsite

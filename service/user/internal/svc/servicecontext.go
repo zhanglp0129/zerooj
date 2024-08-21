@@ -23,7 +23,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	}
 	// 建表
 	err = db.AutoMigrate(
-		&models.City{},
 		&models.User{},
 		&models.UserProfile{},
 		&models.PersonalWebsite{},

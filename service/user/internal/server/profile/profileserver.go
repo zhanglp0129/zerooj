@@ -23,7 +23,7 @@ func NewProfileServer(svcCtx *svc.ServiceContext) *ProfileServer {
 }
 
 // 获取用户简介
-func (s *ProfileServer) GetUserProfile(ctx context.Context, in *user.GetUserInfoReq) (*user.GetUserInfoResp, error) {
+func (s *ProfileServer) GetUserProfile(ctx context.Context, in *user.GetUserProfileReq) (*user.GetUserProfileResp, error) {
 	l := profilelogic.NewGetUserProfileLogic(ctx, s.svcCtx)
 	return l.GetUserProfile(in)
 }

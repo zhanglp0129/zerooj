@@ -13,17 +13,12 @@ import (
 )
 
 type (
-	AddCityReq                    = user.AddCityReq
-	AddCityResp                   = user.AddCityResp
 	AddSkillReq                   = user.AddSkillReq
 	AddSkillResp                  = user.AddSkillResp
 	AddUserPersonalWebsiteReq     = user.AddUserPersonalWebsiteReq
 	AddUserPersonalWebsiteResp    = user.AddUserPersonalWebsiteResp
 	AddUserSkillReq               = user.AddUserSkillReq
 	AddUserSkillResp              = user.AddUserSkillResp
-	City                          = user.City
-	DeleteCityReq                 = user.DeleteCityReq
-	DeleteCityResp                = user.DeleteCityResp
 	DeleteSkillReq                = user.DeleteSkillReq
 	DeleteSkillResp               = user.DeleteSkillResp
 	DeleteUserPersonalWebsiteReq  = user.DeleteUserPersonalWebsiteReq
@@ -41,10 +36,8 @@ type (
 	GetFansResp                   = user.GetFansResp
 	GetFollowingsReq              = user.GetFollowingsReq
 	GetFollowingsResp             = user.GetFollowingsResp
-	GetUserInfoReq                = user.GetUserInfoReq
-	GetUserInfoResp               = user.GetUserInfoResp
-	MustDeleteCityReq             = user.MustDeleteCityReq
-	MustDeleteCityResp            = user.MustDeleteCityResp
+	GetUserProfileReq             = user.GetUserProfileReq
+	GetUserProfileResp            = user.GetUserProfileResp
 	MustDeleteSkillReq            = user.MustDeleteSkillReq
 	MustDeleteSkillResp           = user.MustDeleteSkillResp
 	PersonalWebsite               = user.PersonalWebsite
@@ -68,7 +61,7 @@ type (
 
 	Profile interface {
 		// 获取用户简介
-		GetUserProfile(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
+		GetUserProfile(ctx context.Context, in *GetUserProfileReq, opts ...grpc.CallOption) (*GetUserProfileResp, error)
 		// 修改用户简介，不包括个人网站和用户技能
 		UpdateUserProfile(ctx context.Context, in *UpdateUserProfileReq, opts ...grpc.CallOption) (*UpdateUserProfileResp, error)
 		// 添加个人网站，最多5个
@@ -93,7 +86,7 @@ func NewProfile(cli zrpc.Client) Profile {
 }
 
 // 获取用户简介
-func (m *defaultProfile) GetUserProfile(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error) {
+func (m *defaultProfile) GetUserProfile(ctx context.Context, in *GetUserProfileReq, opts ...grpc.CallOption) (*GetUserProfileResp, error) {
 	client := user.NewProfileClient(m.cli.Conn())
 	return client.GetUserProfile(ctx, in, opts...)
 }
