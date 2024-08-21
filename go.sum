@@ -157,6 +157,8 @@ github.com/zhanglp0129/redis_cache v1.0.1 h1:FoAKI1ml/GQIq8JbFiFPnHbrcPWsM75ids7
 github.com/zhanglp0129/redis_cache v1.0.1/go.mod h1:RdIKQQGaEkw4Q9RV01j6Y82zBVg41I7U4pSRqPa3rYo=
 github.com/zhanglp0129/redis_cache v1.0.2 h1:fWQuG+hz8RtQXfXvpOMnRoWgxmrFtUVygKPfZoVbTZo=
 github.com/zhanglp0129/redis_cache v1.0.2/go.mod h1:RdIKQQGaEkw4Q9RV01j6Y82zBVg41I7U4pSRqPa3rYo=
+github.com/zhanglp0129/redis_cache v1.0.3 h1:5tqOYF7Ir6Nkl837OZDu7VVlRQwTSpPawjrXvojgqO4=
+github.com/zhanglp0129/redis_cache v1.0.3/go.mod h1:RdIKQQGaEkw4Q9RV01j6Y82zBVg41I7U4pSRqPa3rYo=
 github.com/zhanglp0129/snowflake v1.0.0 h1:CD11GYYLq5R+o9E2x92m6rwwukFBlKN7UCFX3KWEfNw=
 github.com/zhanglp0129/snowflake v1.0.0/go.mod h1:AbFxGqjgwBbYLEY09UIJP8q8o7OmWLSj5acJmqj0iik=
 github.com/zhanglp0129/snowflake v1.0.1 h1:tErid5jt62u0XQ+mwaKDS99CNNc5/fNSupXgjEUr4sc=

@@ -31,22 +31,27 @@ func NewGetUserProfileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 
 // 获取用户简介
 func (l *GetUserProfileLogic) GetUserProfile(in *user.GetUserProfileReq) (*user.GetUserProfileResp, error) {
+	return GetUserProfile(l.svcCtx, in.UserId)
+}
+
+// GetUserProfile 获取用户简介。方便复用代码
+func GetUserProfile(svcCtx *svc.ServiceContext, userId int64) (*user.GetUserProfileResp, error) {
 	// 带着缓存查询
-	rdb := l.svcCtx.RDB
-	key := fmt.Sprintf("/cache/user/get_user_profile/%d", in.UserId)
+	rdb := svcCtx.RDB
+	key := fmt.Sprintf("/cache/user/get_user_profile/%d", userId)
 	var model user.GetUserProfileResp
 	_, err := redis_cache.QueryWithCache(rdb, key, &model, func() (*user.GetUserProfileResp, error) {
 		// 先查找用户简介表
 		var p models.UserProfile
-		db := l.svcCtx.DB
-		err := db.Where("user_id = ?", in.UserId).Take(&p).Error
+		db := svcCtx.DB
+		err := db.Where("user_id = ?", userId).Take(&p).Error
 
 		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, err
 		} else if errors.Is(err, gorm.ErrRecordNotFound) {
 			// 没有用户简介，需要插入默认数据
 			p = models.UserProfile{
-				UserID:   in.UserId,
+				UserID:   userId,
 				Birthday: time.Now(),
 			}
 			err = db.Create(&p).Error
@@ -57,7 +62,7 @@ func (l *GetUserProfileLogic) GetUserProfile(in *user.GetUserProfileReq) (*user.
 		} else {
 			// 有用户简介，查询其他信息
 			u := models.User{}
-			err = db.Preload("Websites").Preload("Skills").Take(&u, in.UserId).Error
+			err = db.Preload("Websites").Preload("Skills").Take(&u, userId).Error
 			if err != nil {
 				return nil, err
 			}
