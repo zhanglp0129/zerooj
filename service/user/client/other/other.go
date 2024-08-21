@@ -60,8 +60,9 @@ type (
 	UserRegisterResp              = user.UserRegisterResp
 
 	Other interface {
-		// 添加和删除技能，只有客服能操作
+		// 添加技能，需要客服权限
 		AddSkill(ctx context.Context, in *AddSkillReq, opts ...grpc.CallOption) (*AddSkillResp, error)
+		// 删除技能，需要客服权限
 		DeleteSkill(ctx context.Context, in *DeleteSkillReq, opts ...grpc.CallOption) (*DeleteSkillResp, error)
 		// 强行删除技能，必须要管理员权限
 		MustDeleteSkill(ctx context.Context, in *MustDeleteSkillReq, opts ...grpc.CallOption) (*MustDeleteSkillResp, error)
@@ -78,12 +79,13 @@ func NewOther(cli zrpc.Client) Other {
 	}
 }
 
-// 添加和删除技能，只有客服能操作
+// 添加技能，需要客服权限
 func (m *defaultOther) AddSkill(ctx context.Context, in *AddSkillReq, opts ...grpc.CallOption) (*AddSkillResp, error) {
 	client := user.NewOtherClient(m.cli.Conn())
 	return client.AddSkill(ctx, in, opts...)
 }
 
+// 删除技能，需要客服权限
 func (m *defaultOther) DeleteSkill(ctx context.Context, in *DeleteSkillReq, opts ...grpc.CallOption) (*DeleteSkillResp, error) {
 	client := user.NewOtherClient(m.cli.Conn())
 	return client.DeleteSkill(ctx, in, opts...)

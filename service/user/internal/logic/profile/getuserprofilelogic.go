@@ -97,3 +97,12 @@ func GetUserProfile(svcCtx *svc.ServiceContext, userId int64) (*user.GetUserProf
 
 	return &model, nil
 }
+
+// DeleteUserProfileCache 删除用户简介缓存
+func DeleteUserProfileCache(svcCtx *svc.ServiceContext, userId int64) error {
+	// 删除缓存
+	rdb := svcCtx.RDB
+	key := fmt.Sprintf("/cache/user/get_user_profile/%d", userId)
+	err := redis_cache.DeleteCache(rdb, key)
+	return err
+}

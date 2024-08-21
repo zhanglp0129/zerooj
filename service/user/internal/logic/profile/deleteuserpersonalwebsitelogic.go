@@ -2,8 +2,6 @@ package profilelogic
 
 import (
 	"context"
-	"fmt"
-	"github.com/zhanglp0129/redis_cache"
 	"gorm.io/gorm"
 	"zerooj/common/constant"
 	"zerooj/service/user/models"
@@ -47,10 +45,7 @@ func (l *DeleteUserPersonalWebsiteLogic) DeleteUserPersonalWebsite(in *user.Dele
 		}
 
 		// 删除缓存
-		rdb := l.svcCtx.RDB
-		key := fmt.Sprintf("/cache/user/get_user_profile/%d", in.UserId)
-		err = redis_cache.DeleteCache(rdb, key)
-		return err
+		return DeleteUserProfileCache(l.svcCtx, in.UserId)
 	})
 	if err != nil {
 		return nil, err

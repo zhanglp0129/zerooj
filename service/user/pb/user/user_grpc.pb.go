@@ -978,8 +978,9 @@ const (
 //
 // 其他
 type OtherClient interface {
-	// 添加和删除技能，只有客服能操作
+	// 添加技能，需要客服权限
 	AddSkill(ctx context.Context, in *AddSkillReq, opts ...grpc.CallOption) (*AddSkillResp, error)
+	// 删除技能，需要客服权限
 	DeleteSkill(ctx context.Context, in *DeleteSkillReq, opts ...grpc.CallOption) (*DeleteSkillResp, error)
 	// 强行删除技能，必须要管理员权限
 	MustDeleteSkill(ctx context.Context, in *MustDeleteSkillReq, opts ...grpc.CallOption) (*MustDeleteSkillResp, error)
@@ -1029,8 +1030,9 @@ func (c *otherClient) MustDeleteSkill(ctx context.Context, in *MustDeleteSkillRe
 //
 // 其他
 type OtherServer interface {
-	// 添加和删除技能，只有客服能操作
+	// 添加技能，需要客服权限
 	AddSkill(context.Context, *AddSkillReq) (*AddSkillResp, error)
+	// 删除技能，需要客服权限
 	DeleteSkill(context.Context, *DeleteSkillReq) (*DeleteSkillResp, error)
 	// 强行删除技能，必须要管理员权限
 	MustDeleteSkill(context.Context, *MustDeleteSkillReq) (*MustDeleteSkillResp, error)

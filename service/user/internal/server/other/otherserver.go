@@ -22,12 +22,13 @@ func NewOtherServer(svcCtx *svc.ServiceContext) *OtherServer {
 	}
 }
 
-// 添加和删除技能，只有客服能操作
+// 添加技能，需要客服权限
 func (s *OtherServer) AddSkill(ctx context.Context, in *user.AddSkillReq) (*user.AddSkillResp, error) {
 	l := otherlogic.NewAddSkillLogic(ctx, s.svcCtx)
 	return l.AddSkill(in)
 }
 
+// 删除技能，需要客服权限
 func (s *OtherServer) DeleteSkill(ctx context.Context, in *user.DeleteSkillReq) (*user.DeleteSkillResp, error) {
 	l := otherlogic.NewDeleteSkillLogic(ctx, s.svcCtx)
 	return l.DeleteSkill(in)

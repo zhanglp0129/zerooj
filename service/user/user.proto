@@ -173,12 +173,14 @@ message DeleteUserPersonalWebsiteReq {
 message DeleteUserPersonalWebsiteResp {}
 message AddUserSkillReq {
   int64 userId = 1;
-  int64 skillId = 2;
+  // 技能id，允许多个
+  repeated int64 skillIds = 2;
 }
 message AddUserSkillResp {}
 message DeleteUserSkillReq {
   int64 userId = 1;
-  int64 skillId = 2;
+  // 技能id，允许多个
+  repeated int64 skillIds = 2;
 }
 message DeleteUserSkillResp {}
 
@@ -233,8 +235,9 @@ message FollowUserResp {}
 
 // 其他
 service Other {
-  // 添加和删除技能，只有客服能操作
+  // 添加技能，需要客服权限
   rpc AddSkill(AddSkillReq) returns (AddSkillResp);
+  // 删除技能，需要客服权限
   rpc DeleteSkill(DeleteSkillReq) returns (DeleteSkillResp);
   // 强行删除技能，必须要管理员权限
   rpc MustDeleteSkill(MustDeleteSkillReq) returns (MustDeleteSkillResp);
