@@ -54,6 +54,10 @@ func GetUserProfile(svcCtx *svc.ServiceContext, userId int64) (*user.GetUserProf
 				UserID:   userId,
 				Birthday: time.Now(),
 			}
+			p.ID, err = svcCtx.RW.GenerateId()
+			if err != nil {
+				return nil, err
+			}
 			err = db.Create(&p).Error
 			if err != nil {
 				return nil, err

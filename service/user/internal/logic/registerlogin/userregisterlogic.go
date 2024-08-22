@@ -51,6 +51,10 @@ func (l *UserRegisterLogic) UserRegister(in *user.UserRegisterReq) (*user.UserRe
 		Email:      in.Email,
 		Permission: common_models.DefaultPermission,
 	}
+	u.ID, err = l.svcCtx.RW.GenerateId()
+	if err != nil {
+		return nil, err
+	}
 	if err = db.Create(&u).Error; err != nil {
 		return nil, err
 	}

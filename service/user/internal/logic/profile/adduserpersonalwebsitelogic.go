@@ -42,6 +42,10 @@ func (l *AddUserPersonalWebsiteLogic) AddUserPersonalWebsite(in *user.AddUserPer
 		Name:   in.Name,
 		URL:    in.Url,
 	}
+	w.ID, err = l.svcCtx.RW.GenerateId()
+	if err != nil {
+		return nil, err
+	}
 	err = db.Transaction(func(tx *gorm.DB) error {
 		err := tx.Create(&w).Error
 		if err != nil {

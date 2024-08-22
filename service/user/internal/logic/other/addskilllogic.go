@@ -38,11 +38,16 @@ func (l *AddSkillLogic) AddSkill(in *user.AddSkillReq) (*user.AddSkillResp, erro
 		return nil, constant.InsufficientPermissionsError{}
 	}
 
-	// 插入数据
-	db := l.svcCtx.DB
+	// 构造数据
 	s := models.Skill{
 		Name: in.SkillName,
 	}
+	s.ID, err = l.svcCtx.RW.GenerateId()
+	if err != nil {
+		return nil, err
+	}
+	// 插入数据
+	db := l.svcCtx.DB
 	err = db.Create(&s).Error
 	if err != nil {
 		return nil, err
