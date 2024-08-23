@@ -27,5 +27,6 @@ type PersonalWebsite struct {
 // Skill 技能
 type Skill struct {
 	models.Model
-	Name string `gorm:"size:20;unique;not null"`
+	Name  string `gorm:"size:20;unique;not null"`
+	Users []User `gorm:"many2many:user_skills"`
 }
