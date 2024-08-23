@@ -30,6 +30,8 @@ type (
 	FollowUserResp                = user.FollowUserResp
 	ForgetPasswordReq             = user.ForgetPasswordReq
 	ForgetPasswordResp            = user.ForgetPasswordResp
+	GetAllSkillsReq               = user.GetAllSkillsReq
+	GetAllSkillsResp              = user.GetAllSkillsResp
 	GetBaseInfoReq                = user.GetBaseInfoReq
 	GetBaseInfoResp               = user.GetBaseInfoResp
 	GetFansReq                    = user.GetFansReq
@@ -52,6 +54,8 @@ type (
 	UpdatePasswordResp            = user.UpdatePasswordResp
 	UpdatePermissionReq           = user.UpdatePermissionReq
 	UpdatePermissionResp          = user.UpdatePermissionResp
+	UpdateSkillReq                = user.UpdateSkillReq
+	UpdateSkillResp               = user.UpdateSkillResp
 	UpdateUserProfileReq          = user.UpdateUserProfileReq
 	UpdateUserProfileResp         = user.UpdateUserProfileResp
 	UpdateUsernameReq             = user.UpdateUsernameReq
@@ -64,6 +68,10 @@ type (
 	Other interface {
 		// 添加技能，需要客服权限
 		AddSkill(ctx context.Context, in *AddSkillReq, opts ...grpc.CallOption) (*AddSkillResp, error)
+		// 修改技能，需要客服权限
+		UpdateSkill(ctx context.Context, in *UpdateSkillReq, opts ...grpc.CallOption) (*UpdateSkillResp, error)
+		// 查询所有技能
+		GetAllSkills(ctx context.Context, in *GetAllSkillsReq, opts ...grpc.CallOption) (*GetAllSkillsResp, error)
 		// 删除技能，需要客服权限
 		DeleteSkill(ctx context.Context, in *DeleteSkillReq, opts ...grpc.CallOption) (*DeleteSkillResp, error)
 		// 强行删除技能，必须要管理员权限
@@ -85,6 +93,18 @@ func NewOther(cli zrpc.Client) Other {
 func (m *defaultOther) AddSkill(ctx context.Context, in *AddSkillReq, opts ...grpc.CallOption) (*AddSkillResp, error) {
 	client := user.NewOtherClient(m.cli.Conn())
 	return client.AddSkill(ctx, in, opts...)
+}
+
+// 修改技能，需要客服权限
+func (m *defaultOther) UpdateSkill(ctx context.Context, in *UpdateSkillReq, opts ...grpc.CallOption) (*UpdateSkillResp, error) {
+	client := user.NewOtherClient(m.cli.Conn())
+	return client.UpdateSkill(ctx, in, opts...)
+}
+
+// 查询所有技能
+func (m *defaultOther) GetAllSkills(ctx context.Context, in *GetAllSkillsReq, opts ...grpc.CallOption) (*GetAllSkillsResp, error) {
+	client := user.NewOtherClient(m.cli.Conn())
+	return client.GetAllSkills(ctx, in, opts...)
 }
 
 // 删除技能，需要客服权限

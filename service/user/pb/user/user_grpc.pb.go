@@ -1006,6 +1006,8 @@ var Follow_ServiceDesc = grpc.ServiceDesc{
 
 const (
 	Other_AddSkill_FullMethodName        = "/user.Other/AddSkill"
+	Other_UpdateSkill_FullMethodName     = "/user.Other/UpdateSkill"
+	Other_GetAllSkills_FullMethodName    = "/user.Other/GetAllSkills"
 	Other_DeleteSkill_FullMethodName     = "/user.Other/DeleteSkill"
 	Other_MustDeleteSkill_FullMethodName = "/user.Other/MustDeleteSkill"
 )
@@ -1018,6 +1020,10 @@ const (
 type OtherClient interface {
 	// 添加技能，需要客服权限
 	AddSkill(ctx context.Context, in *AddSkillReq, opts ...grpc.CallOption) (*AddSkillResp, error)
+	// 修改技能，需要客服权限
+	UpdateSkill(ctx context.Context, in *UpdateSkillReq, opts ...grpc.CallOption) (*UpdateSkillResp, error)
+	// 查询所有技能
+	GetAllSkills(ctx context.Context, in *GetAllSkillsReq, opts ...grpc.CallOption) (*GetAllSkillsResp, error)
 	// 删除技能，需要客服权限
 	DeleteSkill(ctx context.Context, in *DeleteSkillReq, opts ...grpc.CallOption) (*DeleteSkillResp, error)
 	// 强行删除技能，必须要管理员权限
@@ -1036,6 +1042,26 @@ func (c *otherClient) AddSkill(ctx context.Context, in *AddSkillReq, opts ...grp
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AddSkillResp)
 	err := c.cc.Invoke(ctx, Other_AddSkill_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *otherClient) UpdateSkill(ctx context.Context, in *UpdateSkillReq, opts ...grpc.CallOption) (*UpdateSkillResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateSkillResp)
+	err := c.cc.Invoke(ctx, Other_UpdateSkill_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *otherClient) GetAllSkills(ctx context.Context, in *GetAllSkillsReq, opts ...grpc.CallOption) (*GetAllSkillsResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetAllSkillsResp)
+	err := c.cc.Invoke(ctx, Other_GetAllSkills_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1070,6 +1096,10 @@ func (c *otherClient) MustDeleteSkill(ctx context.Context, in *MustDeleteSkillRe
 type OtherServer interface {
 	// 添加技能，需要客服权限
 	AddSkill(context.Context, *AddSkillReq) (*AddSkillResp, error)
+	// 修改技能，需要客服权限
+	UpdateSkill(context.Context, *UpdateSkillReq) (*UpdateSkillResp, error)
+	// 查询所有技能
+	GetAllSkills(context.Context, *GetAllSkillsReq) (*GetAllSkillsResp, error)
 	// 删除技能，需要客服权限
 	DeleteSkill(context.Context, *DeleteSkillReq) (*DeleteSkillResp, error)
 	// 强行删除技能，必须要管理员权限
@@ -1083,6 +1113,12 @@ type UnimplementedOtherServer struct {
 
 func (UnimplementedOtherServer) AddSkill(context.Context, *AddSkillReq) (*AddSkillResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddSkill not implemented")
+}
+func (UnimplementedOtherServer) UpdateSkill(context.Context, *UpdateSkillReq) (*UpdateSkillResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateSkill not implemented")
+}
+func (UnimplementedOtherServer) GetAllSkills(context.Context, *GetAllSkillsReq) (*GetAllSkillsResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllSkills not implemented")
 }
 func (UnimplementedOtherServer) DeleteSkill(context.Context, *DeleteSkillReq) (*DeleteSkillResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteSkill not implemented")
@@ -1117,6 +1153,42 @@ func _Other_AddSkill_Handler(srv interface{}, ctx context.Context, dec func(inte
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OtherServer).AddSkill(ctx, req.(*AddSkillReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Other_UpdateSkill_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateSkillReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OtherServer).UpdateSkill(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Other_UpdateSkill_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OtherServer).UpdateSkill(ctx, req.(*UpdateSkillReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Other_GetAllSkills_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllSkillsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OtherServer).GetAllSkills(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Other_GetAllSkills_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OtherServer).GetAllSkills(ctx, req.(*GetAllSkillsReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1167,6 +1239,14 @@ var Other_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddSkill",
 			Handler:    _Other_AddSkill_Handler,
+		},
+		{
+			MethodName: "UpdateSkill",
+			Handler:    _Other_UpdateSkill_Handler,
+		},
+		{
+			MethodName: "GetAllSkills",
+			Handler:    _Other_GetAllSkills_Handler,
 		},
 		{
 			MethodName: "DeleteSkill",

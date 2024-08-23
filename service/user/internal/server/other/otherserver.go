@@ -28,6 +28,18 @@ func (s *OtherServer) AddSkill(ctx context.Context, in *user.AddSkillReq) (*user
 	return l.AddSkill(in)
 }
 
+// 修改技能，需要客服权限
+func (s *OtherServer) UpdateSkill(ctx context.Context, in *user.UpdateSkillReq) (*user.UpdateSkillResp, error) {
+	l := otherlogic.NewUpdateSkillLogic(ctx, s.svcCtx)
+	return l.UpdateSkill(in)
+}
+
+// 查询所有技能
+func (s *OtherServer) GetAllSkills(ctx context.Context, in *user.GetAllSkillsReq) (*user.GetAllSkillsResp, error) {
+	l := otherlogic.NewGetAllSkillsLogic(ctx, s.svcCtx)
+	return l.GetAllSkills(in)
+}
+
 // 删除技能，需要客服权限
 func (s *OtherServer) DeleteSkill(ctx context.Context, in *user.DeleteSkillReq) (*user.DeleteSkillResp, error) {
 	l := otherlogic.NewDeleteSkillLogic(ctx, s.svcCtx)

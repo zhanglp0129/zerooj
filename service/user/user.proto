@@ -245,6 +245,10 @@ message UnfollowUserResp {}
 service Other {
   // 添加技能，需要客服权限
   rpc AddSkill(AddSkillReq) returns (AddSkillResp);
+  // 修改技能，需要客服权限
+  rpc UpdateSkill(UpdateSkillReq) returns (UpdateSkillResp);
+  // 查询所有技能
+  rpc GetAllSkills(GetAllSkillsReq) returns (GetAllSkillsResp);
   // 删除技能，需要客服权限
   rpc DeleteSkill(DeleteSkillReq) returns (DeleteSkillResp);
   // 强行删除技能，必须要管理员权限
@@ -256,6 +260,17 @@ message AddSkillReq {
 }
 message AddSkillResp {
   int64 skillId = 1;
+}
+message UpdateSkillReq {
+  int64 operatorId = 1;
+  int64 skillId = 2;
+  // 修改后的名称
+  string skillName = 3;
+}
+message UpdateSkillResp {}
+message GetAllSkillsReq {}
+message GetAllSkillsResp {
+  repeated Skill skills = 1;
 }
 message DeleteSkillReq {
   int64 operatorId = 1;

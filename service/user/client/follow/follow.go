@@ -30,6 +30,8 @@ type (
 	FollowUserResp                = user.FollowUserResp
 	ForgetPasswordReq             = user.ForgetPasswordReq
 	ForgetPasswordResp            = user.ForgetPasswordResp
+	GetAllSkillsReq               = user.GetAllSkillsReq
+	GetAllSkillsResp              = user.GetAllSkillsResp
 	GetBaseInfoReq                = user.GetBaseInfoReq
 	GetBaseInfoResp               = user.GetBaseInfoResp
 	GetFansReq                    = user.GetFansReq
@@ -52,6 +54,8 @@ type (
 	UpdatePasswordResp            = user.UpdatePasswordResp
 	UpdatePermissionReq           = user.UpdatePermissionReq
 	UpdatePermissionResp          = user.UpdatePermissionResp
+	UpdateSkillReq                = user.UpdateSkillReq
+	UpdateSkillResp               = user.UpdateSkillResp
 	UpdateUserProfileReq          = user.UpdateUserProfileReq
 	UpdateUserProfileResp         = user.UpdateUserProfileResp
 	UpdateUsernameReq             = user.UpdateUsernameReq
