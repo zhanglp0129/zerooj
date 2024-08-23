@@ -44,6 +44,8 @@ type (
 	SearchByUsernameReq           = user.SearchByUsernameReq
 	SearchByUsernameResp          = user.SearchByUsernameResp
 	Skill                         = user.Skill
+	UnfollowUserReq               = user.UnfollowUserReq
+	UnfollowUserResp              = user.UnfollowUserResp
 	UpdateEmailReq                = user.UpdateEmailReq
 	UpdateEmailResp               = user.UpdateEmailResp
 	UpdatePasswordReq             = user.UpdatePasswordReq

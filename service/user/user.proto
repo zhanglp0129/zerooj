@@ -192,6 +192,7 @@ service Follow {
   rpc GetFans(GetFansReq) returns (GetFansResp);
   // 关注其他用户
   rpc FollowUser(FollowUserReq) returns (FollowUserResp);
+  rpc UnfollowUser(UnfollowUserReq) returns (UnfollowUserResp);
 }
 message FollowUserInfo {
   int64 id = 1;
@@ -232,6 +233,13 @@ message FollowUserReq {
   int64 followedId = 2;
 }
 message FollowUserResp {}
+message UnfollowUserReq {
+  // 关注者id，一般为当前登录用户
+  int64 followerId = 1;
+  // 被关注者id
+  int64 followedId = 2;
+}
+message UnfollowUserResp {}
 
 // 其他
 service Other {

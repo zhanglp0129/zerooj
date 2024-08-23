@@ -44,6 +44,8 @@ type (
 	SearchByUsernameReq           = user.SearchByUsernameReq
 	SearchByUsernameResp          = user.SearchByUsernameResp
 	Skill                         = user.Skill
+	UnfollowUserReq               = user.UnfollowUserReq
+	UnfollowUserResp              = user.UnfollowUserResp
 	UpdateEmailReq                = user.UpdateEmailReq
 	UpdateEmailResp               = user.UpdateEmailResp
 	UpdatePasswordReq             = user.UpdatePasswordReq
@@ -66,6 +68,7 @@ type (
 		GetFans(ctx context.Context, in *GetFansReq, opts ...grpc.CallOption) (*GetFansResp, error)
 		// 关注其他用户
 		FollowUser(ctx context.Context, in *FollowUserReq, opts ...grpc.CallOption) (*FollowUserResp, error)
+		UnfollowUser(ctx context.Context, in *UnfollowUserReq, opts ...grpc.CallOption) (*UnfollowUserResp, error)
 	}
 
 	defaultFollow struct {
@@ -95,4 +98,9 @@ func (m *defaultFollow) GetFans(ctx context.Context, in *GetFansReq, opts ...grp
 func (m *defaultFollow) FollowUser(ctx context.Context, in *FollowUserReq, opts ...grpc.CallOption) (*FollowUserResp, error) {
 	client := user.NewFollowClient(m.cli.Conn())
 	return client.FollowUser(ctx, in, opts...)
+}
+
+func (m *defaultFollow) UnfollowUser(ctx context.Context, in *UnfollowUserReq, opts ...grpc.CallOption) (*UnfollowUserResp, error) {
+	client := user.NewFollowClient(m.cli.Conn())
+	return client.UnfollowUser(ctx, in, opts...)
 }
