@@ -7,5 +7,5 @@ type Follow struct {
 	FollowedID int64 `gorm:"primaryKey;comment:被关注者"`
 	Follower   User
 	Followed   User
-	FollowAt   time.Time
+	FollowAt   time.Time `gorm:"not null"`
 }

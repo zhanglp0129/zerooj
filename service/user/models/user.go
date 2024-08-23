@@ -13,7 +13,7 @@ type User struct {
 	Permission models.Permission `gorm:"not null;comment:用户权限"`
 	Profile    UserProfile
 	Websites   []PersonalWebsite
-	Skills     []Skill  `gorm:"many2many:user_skills"`
-	Followings []Follow `gorm:"many2many:follows;joinForeignKey:FollowerID;joinReferences:FollowedID"` // 关注
-	Fans       []Follow `gorm:"many2many:follows;joinForeignKey:FollowedID;joinReferences:FollowerID"` // 粉丝
+	Skills     []Skill `gorm:"many2many:user_skills"`
+	Followings []*User `gorm:"many2many:follows;joinForeignKey:FollowerID;joinReferences:FollowedID"` // 关注
+	Fans       []*User `gorm:"many2many:follows;joinForeignKey:FollowedID;joinReferences:FollowerID"` // 粉丝
 }

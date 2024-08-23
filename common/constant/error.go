@@ -8,6 +8,7 @@ const (
 	NotSupportDatabaseDriver = "not support the database driver"
 	NumberOfDataSourceError  = "number of data source error"
 	DatabaseMachineIdError   = "database machine id error"
+	FollowYourselfError      = "cannot follow yourself"
 )
 
 // InputDataError 输入数据错误，需要传入什么东西错误
