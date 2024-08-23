@@ -30,8 +30,6 @@ type (
 	FollowUserResp                = user.FollowUserResp
 	ForgetPasswordReq             = user.ForgetPasswordReq
 	ForgetPasswordResp            = user.ForgetPasswordResp
-	GetAllSkillsReq               = user.GetAllSkillsReq
-	GetAllSkillsResp              = user.GetAllSkillsResp
 	GetBaseInfoReq                = user.GetBaseInfoReq
 	GetBaseInfoResp               = user.GetBaseInfoResp
 	GetFansReq                    = user.GetFansReq
@@ -45,6 +43,8 @@ type (
 	PersonalWebsite               = user.PersonalWebsite
 	SearchByUsernameReq           = user.SearchByUsernameReq
 	SearchByUsernameResp          = user.SearchByUsernameResp
+	SearchSkillsReq               = user.SearchSkillsReq
+	SearchSkillsResp              = user.SearchSkillsResp
 	Skill                         = user.Skill
 	UnfollowUserReq               = user.UnfollowUserReq
 	UnfollowUserResp              = user.UnfollowUserResp

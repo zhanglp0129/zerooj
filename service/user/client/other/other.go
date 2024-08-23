@@ -30,8 +30,6 @@ type (
 	FollowUserResp                = user.FollowUserResp
 	ForgetPasswordReq             = user.ForgetPasswordReq
 	ForgetPasswordResp            = user.ForgetPasswordResp
-	GetAllSkillsReq               = user.GetAllSkillsReq
-	GetAllSkillsResp              = user.GetAllSkillsResp
 	GetBaseInfoReq                = user.GetBaseInfoReq
 	GetBaseInfoResp               = user.GetBaseInfoResp
 	GetFansReq                    = user.GetFansReq
@@ -45,6 +43,8 @@ type (
 	PersonalWebsite               = user.PersonalWebsite
 	SearchByUsernameReq           = user.SearchByUsernameReq
 	SearchByUsernameResp          = user.SearchByUsernameResp
+	SearchSkillsReq               = user.SearchSkillsReq
+	SearchSkillsResp              = user.SearchSkillsResp
 	Skill                         = user.Skill
 	UnfollowUserReq               = user.UnfollowUserReq
 	UnfollowUserResp              = user.UnfollowUserResp
@@ -70,8 +70,8 @@ type (
 		AddSkill(ctx context.Context, in *AddSkillReq, opts ...grpc.CallOption) (*AddSkillResp, error)
 		// 修改技能，需要客服权限
 		UpdateSkill(ctx context.Context, in *UpdateSkillReq, opts ...grpc.CallOption) (*UpdateSkillResp, error)
-		// 查询所有技能
-		GetAllSkills(ctx context.Context, in *GetAllSkillsReq, opts ...grpc.CallOption) (*GetAllSkillsResp, error)
+		// 搜索技能
+		SearchSkills(ctx context.Context, in *SearchSkillsReq, opts ...grpc.CallOption) (*SearchSkillsResp, error)
 		// 删除技能，需要客服权限
 		DeleteSkill(ctx context.Context, in *DeleteSkillReq, opts ...grpc.CallOption) (*DeleteSkillResp, error)
 		// 强行删除技能，必须要管理员权限
@@ -101,10 +101,10 @@ func (m *defaultOther) UpdateSkill(ctx context.Context, in *UpdateSkillReq, opts
 	return client.UpdateSkill(ctx, in, opts...)
 }
 
-// 查询所有技能
-func (m *defaultOther) GetAllSkills(ctx context.Context, in *GetAllSkillsReq, opts ...grpc.CallOption) (*GetAllSkillsResp, error) {
+// 搜索技能
+func (m *defaultOther) SearchSkills(ctx context.Context, in *SearchSkillsReq, opts ...grpc.CallOption) (*SearchSkillsResp, error) {
 	client := user.NewOtherClient(m.cli.Conn())
-	return client.GetAllSkills(ctx, in, opts...)
+	return client.SearchSkills(ctx, in, opts...)
 }
 
 // 删除技能，需要客服权限
