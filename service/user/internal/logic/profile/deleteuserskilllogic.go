@@ -2,6 +2,9 @@ package profilelogic
 
 import (
 	"context"
+	"gorm.io/gorm"
+	common_models "zerooj/common/models"
+	"zerooj/service/user/models"
 
 	"zerooj/service/user/internal/svc"
 	"zerooj/service/user/pb/user"
@@ -25,7 +28,25 @@ func NewDeleteUserSkillLogic(ctx context.Context, svcCtx *svc.ServiceContext) *D
 
 // 删除用户技能
 func (l *DeleteUserSkillLogic) DeleteUserSkill(in *user.DeleteUserSkillReq) (*user.DeleteUserSkillResp, error) {
-	// todo: add your logic here and delete this line
+	db := l.svcCtx.DB
+	err := db.Transaction(func(tx *gorm.DB) error {
+		var u models.User
+		u.ID = in.UserId
+		skills := make([]models.Skill, 0, len(in.SkillIds))
+		for _, skillId := range in.SkillIds {
+			skills = append(skills, models.Skill{Model: common_models.Model{ID: skillId}})
+		}
+		err := tx.Model(&u).Association("Skills").Delete(&skills)
+		if err != nil {
+			return err
+		}
+
+		// 删除缓存
+		return DeleteUserProfileCache(l.svcCtx, in.UserId)
+	})
+	if err != nil {
+		return nil, err
+	}
 
 	return &user.DeleteUserSkillResp{}, nil
 }
