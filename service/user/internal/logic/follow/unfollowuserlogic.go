@@ -2,6 +2,7 @@ package followlogic
 
 import (
 	"context"
+	"zerooj/service/user/models"
 
 	"zerooj/service/user/internal/svc"
 	"zerooj/service/user/pb/user"
@@ -24,7 +25,16 @@ func NewUnfollowUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Unfo
 }
 
 func (l *UnfollowUserLogic) UnfollowUser(in *user.UnfollowUserReq) (*user.UnfollowUserResp, error) {
-	// todo: add your logic here and delete this line
+	db := l.svcCtx.DB
+	follow := models.Follow{
+		FollowerID: in.FollowerId,
+		FollowedID: in.FollowedId,
+	}
+
+	err := db.Delete(&follow).Error
+	if err != nil {
+		return nil, err
+	}
 
 	return &user.UnfollowUserResp{}, nil
 }
