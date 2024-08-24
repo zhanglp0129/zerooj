@@ -14,7 +14,7 @@ type Problem struct {
 	OutputDescription string            `gorm:"size:1000;comment:输出描述"`
 	ScaleDescription  string            `gorm:"size:1000;comment:数据规模说明"`
 	TimeLimit         time.Duration     `gorm:"comment:时间限制，单位为纳秒"`
-	MemoryLimit       int64             `gorm:"comment:内存限制，单位为字节"`
+	MemoryLimit       models.Memory     `gorm:"comment:内存限制，单位为字节"`
 	Examples          []Example
 	Hints             []Hint
 	JudgeData         []JudgeData
