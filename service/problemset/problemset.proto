@@ -268,8 +268,10 @@ message JudgeDataInfo {
 message AddJudgeDataReq {
   int64 operatorId = 1;
   int64 problemId = 2;
-  string inputObjectName = 3;
-  string outputObjectName = 4;
+  // 输入数据内容
+  string input = 3;
+  // 输出数据内容
+  string output = 4;
 }
 message AddJudgeDataResp {
   int64 id = 1;
@@ -281,7 +283,11 @@ message DeleteJudgeDataReq {
 message DeleteJudgeDataResp {}
 message UpdateJudgeDataReq {
   int64 operatorId = 1;
-  JudgeDataInfo judgeData = 2;
+  int64 judgeDataId = 2;
+  // 输入数据内容
+  string input = 3;
+  // 输出数据内容
+  string output = 4;
 }
 message UpdateJudgeDataResp {}
 message GetJudgeDataReq {
