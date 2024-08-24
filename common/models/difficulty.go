@@ -3,7 +3,7 @@ package models
 type Difficulty uint32
 
 const (
-	Easy Difficulty = iota + 1
+	Easy Difficulty = iota
 	Medium
 	Hard
 )
