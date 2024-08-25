@@ -43,7 +43,8 @@ message GetProblemContentReq {
 message GetProblemContentResp {
   string title = 1;
   uint32 difficulty = 2;
-  string description = 3;
+  // 题目描述在minio的对象名
+  string descriptionObjectName = 3;
   string inputDescription = 4;
   string outputDescription = 5;
   string scaleDescription = 6;

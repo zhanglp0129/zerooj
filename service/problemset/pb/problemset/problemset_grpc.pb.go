@@ -1382,3 +1382,477 @@ var JudgeData_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "problemset.proto",
 }
+
+const (
+	Language_AddLanguage_FullMethodName    = "/problemset.Language/AddLanguage"
+	Language_DeleteLanguage_FullMethodName = "/problemset.Language/DeleteLanguage"
+	Language_UpdateLanguage_FullMethodName = "/problemset.Language/UpdateLanguage"
+	Language_GetLanguage_FullMethodName    = "/problemset.Language/GetLanguage"
+)
+
+// LanguageClient is the client API for Language service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// 编程语言
+type LanguageClient interface {
+	// 添加语言，客服权限
+	AddLanguage(ctx context.Context, in *AddLanguageReq, opts ...grpc.CallOption) (*AddLanguageResp, error)
+	// 删除语言，客服权限
+	DeleteLanguage(ctx context.Context, in *DeleteLanguageReq, opts ...grpc.CallOption) (*DeleteLanguageResp, error)
+	// 更新语言，客服权限
+	UpdateLanguage(ctx context.Context, in *UpdateLanguageReq, opts ...grpc.CallOption) (*UpdateLanguageResp, error)
+	// 获取所有语言
+	GetLanguage(ctx context.Context, in *GetLanguageReq, opts ...grpc.CallOption) (*GetLanguageResp, error)
+}
+
+type languageClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewLanguageClient(cc grpc.ClientConnInterface) LanguageClient {
+	return &languageClient{cc}
+}
+
+func (c *languageClient) AddLanguage(ctx context.Context, in *AddLanguageReq, opts ...grpc.CallOption) (*AddLanguageResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AddLanguageResp)
+	err := c.cc.Invoke(ctx, Language_AddLanguage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *languageClient) DeleteLanguage(ctx context.Context, in *DeleteLanguageReq, opts ...grpc.CallOption) (*DeleteLanguageResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteLanguageResp)
+	err := c.cc.Invoke(ctx, Language_DeleteLanguage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *languageClient) UpdateLanguage(ctx context.Context, in *UpdateLanguageReq, opts ...grpc.CallOption) (*UpdateLanguageResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateLanguageResp)
+	err := c.cc.Invoke(ctx, Language_UpdateLanguage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *languageClient) GetLanguage(ctx context.Context, in *GetLanguageReq, opts ...grpc.CallOption) (*GetLanguageResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetLanguageResp)
+	err := c.cc.Invoke(ctx, Language_GetLanguage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// LanguageServer is the server API for Language service.
+// All implementations must embed UnimplementedLanguageServer
+// for forward compatibility
+//
+// 编程语言
+type LanguageServer interface {
+	// 添加语言，客服权限
+	AddLanguage(context.Context, *AddLanguageReq) (*AddLanguageResp, error)
+	// 删除语言，客服权限
+	DeleteLanguage(context.Context, *DeleteLanguageReq) (*DeleteLanguageResp, error)
+	// 更新语言，客服权限
+	UpdateLanguage(context.Context, *UpdateLanguageReq) (*UpdateLanguageResp, error)
+	// 获取所有语言
+	GetLanguage(context.Context, *GetLanguageReq) (*GetLanguageResp, error)
+	mustEmbedUnimplementedLanguageServer()
+}
+
+// UnimplementedLanguageServer must be embedded to have forward compatible implementations.
+type UnimplementedLanguageServer struct {
+}
+
+func (UnimplementedLanguageServer) AddLanguage(context.Context, *AddLanguageReq) (*AddLanguageResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddLanguage not implemented")
+}
+func (UnimplementedLanguageServer) DeleteLanguage(context.Context, *DeleteLanguageReq) (*DeleteLanguageResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteLanguage not implemented")
+}
+func (UnimplementedLanguageServer) UpdateLanguage(context.Context, *UpdateLanguageReq) (*UpdateLanguageResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateLanguage not implemented")
+}
+func (UnimplementedLanguageServer) GetLanguage(context.Context, *GetLanguageReq) (*GetLanguageResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLanguage not implemented")
+}
+func (UnimplementedLanguageServer) mustEmbedUnimplementedLanguageServer() {}
+
+// UnsafeLanguageServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to LanguageServer will
+// result in compilation errors.
+type UnsafeLanguageServer interface {
+	mustEmbedUnimplementedLanguageServer()
+}
+
+func RegisterLanguageServer(s grpc.ServiceRegistrar, srv LanguageServer) {
+	s.RegisterService(&Language_ServiceDesc, srv)
+}
+
+func _Language_AddLanguage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddLanguageReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LanguageServer).AddLanguage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Language_AddLanguage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LanguageServer).AddLanguage(ctx, req.(*AddLanguageReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Language_DeleteLanguage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteLanguageReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LanguageServer).DeleteLanguage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Language_DeleteLanguage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LanguageServer).DeleteLanguage(ctx, req.(*DeleteLanguageReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Language_UpdateLanguage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateLanguageReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LanguageServer).UpdateLanguage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Language_UpdateLanguage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LanguageServer).UpdateLanguage(ctx, req.(*UpdateLanguageReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Language_GetLanguage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetLanguageReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LanguageServer).GetLanguage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Language_GetLanguage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LanguageServer).GetLanguage(ctx, req.(*GetLanguageReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// Language_ServiceDesc is the grpc.ServiceDesc for Language service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var Language_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "problemset.Language",
+	HandlerType: (*LanguageServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "AddLanguage",
+			Handler:    _Language_AddLanguage_Handler,
+		},
+		{
+			MethodName: "DeleteLanguage",
+			Handler:    _Language_DeleteLanguage_Handler,
+		},
+		{
+			MethodName: "UpdateLanguage",
+			Handler:    _Language_UpdateLanguage_Handler,
+		},
+		{
+			MethodName: "GetLanguage",
+			Handler:    _Language_GetLanguage_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "problemset.proto",
+}
+
+const (
+	Submit_SubmitCode_FullMethodName            = "/problemset.Submit/SubmitCode"
+	Submit_GetProblemSubmitCount_FullMethodName = "/problemset.Submit/GetProblemSubmitCount"
+	Submit_GetUserSubmit_FullMethodName         = "/problemset.Submit/GetUserSubmit"
+	Submit_GetUserProblemSubmit_FullMethodName  = "/problemset.Submit/GetUserProblemSubmit"
+	Submit_GetSubmitById_FullMethodName         = "/problemset.Submit/GetSubmitById"
+)
+
+// SubmitClient is the client API for Submit service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// 提交
+type SubmitClient interface {
+	// 用户提交代码
+	SubmitCode(ctx context.Context, in *SubmitCodeReq, opts ...grpc.CallOption) (*SubmitCodeResp, error)
+	// 获取题目的提交数
+	GetProblemSubmitCount(ctx context.Context, in *GetProblemSubmitCountReq, opts ...grpc.CallOption) (*GetProblemSubmitCountResp, error)
+	// 分页获取用户提交
+	GetUserSubmit(ctx context.Context, in *GetUserSubmitReq, opts ...grpc.CallOption) (*GetUserSubmitResp, error)
+	// 获取用户某一道题的全部提交
+	GetUserProblemSubmit(ctx context.Context, in *GetUserProblemSubmitReq, opts ...grpc.CallOption) (*GetUserProblemSubmitResp, error)
+	// 获取通过id提交记录
+	GetSubmitById(ctx context.Context, in *GetSubmitByIdReq, opts ...grpc.CallOption) (*GetSubmitByIdResp, error)
+}
+
+type submitClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewSubmitClient(cc grpc.ClientConnInterface) SubmitClient {
+	return &submitClient{cc}
+}
+
+func (c *submitClient) SubmitCode(ctx context.Context, in *SubmitCodeReq, opts ...grpc.CallOption) (*SubmitCodeResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SubmitCodeResp)
+	err := c.cc.Invoke(ctx, Submit_SubmitCode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *submitClient) GetProblemSubmitCount(ctx context.Context, in *GetProblemSubmitCountReq, opts ...grpc.CallOption) (*GetProblemSubmitCountResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetProblemSubmitCountResp)
+	err := c.cc.Invoke(ctx, Submit_GetProblemSubmitCount_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *submitClient) GetUserSubmit(ctx context.Context, in *GetUserSubmitReq, opts ...grpc.CallOption) (*GetUserSubmitResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetUserSubmitResp)
+	err := c.cc.Invoke(ctx, Submit_GetUserSubmit_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *submitClient) GetUserProblemSubmit(ctx context.Context, in *GetUserProblemSubmitReq, opts ...grpc.CallOption) (*GetUserProblemSubmitResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetUserProblemSubmitResp)
+	err := c.cc.Invoke(ctx, Submit_GetUserProblemSubmit_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *submitClient) GetSubmitById(ctx context.Context, in *GetSubmitByIdReq, opts ...grpc.CallOption) (*GetSubmitByIdResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetSubmitByIdResp)
+	err := c.cc.Invoke(ctx, Submit_GetSubmitById_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// SubmitServer is the server API for Submit service.
+// All implementations must embed UnimplementedSubmitServer
+// for forward compatibility
+//
+// 提交
+type SubmitServer interface {
+	// 用户提交代码
+	SubmitCode(context.Context, *SubmitCodeReq) (*SubmitCodeResp, error)
+	// 获取题目的提交数
+	GetProblemSubmitCount(context.Context, *GetProblemSubmitCountReq) (*GetProblemSubmitCountResp, error)
+	// 分页获取用户提交
+	GetUserSubmit(context.Context, *GetUserSubmitReq) (*GetUserSubmitResp, error)
+	// 获取用户某一道题的全部提交
+	GetUserProblemSubmit(context.Context, *GetUserProblemSubmitReq) (*GetUserProblemSubmitResp, error)
+	// 获取通过id提交记录
+	GetSubmitById(context.Context, *GetSubmitByIdReq) (*GetSubmitByIdResp, error)
+	mustEmbedUnimplementedSubmitServer()
+}
+
+// UnimplementedSubmitServer must be embedded to have forward compatible implementations.
+type UnimplementedSubmitServer struct {
+}
+
+func (UnimplementedSubmitServer) SubmitCode(context.Context, *SubmitCodeReq) (*SubmitCodeResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitCode not implemented")
+}
+func (UnimplementedSubmitServer) GetProblemSubmitCount(context.Context, *GetProblemSubmitCountReq) (*GetProblemSubmitCountResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProblemSubmitCount not implemented")
+}
+func (UnimplementedSubmitServer) GetUserSubmit(context.Context, *GetUserSubmitReq) (*GetUserSubmitResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserSubmit not implemented")
+}
+func (UnimplementedSubmitServer) GetUserProblemSubmit(context.Context, *GetUserProblemSubmitReq) (*GetUserProblemSubmitResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserProblemSubmit not implemented")
+}
+func (UnimplementedSubmitServer) GetSubmitById(context.Context, *GetSubmitByIdReq) (*GetSubmitByIdResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSubmitById not implemented")
+}
+func (UnimplementedSubmitServer) mustEmbedUnimplementedSubmitServer() {}
+
+// UnsafeSubmitServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to SubmitServer will
+// result in compilation errors.
+type UnsafeSubmitServer interface {
+	mustEmbedUnimplementedSubmitServer()
+}
+
+func RegisterSubmitServer(s grpc.ServiceRegistrar, srv SubmitServer) {
+	s.RegisterService(&Submit_ServiceDesc, srv)
+}
+
+func _Submit_SubmitCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SubmitCodeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SubmitServer).SubmitCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Submit_SubmitCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SubmitServer).SubmitCode(ctx, req.(*SubmitCodeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Submit_GetProblemSubmitCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetProblemSubmitCountReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SubmitServer).GetProblemSubmitCount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Submit_GetProblemSubmitCount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SubmitServer).GetProblemSubmitCount(ctx, req.(*GetProblemSubmitCountReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Submit_GetUserSubmit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserSubmitReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SubmitServer).GetUserSubmit(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Submit_GetUserSubmit_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SubmitServer).GetUserSubmit(ctx, req.(*GetUserSubmitReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Submit_GetUserProblemSubmit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserProblemSubmitReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SubmitServer).GetUserProblemSubmit(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Submit_GetUserProblemSubmit_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SubmitServer).GetUserProblemSubmit(ctx, req.(*GetUserProblemSubmitReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Submit_GetSubmitById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSubmitByIdReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SubmitServer).GetSubmitById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Submit_GetSubmitById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SubmitServer).GetSubmitById(ctx, req.(*GetSubmitByIdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// Submit_ServiceDesc is the grpc.ServiceDesc for Submit service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var Submit_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "problemset.Submit",
+	HandlerType: (*SubmitServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "SubmitCode",
+			Handler:    _Submit_SubmitCode_Handler,
+		},
+		{
+			MethodName: "GetProblemSubmitCount",
+			Handler:    _Submit_GetProblemSubmitCount_Handler,
+		},
+		{
+			MethodName: "GetUserSubmit",
+			Handler:    _Submit_GetUserSubmit_Handler,
+		},
+		{
+			MethodName: "GetUserProblemSubmit",
+			Handler:    _Submit_GetUserProblemSubmit_Handler,
+		},
+		{
+			MethodName: "GetSubmitById",
+			Handler:    _Submit_GetSubmitById_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "problemset.proto",
+}
