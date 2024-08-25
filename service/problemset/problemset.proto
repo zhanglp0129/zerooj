@@ -296,3 +296,111 @@ message GetJudgeDataReq {
 message GetJudgeDataResp {
   repeated JudgeDataInfo judgeData = 1;
 }
+
+// 编程语言
+service Language {
+  // 添加语言，客服权限
+  rpc AddLanguage(AddLanguageReq) returns (AddLanguageResp);
+  // 删除语言，客服权限
+  rpc DeleteLanguage(DeleteLanguageReq) returns (DeleteLanguageResp);
+  // 更新语言，客服权限
+  rpc UpdateLanguage(UpdateLanguageReq) returns (UpdateLanguageResp);
+  // 获取所有语言
+  rpc GetLanguage(GetLanguageReq) returns (GetLanguageResp);
+}
+message LanguageInfo {
+  int64 languageId = 1;
+  string name = 2;
+  string version = 3;
+}
+message AddLanguageReq {
+  // 操作者id
+  int64 operatorId = 1;
+  string name = 2;
+  string version = 3;
+}
+message AddLanguageResp {
+  int64 id = 1;
+}
+message DeleteLanguageReq {
+  // 操作者id
+  int64 operatorId = 1;
+  int64 languageId = 2;
+}
+message DeleteLanguageResp {}
+message UpdateLanguageReq {
+  int64 operatorId = 1;
+  LanguageInfo language = 2;
+}
+message UpdateLanguageResp {}
+message GetLanguageReq {}
+message GetLanguageResp {
+  repeated LanguageInfo language = 1;
+}
+
+// 提交
+service Submit {
+  // 用户提交代码
+  rpc SubmitCode(SubmitCodeReq) returns (SubmitCodeResp);
+  // 获取题目的提交数
+  rpc GetProblemSubmitCount(GetProblemSubmitCountReq) returns (GetProblemSubmitCountResp);
+  // 分页获取用户提交
+  rpc GetUserSubmit(GetUserSubmitReq) returns (GetUserSubmitResp);
+  // 获取用户某一道题的全部提交
+  rpc GetUserProblemSubmit(GetUserProblemSubmitReq) returns (GetUserProblemSubmitResp);
+  // 获取通过id提交记录
+  rpc GetSubmitById(GetSubmitByIdReq) returns (GetSubmitByIdResp);
+}
+message SubmitInfo {
+  int64 submitId = 1;
+  int64 userId = 2;
+  int64 problemId = 3;
+  LanguageInfo language = 4;
+  uint32 result = 5;
+  // 用户提交的代码，在minio的对象名
+  string codeObjectName = 6;
+  int64 runTime = 7;
+  int64 memoryConsumption = 8;
+}
+message SubmitCodeReq {
+  int64 userId = 1;
+  int64 problemId = 2;
+  int64 languageId = 3;
+  // 代码原文
+  string code = 4;
+}
+message SubmitCodeResp {
+  int64 submitId = 1;
+}
+message GetProblemSubmitCountReq {
+  int64 problemId = 1;
+}
+message GetProblemSubmitCountResp {
+  // 提交数
+  int64 submitCount = 1;
+  // 通过数
+  int64 acceptCount = 2;
+}
+message GetUserSubmitReq {
+  int64 userId = 1;
+  int32 pageNum = 2;
+  int32 pageSize = 3;
+}
+message GetUserSubmitResp {
+  repeated SubmitInfo submits = 1;
+  // 总记录数
+  int64 count = 2;
+}
+message GetUserProblemSubmitReq {
+  int64 userId = 1;
+  int64 problemId = 2;
+}
+message GetUserProblemSubmitResp {
+  repeated SubmitInfo submits = 1;
+}
+message GetSubmitByIdReq {
+  int64 submitId = 1;
+}
+message GetSubmitByIdResp {
+  SubmitInfo submit = 1;
+}
