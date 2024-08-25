@@ -9,7 +9,7 @@ type Problem struct {
 	models.Model
 	Title             string            `gorm:"size:20;comment:题目标题"`
 	Difficulty        models.Difficulty `gorm:"comment:难度，0简单，1中等，2困难"`
-	Description       string            `gorm:"size:10000;comment:题目描述"`
+	Description       string            `gorm:"size:5000;comment:题目描述"`
 	InputDescription  string            `gorm:"size:1000;comment:输入描述"`
 	OutputDescription string            `gorm:"size:1000;comment:输出描述"`
 	ScaleDescription  string            `gorm:"size:1000;comment:数据规模说明"`
