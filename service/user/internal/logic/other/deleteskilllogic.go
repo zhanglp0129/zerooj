@@ -34,7 +34,7 @@ func (l *DeleteSkillLogic) DeleteSkill(in *user.DeleteSkillReq) (*user.DeleteSki
 		return nil, err
 	}
 	if !common_models.Permission(baseInfo.Permission).CanSupport() {
-		return nil, constant.InsufficientPermissionsError{}
+		return nil, constant.InsufficientPermissionsError
 	}
 
 	// 删除

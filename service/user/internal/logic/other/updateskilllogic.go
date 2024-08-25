@@ -35,7 +35,7 @@ func (l *UpdateSkillLogic) UpdateSkill(in *user.UpdateSkillReq) (*user.UpdateSki
 		return nil, err
 	}
 	if !common_models.Permission(baseInfo.Permission).CanSupport() {
-		return nil, constant.InsufficientPermissionsError{}
+		return nil, constant.InsufficientPermissionsError
 	}
 
 	db := l.svcCtx.DB

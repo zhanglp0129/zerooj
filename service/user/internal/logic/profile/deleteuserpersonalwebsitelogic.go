@@ -35,7 +35,7 @@ func (l *DeleteUserPersonalWebsiteLogic) DeleteUserPersonalWebsite(in *user.Dele
 	if err != nil {
 		return nil, err
 	} else if w.UserID != in.UserId {
-		return nil, constant.InsufficientPermissionsError{}
+		return nil, constant.InsufficientPermissionsError
 	}
 
 	err = db.Transaction(func(tx *gorm.DB) error {

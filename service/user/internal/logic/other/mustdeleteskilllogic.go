@@ -36,7 +36,7 @@ func (l *MustDeleteSkillLogic) MustDeleteSkill(in *user.MustDeleteSkillReq) (*us
 		return nil, err
 	}
 	if !common_models.Permission(baseInfo.Permission).CanAdmin() {
-		return nil, constant.InsufficientPermissionsError{}
+		return nil, constant.InsufficientPermissionsError
 	}
 
 	var count int64

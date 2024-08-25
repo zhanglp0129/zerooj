@@ -53,7 +53,7 @@ func (l *UpdateEmailLogic) UpdateEmail(in *user.UpdateEmailReq) (*user.UpdateEma
 
 	// 判断新旧邮箱是否相同
 	if in.Email == u.Email {
-		return nil, constant.NewEqualsOldError{Thing: "邮箱"}
+		return nil, constant.NewEmailEqualsOldError
 	}
 
 	oldKey := fmt.Sprintf("/mail_check_code/user/update_email/old/%s", u.Email)
@@ -65,7 +65,7 @@ func (l *UpdateEmailLogic) UpdateEmail(in *user.UpdateEmailReq) (*user.UpdateEma
 			return nil, err
 		}
 		if oldPasswordEncrypt != u.Password {
-			return nil, constant.InputDataError{Thing: "旧密码"}
+			return nil, constant.OldPasswordError
 		}
 	} else {
 		// 校验旧邮箱验证码
@@ -73,7 +73,7 @@ func (l *UpdateEmailLogic) UpdateEmail(in *user.UpdateEmailReq) (*user.UpdateEma
 		if err != nil && !errors.Is(err, redis.Nil) {
 			return nil, err
 		} else if errors.Is(err, redis.Nil) || trueOldCheckCode != in.OldEmailCheckCode {
-			return nil, constant.InputDataError{Thing: "旧邮箱验证码"}
+			return nil, constant.OldMailCheckCodeError
 		}
 	}
 
@@ -82,7 +82,7 @@ func (l *UpdateEmailLogic) UpdateEmail(in *user.UpdateEmailReq) (*user.UpdateEma
 	if err != nil && !errors.Is(err, redis.Nil) {
 		return nil, err
 	} else if errors.Is(err, redis.Nil) || trueONewCheckCode != in.EmailCheckCode {
-		return nil, constant.InputDataError{Thing: "新邮箱验证码"}
+		return nil, constant.NewMailCheckCodeError
 	}
 
 	err = db.Transaction(func(tx *gorm.DB) error {

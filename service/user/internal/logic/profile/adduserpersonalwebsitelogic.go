@@ -34,7 +34,7 @@ func (l *AddUserPersonalWebsiteLogic) AddUserPersonalWebsite(in *user.AddUserPer
 	if err != nil {
 		return nil, err
 	} else if count >= 5 {
-		return nil, constant.QuantityExceedsLimit{Thing: "个人网站"}
+		return nil, constant.WebsiteQuantityExceedsLimit
 	}
 
 	w := models.PersonalWebsite{

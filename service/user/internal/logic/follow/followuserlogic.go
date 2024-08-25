@@ -2,7 +2,6 @@ package followlogic
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/redis/go-redis/v9"
 	"github.com/zhanglp0129/redis_cache"
@@ -34,7 +33,7 @@ func NewFollowUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Follow
 func (l *FollowUserLogic) FollowUser(in *user.FollowUserReq) (*user.FollowUserResp, error) {
 	// 不能关注自己
 	if in.FollowerId == in.FollowedId {
-		return nil, errors.New(constant.FollowYourselfError)
+		return nil, constant.FollowYourselfError
 	}
 
 	db := l.svcCtx.DB

@@ -49,7 +49,7 @@ func (l *UpdateUsernameLogic) UpdateUsername(in *user.UpdateUsernameReq) (*user.
 	}
 	oldUsername := u.Username
 	if in.Username == oldUsername {
-		return nil, constant.NewEqualsOldError{Thing: "用户名"}
+		return nil, constant.NewUsernameEqualsOldError
 	}
 
 	// 修改数据
