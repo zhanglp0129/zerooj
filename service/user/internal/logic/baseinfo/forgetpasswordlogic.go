@@ -44,7 +44,7 @@ func (l *ForgetPasswordLogic) ForgetPassword(in *user.ForgetPasswordReq) (*user.
 		return nil, err
 	}
 	if trueCheckCode != in.EmailCheckCode {
-		return nil, constant.InputDataError{Thing: "邮箱验证码"}
+		return nil, constant.MailCheckCodeError
 	}
 
 	// 检查新旧密码是否相同
@@ -53,7 +53,7 @@ func (l *ForgetPasswordLogic) ForgetPassword(in *user.ForgetPasswordReq) (*user.
 		return nil, err
 	}
 	if newPasswordEncrypt == u.Password {
-		return nil, constant.NewEqualsOldError{Thing: "密码"}
+		return nil, constant.NewPasswordEqualsOldError
 	}
 
 	// 修改密码

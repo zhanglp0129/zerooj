@@ -37,7 +37,7 @@ func (l *UpdatePermissionLogic) UpdatePermission(in *user.UpdatePermissionReq) (
 	if err != nil {
 		return nil, err
 	} else if !operator.Permission.CanAdmin() {
-		return nil, constant.InsufficientPermissionsError{}
+		return nil, constant.InsufficientPermissionsError
 	}
 
 	// 获取旧权限

@@ -35,7 +35,7 @@ func (l *AddUserSkillLogic) AddUserSkill(in *user.AddUserSkillReq) (*user.AddUse
 	u.ID = in.UserId
 	count := db.Model(&u).Association("Skills").Count()
 	if int64(len(in.SkillIds))+count > 10 {
-		return nil, constant.QuantityExceedsLimit{Thing: "技能"}
+		return nil, constant.SkillQuantityExceedsLimit
 	}
 
 	// 插入用户技能

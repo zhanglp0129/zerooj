@@ -39,12 +39,12 @@ func (l *UpdatePasswordLogic) UpdatePassword(in *user.UpdatePasswordReq) (*user.
 	if err != nil {
 		return nil, err
 	} else if oldPasswordEncrypt != u.Password {
-		return nil, constant.InputDataError{Thing: "原密码"}
+		return nil, constant.OldPasswordError
 	}
 
 	// 再校验新旧密码是否相同
 	if in.OldPassword == in.NewPassword {
-		return nil, constant.NewEqualsOldError{Thing: "密码"}
+		return nil, constant.NewPasswordEqualsOldError
 	}
 
 	//  修改密码

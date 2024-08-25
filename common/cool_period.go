@@ -14,7 +14,7 @@ func InCoolPeriod(rdb redis.UniversalClient, key string) error {
 	_, err := rdb.Get(context.Background(), key).Result()
 	if err == nil {
 		// 处于冷却期
-		return constant.OperationInCoolPeriod{}
+		return constant.OperationInCoolPeriod
 	} else if !errors.Is(err, redis.Nil) {
 		// 其他错误
 		return err

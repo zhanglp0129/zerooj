@@ -35,7 +35,7 @@ func (l *AddSkillLogic) AddSkill(in *user.AddSkillReq) (*user.AddSkillResp, erro
 		return nil, err
 	}
 	if !common_models.Permission(baseInfo.Permission).CanSupport() {
-		return nil, constant.InsufficientPermissionsError{}
+		return nil, constant.InsufficientPermissionsError
 	}
 
 	// 构造数据

@@ -43,13 +43,13 @@ func (l *SendMailCheckCodeLogic) SendMailCheckCode(in *user.SendMailCheckCodeReq
 	if err != nil {
 		return nil, err
 	} else if res.Allowed == 0 {
-		return nil, constant.FrequentVisitError{}
+		return nil, constant.FrequentVisitError
 	}
 	res, err = lim.Allow(context.Background(), frequencyKeyHour, redis_rate.PerHour(10))
 	if err != nil {
 		return nil, err
 	} else if res.Allowed == 0 {
-		return nil, constant.FrequentVisitError{}
+		return nil, constant.FrequentVisitError
 	}
 
 	// 准备数据
