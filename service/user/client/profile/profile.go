@@ -36,6 +36,8 @@ type (
 	GetFansResp                   = user.GetFansResp
 	GetFollowingsReq              = user.GetFollowingsReq
 	GetFollowingsResp             = user.GetFollowingsResp
+	GetPermissionReq              = user.GetPermissionReq
+	GetPermissionResp             = user.GetPermissionResp
 	GetUserProfileReq             = user.GetUserProfileReq
 	GetUserProfileResp            = user.GetUserProfileResp
 	MustDeleteSkillReq            = user.MustDeleteSkillReq
@@ -45,7 +47,7 @@ type (
 	SearchByUsernameResp          = user.SearchByUsernameResp
 	SearchSkillsReq               = user.SearchSkillsReq
 	SearchSkillsResp              = user.SearchSkillsResp
-	Skill                         = user.Skill
+	SkillInfo                     = user.SkillInfo
 	UnfollowUserReq               = user.UnfollowUserReq
 	UnfollowUserResp              = user.UnfollowUserResp
 	UpdateEmailReq                = user.UpdateEmailReq
@@ -74,10 +76,6 @@ type (
 		AddUserPersonalWebsite(ctx context.Context, in *AddUserPersonalWebsiteReq, opts ...grpc.CallOption) (*AddUserPersonalWebsiteResp, error)
 		// 删除个人网站
 		DeleteUserPersonalWebsite(ctx context.Context, in *DeleteUserPersonalWebsiteReq, opts ...grpc.CallOption) (*DeleteUserPersonalWebsiteResp, error)
-		// 添加用户技能，最多10个
-		AddUserSkill(ctx context.Context, in *AddUserSkillReq, opts ...grpc.CallOption) (*AddUserSkillResp, error)
-		// 删除用户技能
-		DeleteUserSkill(ctx context.Context, in *DeleteUserSkillReq, opts ...grpc.CallOption) (*DeleteUserSkillResp, error)
 	}
 
 	defaultProfile struct {
@@ -113,16 +111,4 @@ func (m *defaultProfile) AddUserPersonalWebsite(ctx context.Context, in *AddUser
 func (m *defaultProfile) DeleteUserPersonalWebsite(ctx context.Context, in *DeleteUserPersonalWebsiteReq, opts ...grpc.CallOption) (*DeleteUserPersonalWebsiteResp, error) {
 	client := user.NewProfileClient(m.cli.Conn())
 	return client.DeleteUserPersonalWebsite(ctx, in, opts...)
-}
-
-// 添加用户技能，最多10个
-func (m *defaultProfile) AddUserSkill(ctx context.Context, in *AddUserSkillReq, opts ...grpc.CallOption) (*AddUserSkillResp, error) {
-	client := user.NewProfileClient(m.cli.Conn())
-	return client.AddUserSkill(ctx, in, opts...)
-}
-
-// 删除用户技能
-func (m *defaultProfile) DeleteUserSkill(ctx context.Context, in *DeleteUserSkillReq, opts ...grpc.CallOption) (*DeleteUserSkillResp, error) {
-	client := user.NewProfileClient(m.cli.Conn())
-	return client.DeleteUserSkill(ctx, in, opts...)
 }

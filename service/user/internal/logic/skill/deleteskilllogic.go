@@ -1,10 +1,7 @@
-package otherlogic
+package skilllogic
 
 import (
 	"context"
-	"zerooj/common/constant"
-	common_models "zerooj/common/models"
-	baseinfologic "zerooj/service/user/internal/logic/baseinfo"
 	"zerooj/service/user/models"
 
 	"zerooj/service/user/internal/svc"
@@ -27,19 +24,11 @@ func NewDeleteSkillLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Delet
 	}
 }
 
+// 删除技能
 func (l *DeleteSkillLogic) DeleteSkill(in *user.DeleteSkillReq) (*user.DeleteSkillResp, error) {
-	// 鉴权
-	baseInfo, err := baseinfologic.GetBaseInfo(l.svcCtx, in.OperatorId)
-	if err != nil {
-		return nil, err
-	}
-	if !common_models.Permission(baseInfo.Permission).CanSupport() {
-		return nil, constant.InsufficientPermissionsError
-	}
-
 	// 删除
 	db := l.svcCtx.DB
-	err = db.Delete(&models.Skill{}, in.SkillId).Error
+	err := db.Delete(&models.Skill{}, in.SkillId).Error
 	if err != nil {
 		return nil, err
 	}

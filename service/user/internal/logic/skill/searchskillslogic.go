@@ -1,4 +1,4 @@
-package otherlogic
+package skilllogic
 
 import (
 	"context"
@@ -44,9 +44,9 @@ func (l *SearchSkillsLogic) SearchSkills(in *user.SearchSkillsReq) (*user.Search
 		return nil, err
 	}
 
-	skills := make([]*user.Skill, 0, len(ss))
+	skills := make([]*user.SkillInfo, 0, len(ss))
 	for _, s := range ss {
-		skills = append(skills, &user.Skill{
+		skills = append(skills, &user.SkillInfo{
 			SkillId: s.ID,
 			Name:    s.Name,
 		})

@@ -45,15 +45,3 @@ func (s *ProfileServer) DeleteUserPersonalWebsite(ctx context.Context, in *user.
 	l := profilelogic.NewDeleteUserPersonalWebsiteLogic(ctx, s.svcCtx)
 	return l.DeleteUserPersonalWebsite(in)
 }
-
-// 添加用户技能，最多10个
-func (s *ProfileServer) AddUserSkill(ctx context.Context, in *user.AddUserSkillReq) (*user.AddUserSkillResp, error) {
-	l := profilelogic.NewAddUserSkillLogic(ctx, s.svcCtx)
-	return l.AddUserSkill(in)
-}
-
-// 删除用户技能
-func (s *ProfileServer) DeleteUserSkill(ctx context.Context, in *user.DeleteUserSkillReq) (*user.DeleteUserSkillResp, error) {
-	l := profilelogic.NewDeleteUserSkillLogic(ctx, s.svcCtx)
-	return l.DeleteUserSkill(in)
-}
