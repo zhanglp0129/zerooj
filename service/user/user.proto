@@ -119,10 +119,6 @@ service Profile {
   rpc AddUserPersonalWebsite(AddUserPersonalWebsiteReq) returns (AddUserPersonalWebsiteResp);
   // 删除个人网站
   rpc DeleteUserPersonalWebsite(DeleteUserPersonalWebsiteReq) returns (DeleteUserPersonalWebsiteResp);
-  // 添加用户技能，最多10个
-  rpc AddUserSkill(AddUserSkillReq) returns (AddUserSkillResp);
-  // 删除用户技能
-  rpc DeleteUserSkill(DeleteUserSkillReq) returns (DeleteUserSkillResp);
 }
 message GetUserProfileReq {
   int64 userId = 1;
@@ -135,16 +131,12 @@ message GetUserProfileResp {
   google.protobuf.Timestamp birthday = 4;
   string personalIntroduction = 5;
   repeated PersonalWebsite websites = 6;
-  repeated Skill skills = 7;
+  repeated SkillInfo skills = 7;
 }
 message PersonalWebsite {
   int64 websiteId = 1;
   string name = 2;
   string url = 3;
-}
-message Skill {
-  int64 skillId = 1;
-  string name = 2;
 }
 message UpdateUserProfileReq {
   int64 userId = 1;
@@ -169,18 +161,6 @@ message DeleteUserPersonalWebsiteReq {
   int64 websiteId = 2;
 }
 message DeleteUserPersonalWebsiteResp {}
-message AddUserSkillReq {
-  int64 userId = 1;
-  // 技能id，允许多个
-  repeated int64 skillIds = 2;
-}
-message AddUserSkillResp {}
-message DeleteUserSkillReq {
-  int64 userId = 1;
-  // 技能id，允许多个
-  repeated int64 skillIds = 2;
-}
-message DeleteUserSkillResp {}
 
 // 关注
 service Follow {
@@ -199,7 +179,7 @@ message FollowUserInfo {
   string personalIntroduction = 4;
   string avatarURL = 5;
   repeated PersonalWebsite websites = 6;
-  repeated Skill skills = 7;
+  repeated SkillInfo skills = 7;
   google.protobuf.Timestamp followAt = 8;
 }
 message GetFollowingsReq {
@@ -239,8 +219,8 @@ message UnfollowUserReq {
 }
 message UnfollowUserResp {}
 
-// 其他
-service Other {
+// 技能
+service Skill {
   // 添加技能
   rpc AddSkill(AddSkillReq) returns (AddSkillResp);
   // 修改技能
@@ -251,6 +231,14 @@ service Other {
   rpc DeleteSkill(DeleteSkillReq) returns (DeleteSkillResp);
   // 强行删除技能
   rpc MustDeleteSkill(MustDeleteSkillReq) returns (MustDeleteSkillResp);
+  // 添加用户技能，最多10个
+  rpc AddUserSkill(AddUserSkillReq) returns (AddUserSkillResp);
+  // 删除用户技能
+  rpc DeleteUserSkill(DeleteUserSkillReq) returns (DeleteUserSkillResp);
+}
+message SkillInfo {
+  int64 skillId = 1;
+  string name = 2;
 }
 message AddSkillReq {
   string skillName = 1;
@@ -271,7 +259,7 @@ message SearchSkillsReq {
   int32 pageSize = 3;
 }
 message SearchSkillsResp {
-  repeated Skill skills = 1;
+  repeated SkillInfo skills = 1;
   // 记录总数
   int64 count = 2;
 }
@@ -286,3 +274,15 @@ message MustDeleteSkillResp {
   // 拥有该技能的用户数量
   int64 userSkillCount = 1;
 }
+message AddUserSkillReq {
+  int64 userId = 1;
+  // 技能id，允许多个
+  repeated int64 skillIds = 2;
+}
+message AddUserSkillResp {}
+message DeleteUserSkillReq {
+  int64 userId = 1;
+  // 技能id，允许多个
+  repeated int64 skillIds = 2;
+}
+message DeleteUserSkillResp {}

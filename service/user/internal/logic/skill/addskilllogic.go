@@ -1,4 +1,4 @@
-package otherlogic
+package skilllogic
 
 import (
 	"context"
@@ -24,7 +24,7 @@ func NewAddSkillLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddSkill
 	}
 }
 
-// 添加和删除技能
+// 添加技能
 func (l *AddSkillLogic) AddSkill(in *user.AddSkillReq) (*user.AddSkillResp, error) {
 	// 构造数据
 	s := models.Skill{

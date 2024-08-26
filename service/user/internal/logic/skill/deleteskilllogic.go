@@ -1,4 +1,4 @@
-package otherlogic
+package skilllogic
 
 import (
 	"context"
@@ -24,6 +24,7 @@ func NewDeleteSkillLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Delet
 	}
 }
 
+// 删除技能
 func (l *DeleteSkillLogic) DeleteSkill(in *user.DeleteSkillReq) (*user.DeleteSkillResp, error) {
 	// 删除
 	db := l.svcCtx.DB

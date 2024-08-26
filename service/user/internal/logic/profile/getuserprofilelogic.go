@@ -86,7 +86,7 @@ func GetUserProfile(svcCtx *svc.ServiceContext, userId int64) (*user.GetUserProf
 				})
 			}
 			for _, skill := range u.Skills {
-				model.Skills = append(model.Skills, &user.Skill{
+				model.Skills = append(model.Skills, &user.SkillInfo{
 					SkillId: skill.ID,
 					Name:    skill.Name,
 				})

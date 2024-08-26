@@ -1,4 +1,4 @@
-package otherlogic
+package skilllogic
 
 import (
 	"context"

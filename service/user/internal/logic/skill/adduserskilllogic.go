@@ -1,10 +1,11 @@
-package profilelogic
+package skilllogic
 
 import (
 	"context"
 	"gorm.io/gorm"
 	"zerooj/common/constant"
 	common_models "zerooj/common/models"
+	profilelogic "zerooj/service/user/internal/logic/profile"
 	"zerooj/service/user/models"
 
 	"zerooj/service/user/internal/svc"
@@ -50,7 +51,7 @@ func (l *AddUserSkillLogic) AddUserSkill(in *user.AddUserSkillReq) (*user.AddUse
 		}
 
 		// 删除缓存
-		return DeleteUserProfileCache(l.svcCtx, in.UserId)
+		return profilelogic.DeleteUserProfileCache(l.svcCtx, in.UserId)
 	})
 	if err != nil {
 		return nil, err
