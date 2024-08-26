@@ -9,6 +9,7 @@ import (
 	followServer "zerooj/service/user/internal/server/follow"
 	profileServer "zerooj/service/user/internal/server/profile"
 	registerloginServer "zerooj/service/user/internal/server/registerlogin"
+	skillServer "zerooj/service/user/internal/server/skill"
 	"zerooj/service/user/internal/svc"
 	"zerooj/service/user/pb/user"
 
@@ -33,6 +34,7 @@ func main() {
 		user.RegisterBaseInfoServer(grpcServer, baseinfoServer.NewBaseInfoServer(ctx))
 		user.RegisterProfileServer(grpcServer, profileServer.NewProfileServer(ctx))
 		user.RegisterFollowServer(grpcServer, followServer.NewFollowServer(ctx))
+		user.RegisterSkillServer(grpcServer, skillServer.NewSkillServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)
