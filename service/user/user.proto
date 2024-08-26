@@ -48,7 +48,7 @@ service BaseInfo {
   rpc ForgetPassword(ForgetPasswordReq) returns (ForgetPasswordResp);
   // 修改用户邮箱，有7天冷却期
   rpc UpdateEmail(UpdateEmailReq) returns (UpdateEmailResp);
-  // 修改用户权限，需要管理员权限
+  // 修改用户权限
   rpc UpdatePermission(UpdatePermissionReq) returns (UpdatePermissionResp);
 }
 message GetBaseInfoReq {
@@ -103,9 +103,7 @@ message UpdateEmailResp {
 message UpdatePermissionReq {
   // 被修改者id
   int64 id = 1;
-  // 操作者id，必须为管理员用户。一般为当前登录的用户
-  int64 operatorId = 2;
-  uint32 permission = 3;
+  uint32 permission = 2;
 }
 message UpdatePermissionResp {
   uint32 oldPermission = 1;
@@ -243,29 +241,27 @@ message UnfollowUserResp {}
 
 // 其他
 service Other {
-  // 添加技能，需要客服权限
+  // 添加技能
   rpc AddSkill(AddSkillReq) returns (AddSkillResp);
-  // 修改技能，需要客服权限
+  // 修改技能
   rpc UpdateSkill(UpdateSkillReq) returns (UpdateSkillResp);
   // 搜索技能
   rpc SearchSkills(SearchSkillsReq) returns (SearchSkillsResp);
-  // 删除技能，需要客服权限
+  // 删除技能
   rpc DeleteSkill(DeleteSkillReq) returns (DeleteSkillResp);
-  // 强行删除技能，必须要管理员权限
+  // 强行删除技能
   rpc MustDeleteSkill(MustDeleteSkillReq) returns (MustDeleteSkillResp);
 }
 message AddSkillReq {
-  int64 operatorId = 1;
-  string skillName = 2;
+  string skillName = 1;
 }
 message AddSkillResp {
   int64 skillId = 1;
 }
 message UpdateSkillReq {
-  int64 operatorId = 1;
-  int64 skillId = 2;
+  int64 skillId = 1;
   // 修改后的名称
-  string skillName = 3;
+  string skillName = 2;
 }
 message UpdateSkillResp {}
 message SearchSkillsReq {
@@ -280,13 +276,11 @@ message SearchSkillsResp {
   int64 count = 2;
 }
 message DeleteSkillReq {
-  int64 operatorId = 1;
-  int64 skillId = 2;
+  int64 skillId = 1;
 }
 message DeleteSkillResp {}
 message MustDeleteSkillReq {
-  int64 operatorId = 1;
-  int64 skillId = 2;
+  int64 skillId = 1;
 }
 message MustDeleteSkillResp {
   // 拥有该技能的用户数量

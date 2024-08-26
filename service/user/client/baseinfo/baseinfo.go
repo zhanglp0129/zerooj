@@ -78,7 +78,7 @@ type (
 		ForgetPassword(ctx context.Context, in *ForgetPasswordReq, opts ...grpc.CallOption) (*ForgetPasswordResp, error)
 		// 修改用户邮箱，有7天冷却期
 		UpdateEmail(ctx context.Context, in *UpdateEmailReq, opts ...grpc.CallOption) (*UpdateEmailResp, error)
-		// 修改用户权限，需要管理员权限
+		// 修改用户权限
 		UpdatePermission(ctx context.Context, in *UpdatePermissionReq, opts ...grpc.CallOption) (*UpdatePermissionResp, error)
 	}
 
@@ -129,7 +129,7 @@ func (m *defaultBaseInfo) UpdateEmail(ctx context.Context, in *UpdateEmailReq, o
 	return client.UpdateEmail(ctx, in, opts...)
 }
 
-// 修改用户权限，需要管理员权限
+// 修改用户权限
 func (m *defaultBaseInfo) UpdatePermission(ctx context.Context, in *UpdatePermissionReq, opts ...grpc.CallOption) (*UpdatePermissionResp, error) {
 	client := user.NewBaseInfoClient(m.cli.Conn())
 	return client.UpdatePermission(ctx, in, opts...)

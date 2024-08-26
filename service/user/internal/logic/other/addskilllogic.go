@@ -2,9 +2,6 @@ package otherlogic
 
 import (
 	"context"
-	"zerooj/common/constant"
-	common_models "zerooj/common/models"
-	baseinfologic "zerooj/service/user/internal/logic/baseinfo"
 	"zerooj/service/user/models"
 
 	"zerooj/service/user/internal/svc"
@@ -27,21 +24,13 @@ func NewAddSkillLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddSkill
 	}
 }
 
-// 添加和删除技能，只有客服能操作
+// 添加和删除技能
 func (l *AddSkillLogic) AddSkill(in *user.AddSkillReq) (*user.AddSkillResp, error) {
-	// 鉴权
-	baseInfo, err := baseinfologic.GetBaseInfo(l.svcCtx, in.OperatorId)
-	if err != nil {
-		return nil, err
-	}
-	if !common_models.Permission(baseInfo.Permission).CanSupport() {
-		return nil, constant.InsufficientPermissionsError
-	}
-
 	// 构造数据
 	s := models.Skill{
 		Name: in.SkillName,
 	}
+	var err error
 	s.ID, err = l.svcCtx.RW.GenerateId()
 	if err != nil {
 		return nil, err

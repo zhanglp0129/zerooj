@@ -183,7 +183,7 @@ type BaseInfoClient interface {
 	ForgetPassword(ctx context.Context, in *ForgetPasswordReq, opts ...grpc.CallOption) (*ForgetPasswordResp, error)
 	// 修改用户邮箱，有7天冷却期
 	UpdateEmail(ctx context.Context, in *UpdateEmailReq, opts ...grpc.CallOption) (*UpdateEmailResp, error)
-	// 修改用户权限，需要管理员权限
+	// 修改用户权限
 	UpdatePermission(ctx context.Context, in *UpdatePermissionReq, opts ...grpc.CallOption) (*UpdatePermissionResp, error)
 }
 
@@ -283,7 +283,7 @@ type BaseInfoServer interface {
 	ForgetPassword(context.Context, *ForgetPasswordReq) (*ForgetPasswordResp, error)
 	// 修改用户邮箱，有7天冷却期
 	UpdateEmail(context.Context, *UpdateEmailReq) (*UpdateEmailResp, error)
-	// 修改用户权限，需要管理员权限
+	// 修改用户权限
 	UpdatePermission(context.Context, *UpdatePermissionReq) (*UpdatePermissionResp, error)
 	mustEmbedUnimplementedBaseInfoServer()
 }
@@ -1018,15 +1018,15 @@ const (
 //
 // 其他
 type OtherClient interface {
-	// 添加技能，需要客服权限
+	// 添加技能
 	AddSkill(ctx context.Context, in *AddSkillReq, opts ...grpc.CallOption) (*AddSkillResp, error)
-	// 修改技能，需要客服权限
+	// 修改技能
 	UpdateSkill(ctx context.Context, in *UpdateSkillReq, opts ...grpc.CallOption) (*UpdateSkillResp, error)
 	// 搜索技能
 	SearchSkills(ctx context.Context, in *SearchSkillsReq, opts ...grpc.CallOption) (*SearchSkillsResp, error)
-	// 删除技能，需要客服权限
+	// 删除技能
 	DeleteSkill(ctx context.Context, in *DeleteSkillReq, opts ...grpc.CallOption) (*DeleteSkillResp, error)
-	// 强行删除技能，必须要管理员权限
+	// 强行删除技能
 	MustDeleteSkill(ctx context.Context, in *MustDeleteSkillReq, opts ...grpc.CallOption) (*MustDeleteSkillResp, error)
 }
 
@@ -1094,15 +1094,15 @@ func (c *otherClient) MustDeleteSkill(ctx context.Context, in *MustDeleteSkillRe
 //
 // 其他
 type OtherServer interface {
-	// 添加技能，需要客服权限
+	// 添加技能
 	AddSkill(context.Context, *AddSkillReq) (*AddSkillResp, error)
-	// 修改技能，需要客服权限
+	// 修改技能
 	UpdateSkill(context.Context, *UpdateSkillReq) (*UpdateSkillResp, error)
 	// 搜索技能
 	SearchSkills(context.Context, *SearchSkillsReq) (*SearchSkillsResp, error)
-	// 删除技能，需要客服权限
+	// 删除技能
 	DeleteSkill(context.Context, *DeleteSkillReq) (*DeleteSkillResp, error)
-	// 强行删除技能，必须要管理员权限
+	// 强行删除技能
 	MustDeleteSkill(context.Context, *MustDeleteSkillReq) (*MustDeleteSkillResp, error)
 	mustEmbedUnimplementedOtherServer()
 }

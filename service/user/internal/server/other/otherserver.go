@@ -22,13 +22,13 @@ func NewOtherServer(svcCtx *svc.ServiceContext) *OtherServer {
 	}
 }
 
-// 添加技能，需要客服权限
+// 添加技能
 func (s *OtherServer) AddSkill(ctx context.Context, in *user.AddSkillReq) (*user.AddSkillResp, error) {
 	l := otherlogic.NewAddSkillLogic(ctx, s.svcCtx)
 	return l.AddSkill(in)
 }
 
-// 修改技能，需要客服权限
+// 修改技能
 func (s *OtherServer) UpdateSkill(ctx context.Context, in *user.UpdateSkillReq) (*user.UpdateSkillResp, error) {
 	l := otherlogic.NewUpdateSkillLogic(ctx, s.svcCtx)
 	return l.UpdateSkill(in)
@@ -40,13 +40,13 @@ func (s *OtherServer) SearchSkills(ctx context.Context, in *user.SearchSkillsReq
 	return l.SearchSkills(in)
 }
 
-// 删除技能，需要客服权限
+// 删除技能
 func (s *OtherServer) DeleteSkill(ctx context.Context, in *user.DeleteSkillReq) (*user.DeleteSkillResp, error) {
 	l := otherlogic.NewDeleteSkillLogic(ctx, s.svcCtx)
 	return l.DeleteSkill(in)
 }
 
-// 强行删除技能，必须要管理员权限
+// 强行删除技能
 func (s *OtherServer) MustDeleteSkill(ctx context.Context, in *user.MustDeleteSkillReq) (*user.MustDeleteSkillResp, error) {
 	l := otherlogic.NewMustDeleteSkillLogic(ctx, s.svcCtx)
 	return l.MustDeleteSkill(in)

@@ -66,15 +66,15 @@ type (
 	UserRegisterResp              = user.UserRegisterResp
 
 	Other interface {
-		// 添加技能，需要客服权限
+		// 添加技能
 		AddSkill(ctx context.Context, in *AddSkillReq, opts ...grpc.CallOption) (*AddSkillResp, error)
-		// 修改技能，需要客服权限
+		// 修改技能
 		UpdateSkill(ctx context.Context, in *UpdateSkillReq, opts ...grpc.CallOption) (*UpdateSkillResp, error)
 		// 搜索技能
 		SearchSkills(ctx context.Context, in *SearchSkillsReq, opts ...grpc.CallOption) (*SearchSkillsResp, error)
-		// 删除技能，需要客服权限
+		// 删除技能
 		DeleteSkill(ctx context.Context, in *DeleteSkillReq, opts ...grpc.CallOption) (*DeleteSkillResp, error)
-		// 强行删除技能，必须要管理员权限
+		// 强行删除技能
 		MustDeleteSkill(ctx context.Context, in *MustDeleteSkillReq, opts ...grpc.CallOption) (*MustDeleteSkillResp, error)
 	}
 
@@ -89,13 +89,13 @@ func NewOther(cli zrpc.Client) Other {
 	}
 }
 
-// 添加技能，需要客服权限
+// 添加技能
 func (m *defaultOther) AddSkill(ctx context.Context, in *AddSkillReq, opts ...grpc.CallOption) (*AddSkillResp, error) {
 	client := user.NewOtherClient(m.cli.Conn())
 	return client.AddSkill(ctx, in, opts...)
 }
 
-// 修改技能，需要客服权限
+// 修改技能
 func (m *defaultOther) UpdateSkill(ctx context.Context, in *UpdateSkillReq, opts ...grpc.CallOption) (*UpdateSkillResp, error) {
 	client := user.NewOtherClient(m.cli.Conn())
 	return client.UpdateSkill(ctx, in, opts...)
@@ -107,13 +107,13 @@ func (m *defaultOther) SearchSkills(ctx context.Context, in *SearchSkillsReq, op
 	return client.SearchSkills(ctx, in, opts...)
 }
 
-// 删除技能，需要客服权限
+// 删除技能
 func (m *defaultOther) DeleteSkill(ctx context.Context, in *DeleteSkillReq, opts ...grpc.CallOption) (*DeleteSkillResp, error) {
 	client := user.NewOtherClient(m.cli.Conn())
 	return client.DeleteSkill(ctx, in, opts...)
 }
 
-// 强行删除技能，必须要管理员权限
+// 强行删除技能
 func (m *defaultOther) MustDeleteSkill(ctx context.Context, in *MustDeleteSkillReq, opts ...grpc.CallOption) (*MustDeleteSkillResp, error) {
 	client := user.NewOtherClient(m.cli.Conn())
 	return client.MustDeleteSkill(ctx, in, opts...)

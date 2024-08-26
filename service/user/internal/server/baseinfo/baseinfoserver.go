@@ -58,7 +58,7 @@ func (s *BaseInfoServer) UpdateEmail(ctx context.Context, in *user.UpdateEmailRe
 	return l.UpdateEmail(in)
 }
 
-// 修改用户权限，需要管理员权限
+// 修改用户权限
 func (s *BaseInfoServer) UpdatePermission(ctx context.Context, in *user.UpdatePermissionReq) (*user.UpdatePermissionResp, error) {
 	l := baseinfologic.NewUpdatePermissionLogic(ctx, s.svcCtx)
 	return l.UpdatePermission(in)
