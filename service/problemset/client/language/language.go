@@ -93,11 +93,11 @@ type (
 	UpdateTagsResp            = problemset.UpdateTagsResp
 
 	Language interface {
-		// 添加语言，客服权限
+		// 添加语言
 		AddLanguage(ctx context.Context, in *AddLanguageReq, opts ...grpc.CallOption) (*AddLanguageResp, error)
-		// 删除语言，客服权限
+		// 删除语言
 		DeleteLanguage(ctx context.Context, in *DeleteLanguageReq, opts ...grpc.CallOption) (*DeleteLanguageResp, error)
-		// 更新语言，客服权限
+		// 更新语言
 		UpdateLanguage(ctx context.Context, in *UpdateLanguageReq, opts ...grpc.CallOption) (*UpdateLanguageResp, error)
 		// 获取所有语言
 		GetLanguage(ctx context.Context, in *GetLanguageReq, opts ...grpc.CallOption) (*GetLanguageResp, error)
@@ -114,19 +114,19 @@ func NewLanguage(cli zrpc.Client) Language {
 	}
 }
 
-// 添加语言，客服权限
+// 添加语言
 func (m *defaultLanguage) AddLanguage(ctx context.Context, in *AddLanguageReq, opts ...grpc.CallOption) (*AddLanguageResp, error) {
 	client := problemset.NewLanguageClient(m.cli.Conn())
 	return client.AddLanguage(ctx, in, opts...)
 }
 
-// 删除语言，客服权限
+// 删除语言
 func (m *defaultLanguage) DeleteLanguage(ctx context.Context, in *DeleteLanguageReq, opts ...grpc.CallOption) (*DeleteLanguageResp, error) {
 	client := problemset.NewLanguageClient(m.cli.Conn())
 	return client.DeleteLanguage(ctx, in, opts...)
 }
 
-// 更新语言，客服权限
+// 更新语言
 func (m *defaultLanguage) UpdateLanguage(ctx context.Context, in *UpdateLanguageReq, opts ...grpc.CallOption) (*UpdateLanguageResp, error) {
 	client := problemset.NewLanguageClient(m.cli.Conn())
 	return client.UpdateLanguage(ctx, in, opts...)

@@ -23,7 +23,7 @@ func NewAddTagsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddTagsLo
 	}
 }
 
-// 添加标签，客服权限
+// 添加标签
 func (l *AddTagsLogic) AddTags(in *problemset.AddTagsReq) (*problemset.AddTagsResp, error) {
 	// todo: add your logic here and delete this line
 

@@ -23,7 +23,7 @@ func NewUpdateTagsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Update
 	}
 }
 
-// 更新标签，客服权限
+// 更新标签
 func (l *UpdateTagsLogic) UpdateTags(in *problemset.UpdateTagsReq) (*problemset.UpdateTagsResp, error) {
 	// todo: add your logic here and delete this line
 

@@ -23,7 +23,7 @@ func NewUpdateHintLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Update
 	}
 }
 
-// 修改提示，客服权限
+// 修改提示
 func (l *UpdateHintLogic) UpdateHint(in *problemset.UpdateHintReq) (*problemset.UpdateHintResp, error) {
 	// todo: add your logic here and delete this line
 

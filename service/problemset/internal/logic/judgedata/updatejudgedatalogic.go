@@ -23,7 +23,7 @@ func NewUpdateJudgeDataLogic(ctx context.Context, svcCtx *svc.ServiceContext) *U
 	}
 }
 
-// 修改测评数据，客服权限
+// 修改测评数据
 func (l *UpdateJudgeDataLogic) UpdateJudgeData(in *problemset.UpdateJudgeDataReq) (*problemset.UpdateJudgeDataResp, error) {
 	// todo: add your logic here and delete this line
 

@@ -23,7 +23,7 @@ func NewProblemAddTagsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Pr
 	}
 }
 
-// 给题目添加标签，最多5个，客服权限
+// 给题目添加标签，最多5个
 func (l *ProblemAddTagsLogic) ProblemAddTags(in *problemset.ProblemAddTagsReq) (*problemset.ProblemAddTagsResp, error) {
 	// todo: add your logic here and delete this line
 

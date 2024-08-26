@@ -93,11 +93,11 @@ type (
 	UpdateTagsResp            = problemset.UpdateTagsResp
 
 	JudgeData interface {
-		// 添加测评数据，客服权限
+		// 添加测评数据
 		AddJudgeData(ctx context.Context, in *AddJudgeDataReq, opts ...grpc.CallOption) (*AddJudgeDataResp, error)
-		// 删除测评数据，客服权限
+		// 删除测评数据
 		DeleteJudgeData(ctx context.Context, in *DeleteJudgeDataReq, opts ...grpc.CallOption) (*DeleteJudgeDataResp, error)
-		// 修改测评数据，客服权限
+		// 修改测评数据
 		UpdateJudgeData(ctx context.Context, in *UpdateJudgeDataReq, opts ...grpc.CallOption) (*UpdateJudgeDataResp, error)
 		// 获取题目的测评数据，返回minio对象名称，可缓存
 		GetJudgeData(ctx context.Context, in *GetJudgeDataReq, opts ...grpc.CallOption) (*GetJudgeDataResp, error)
@@ -114,19 +114,19 @@ func NewJudgeData(cli zrpc.Client) JudgeData {
 	}
 }
 
-// 添加测评数据，客服权限
+// 添加测评数据
 func (m *defaultJudgeData) AddJudgeData(ctx context.Context, in *AddJudgeDataReq, opts ...grpc.CallOption) (*AddJudgeDataResp, error) {
 	client := problemset.NewJudgeDataClient(m.cli.Conn())
 	return client.AddJudgeData(ctx, in, opts...)
 }
 
-// 删除测评数据，客服权限
+// 删除测评数据
 func (m *defaultJudgeData) DeleteJudgeData(ctx context.Context, in *DeleteJudgeDataReq, opts ...grpc.CallOption) (*DeleteJudgeDataResp, error) {
 	client := problemset.NewJudgeDataClient(m.cli.Conn())
 	return client.DeleteJudgeData(ctx, in, opts...)
 }
 
-// 修改测评数据，客服权限
+// 修改测评数据
 func (m *defaultJudgeData) UpdateJudgeData(ctx context.Context, in *UpdateJudgeDataReq, opts ...grpc.CallOption) (*UpdateJudgeDataResp, error) {
 	client := problemset.NewJudgeDataClient(m.cli.Conn())
 	return client.UpdateJudgeData(ctx, in, opts...)

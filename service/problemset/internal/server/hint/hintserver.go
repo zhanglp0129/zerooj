@@ -22,19 +22,19 @@ func NewHintServer(svcCtx *svc.ServiceContext) *HintServer {
 	}
 }
 
-// 添加提示，客服权限
+// 添加提示
 func (s *HintServer) AddHint(ctx context.Context, in *problemset.AddHintReq) (*problemset.AddHintResp, error) {
 	l := hintlogic.NewAddHintLogic(ctx, s.svcCtx)
 	return l.AddHint(in)
 }
 
-// 删除提示，客服权限
+// 删除提示
 func (s *HintServer) DeleteHint(ctx context.Context, in *problemset.DeleteHintReq) (*problemset.DeleteHintResp, error) {
 	l := hintlogic.NewDeleteHintLogic(ctx, s.svcCtx)
 	return l.DeleteHint(in)
 }
 
-// 修改提示，客服权限
+// 修改提示
 func (s *HintServer) UpdateHint(ctx context.Context, in *problemset.UpdateHintReq) (*problemset.UpdateHintResp, error) {
 	l := hintlogic.NewUpdateHintLogic(ctx, s.svcCtx)
 	return l.UpdateHint(in)

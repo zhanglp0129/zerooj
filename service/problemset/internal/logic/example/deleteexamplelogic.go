@@ -23,7 +23,7 @@ func NewDeleteExampleLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Del
 	}
 }
 
-// 删除样例，客服权限
+// 删除样例
 func (l *DeleteExampleLogic) DeleteExample(in *problemset.DeleteExampleReq) (*problemset.DeleteExampleResp, error) {
 	// todo: add your logic here and delete this line
 

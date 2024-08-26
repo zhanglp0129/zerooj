@@ -23,7 +23,7 @@ func NewMustDeleteTagsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Mu
 	}
 }
 
-// 强行删除标签，管理员权限
+// 强行删除标签
 func (l *MustDeleteTagsLogic) MustDeleteTags(in *problemset.MustDeleteTagsReq) (*problemset.MustDeleteTagsResp, error) {
 	// todo: add your logic here and delete this line
 

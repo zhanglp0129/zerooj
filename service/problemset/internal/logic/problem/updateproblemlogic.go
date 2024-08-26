@@ -23,7 +23,7 @@ func NewUpdateProblemLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Upd
 	}
 }
 
-// 更新问题，客服权限
+// 更新问题
 func (l *UpdateProblemLogic) UpdateProblem(in *problemset.UpdateProblemReq) (*problemset.UpdateProblemResp, error) {
 	// todo: add your logic here and delete this line
 

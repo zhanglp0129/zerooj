@@ -93,13 +93,13 @@ type (
 	UpdateTagsResp            = problemset.UpdateTagsResp
 
 	Problem interface {
-		// 添加问题，客服权限
+		// 添加问题
 		AddProblem(ctx context.Context, in *AddProblemReq, opts ...grpc.CallOption) (*AddProblemResp, error)
-		// 删除问题，客服权限
+		// 删除问题
 		DeleteProblem(ctx context.Context, in *DeleteProblemReq, opts ...grpc.CallOption) (*DeleteProblemResp, error)
 		// 获取问题信息，可缓存
 		GetProblemContent(ctx context.Context, in *GetProblemContentReq, opts ...grpc.CallOption) (*GetProblemContentResp, error)
-		// 更新问题，客服权限
+		// 更新问题
 		UpdateProblem(ctx context.Context, in *UpdateProblemReq, opts ...grpc.CallOption) (*UpdateProblemResp, error)
 		// 分页搜索题目
 		SearchProblem(ctx context.Context, in *SearchProblemReq, opts ...grpc.CallOption) (*SearchProblemResp, error)
@@ -116,13 +116,13 @@ func NewProblem(cli zrpc.Client) Problem {
 	}
 }
 
-// 添加问题，客服权限
+// 添加问题
 func (m *defaultProblem) AddProblem(ctx context.Context, in *AddProblemReq, opts ...grpc.CallOption) (*AddProblemResp, error) {
 	client := problemset.NewProblemClient(m.cli.Conn())
 	return client.AddProblem(ctx, in, opts...)
 }
 
-// 删除问题，客服权限
+// 删除问题
 func (m *defaultProblem) DeleteProblem(ctx context.Context, in *DeleteProblemReq, opts ...grpc.CallOption) (*DeleteProblemResp, error) {
 	client := problemset.NewProblemClient(m.cli.Conn())
 	return client.DeleteProblem(ctx, in, opts...)
@@ -134,7 +134,7 @@ func (m *defaultProblem) GetProblemContent(ctx context.Context, in *GetProblemCo
 	return client.GetProblemContent(ctx, in, opts...)
 }
 
-// 更新问题，客服权限
+// 更新问题
 func (m *defaultProblem) UpdateProblem(ctx context.Context, in *UpdateProblemReq, opts ...grpc.CallOption) (*UpdateProblemResp, error) {
 	client := problemset.NewProblemClient(m.cli.Conn())
 	return client.UpdateProblem(ctx, in, opts...)

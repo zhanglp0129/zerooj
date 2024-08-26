@@ -22,25 +22,25 @@ func NewTagServer(svcCtx *svc.ServiceContext) *TagServer {
 	}
 }
 
-// 添加标签，客服权限
+// 添加标签
 func (s *TagServer) AddTags(ctx context.Context, in *problemset.AddTagsReq) (*problemset.AddTagsResp, error) {
 	l := taglogic.NewAddTagsLogic(ctx, s.svcCtx)
 	return l.AddTags(in)
 }
 
-// 删除标签，客服权限
+// 删除标签
 func (s *TagServer) DeleteTags(ctx context.Context, in *problemset.DeleteTagsReq) (*problemset.DeleteTagsResp, error) {
 	l := taglogic.NewDeleteTagsLogic(ctx, s.svcCtx)
 	return l.DeleteTags(in)
 }
 
-// 强行删除标签，管理员权限
+// 强行删除标签
 func (s *TagServer) MustDeleteTags(ctx context.Context, in *problemset.MustDeleteTagsReq) (*problemset.MustDeleteTagsResp, error) {
 	l := taglogic.NewMustDeleteTagsLogic(ctx, s.svcCtx)
 	return l.MustDeleteTags(in)
 }
 
-// 更新标签，客服权限
+// 更新标签
 func (s *TagServer) UpdateTags(ctx context.Context, in *problemset.UpdateTagsReq) (*problemset.UpdateTagsResp, error) {
 	l := taglogic.NewUpdateTagsLogic(ctx, s.svcCtx)
 	return l.UpdateTags(in)
@@ -52,13 +52,13 @@ func (s *TagServer) GetAllTags(ctx context.Context, in *problemset.GetAllTagsReq
 	return l.GetAllTags(in)
 }
 
-// 给题目添加标签，最多5个，客服权限
+// 给题目添加标签，最多5个
 func (s *TagServer) ProblemAddTags(ctx context.Context, in *problemset.ProblemAddTagsReq) (*problemset.ProblemAddTagsResp, error) {
 	l := taglogic.NewProblemAddTagsLogic(ctx, s.svcCtx)
 	return l.ProblemAddTags(in)
 }
 
-// 给题目删除标签，客服权限
+// 给题目删除标签
 func (s *TagServer) ProblemDeleteTags(ctx context.Context, in *problemset.ProblemDeleteTagsReq) (*problemset.ProblemDeleteTagsResp, error) {
 	l := taglogic.NewProblemDeleteTagsLogic(ctx, s.svcCtx)
 	return l.ProblemDeleteTags(in)

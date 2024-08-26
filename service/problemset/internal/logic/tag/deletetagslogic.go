@@ -23,7 +23,7 @@ func NewDeleteTagsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Delete
 	}
 }
 
-// 删除标签，客服权限
+// 删除标签
 func (l *DeleteTagsLogic) DeleteTags(in *problemset.DeleteTagsReq) (*problemset.DeleteTagsResp, error) {
 	// todo: add your logic here and delete this line
 

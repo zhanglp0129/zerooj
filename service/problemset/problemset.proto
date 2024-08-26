@@ -6,35 +6,32 @@ option go_package = "./problemset";
 
 // 题目
 service Problem {
-  // 添加问题，客服权限
+  // 添加问题
   rpc AddProblem(AddProblemReq) returns (AddProblemResp);
-  // 删除问题，客服权限
+  // 删除问题
   rpc DeleteProblem(DeleteProblemReq) returns (DeleteProblemResp);
   // 获取问题信息，可缓存
   rpc GetProblemContent(GetProblemContentReq) returns (GetProblemContentResp);
-  // 更新问题，客服权限
+  // 更新问题
   rpc UpdateProblem(UpdateProblemReq) returns (UpdateProblemResp);
   // 分页搜索题目
   rpc SearchProblem(SearchProblemReq) returns (SearchProblemResp);
 }
 message AddProblemReq {
-  // 操作者id，用于鉴权
-  int64 operatorId = 1;
-  string title = 2;
-  uint32 difficulty = 3;
-  string description = 4;
-  string inputDescription = 5;
-  string outputDescription = 6;
-  string scaleDescription = 7;
-  int64 timeLimit = 8;
-  int64 memoryLimit = 9;
+  string title = 1;
+  uint32 difficulty = 2;
+  string description = 3;
+  string inputDescription = 4;
+  string outputDescription = 5;
+  string scaleDescription = 6;
+  int64 timeLimit = 7;
+  int64 memoryLimit = 8;
 }
 message AddProblemResp {
   int64 id = 1;
 }
 message DeleteProblemReq {
-  int64 operatorId = 1;
-  int64 problemId = 2;
+  int64 problemId = 1;
 }
 message DeleteProblemResp {}
 message GetProblemContentReq {
@@ -52,15 +49,14 @@ message GetProblemContentResp {
   int64 memoryLimit = 8;
 }
 message UpdateProblemReq {
-  int64 operatorId = 1;
-  int64 problemId = 2;
-  uint32 difficulty = 3;
-  string description = 4;
-  string inputDescription = 5;
-  string outputDescription = 6;
-  string scaleDescription = 7;
-  int64 timeLimit = 8;
-  int64 memoryLimit = 9;
+  int64 problemId = 1;
+  uint32 difficulty = 2;
+  string description = 3;
+  string inputDescription = 4;
+  string outputDescription = 5;
+  string scaleDescription = 6;
+  int64 timeLimit = 7;
+  int64 memoryLimit = 8;
 }
 message UpdateProblemResp {}
 message SearchProblemReq {
@@ -81,45 +77,41 @@ message SearchProblemResp {
 
 // 标签
 service Tag {
-  // 添加标签，客服权限
+  // 添加标签
   rpc AddTags(AddTagsReq) returns (AddTagsResp);
-  // 删除标签，客服权限
+  // 删除标签
   rpc DeleteTags(DeleteTagsReq) returns (DeleteTagsResp);
-  // 强行删除标签，管理员权限
+  // 强行删除标签
   rpc MustDeleteTags(MustDeleteTagsReq) returns (MustDeleteTagsResp);
-  // 更新标签，客服权限
+  // 更新标签
   rpc UpdateTags(UpdateTagsReq) returns (UpdateTagsResp);
   // 获取所有标签，可缓存
   rpc GetAllTags(GetAllTagsReq) returns (GetAllTagsResp);
-  // 给题目添加标签，最多5个，客服权限
+  // 给题目添加标签，最多5个
   rpc ProblemAddTags(ProblemAddTagsReq) returns (ProblemAddTagsResp);
-  // 给题目删除标签，客服权限
+  // 给题目删除标签
   rpc ProblemDeleteTags(ProblemDeleteTagsReq) returns (ProblemDeleteTagsResp);
   // 获取一个题目的所有标签，可缓存
   rpc GetProblemTags(GetProblemTagsReq) returns (GetProblemTagsResp);
 }
 message AddTagsReq {
-  int64 operatorId = 1;
-  string name = 2;
+  string name = 1;
 }
 message AddTagsResp {
   int64 id = 1;
 }
 message DeleteTagsReq {
-  int64 operatorId = 1;
-  int64 tagId = 2;
+  int64 tagId = 1;
 }
 message DeleteTagsResp {}
 message MustDeleteTagsReq {
-  int64 operatorId = 1;
-  int64 tagId = 2;
+  int64 tagId = 1;
 }
 message MustDeleteTagsResp {}
 message UpdateTagsReq {
-  int64 operatorId = 1;
-  int64 tagId = 2;
+  int64 tagId = 1;
   // 修改后标签名字
-  string name = 3;
+  string name = 2;
 }
 message UpdateTagsResp {}
 message GetAllTagsReq {}
@@ -132,15 +124,13 @@ message GetAllTagsResp {
   repeated TagInfo tags = 1;
 }
 message ProblemAddTagsReq {
-  int64 operatorId = 1;
-  int64 problemId = 2;
-  repeated int64 tagIds = 3;
+  int64 problemId = 1;
+  repeated int64 tagIds = 2;
 }
 message ProblemAddTagsResp {}
 message ProblemDeleteTagsReq {
-  int64 operatorId = 1;
-  int64 problemId = 2;
-  repeated int64 tagIds = 3;
+  int64 problemId = 1;
+  repeated int64 tagIds = 2;
 }
 message ProblemDeleteTagsResp {}
 message GetProblemTagsReq {
@@ -152,11 +142,11 @@ message GetProblemTagsResp {
 
 // 样例
 service Example {
-  // 添加样例，客服权限
+  // 添加样例
   rpc AddExample(AddExampleReq) returns (AddExampleResp);
-  // 删除样例，客服权限
+  // 删除样例
   rpc DeleteExample(DeleteExampleReq) returns (DeleteExampleResp);
-  // 修改样例，客服权限
+  // 修改样例
   rpc UpdateExample(UpdateExampleReq) returns (UpdateExampleResp);
   // 获取样例
   rpc GetExample(GetExampleReq) returns (GetExampleResp);
@@ -170,23 +160,20 @@ message ExampleInfo {
   string explanation = 4;
 }
 message AddExampleReq {
-  int64 operatorId = 1;
-  int64 problemId = 2;
-  string input = 3;
-  string output = 4;
-  string explanation = 5;
+  int64 problemId = 1;
+  string input = 2;
+  string output = 3;
+  string explanation = 4;
 }
 message AddExampleResp {
   int64 id = 1;
 }
 message DeleteExampleReq {
-  int64 operatorId = 1;
-  int64 exampleId = 2;
+  int64 exampleId = 1;
 }
 message DeleteExampleResp {}
 message UpdateExampleReq {
-  int64 operatorId = 1;
-  ExampleInfo example = 2;
+  ExampleInfo example = 1;
 }
 message UpdateExampleResp {}
 message GetExampleReq {
@@ -204,11 +191,11 @@ message GetProblemExamplesResp {
 
 // 提示
 service Hint {
-  // 添加提示，客服权限
+  // 添加提示
   rpc AddHint(AddHintReq) returns (AddHintResp);
-  // 删除提示，客服权限
+  // 删除提示
   rpc DeleteHint(DeleteHintReq) returns (DeleteHintResp);
-  // 修改提示，客服权限
+  // 修改提示
   rpc UpdateHint(UpdateHintReq) returns (UpdateHintResp);
   // 获取提示
   rpc GetHint(GetHintReq) returns (GetHintResp);
@@ -220,21 +207,18 @@ message HintInfo {
   string content = 2;
 }
 message AddHintReq {
-  int64 operatorId = 1;
-  int64 problemId = 2;
-  string content = 3;
+  int64 problemId = 1;
+  string content = 2;
 }
 message AddHintResp {
   int64 id = 1;
 }
 message DeleteHintReq {
-  int64 operatorId = 1;
-  int64 hintId = 2;
+  int64 hintId = 1;
 }
 message DeleteHintResp {}
 message UpdateHintReq {
-  int64 operatorId = 1;
-  HintInfo hint = 2;
+  HintInfo hint = 1;
 }
 message UpdateHintResp {}
 message GetHintReq {
@@ -252,11 +236,11 @@ message GetProblemHintsResp {
 
 // 评测数据
 service JudgeData {
-  // 添加测评数据，客服权限
+  // 添加测评数据
   rpc AddJudgeData(AddJudgeDataReq) returns (AddJudgeDataResp);
-  // 删除测评数据，客服权限
+  // 删除测评数据
   rpc DeleteJudgeData(DeleteJudgeDataReq) returns (DeleteJudgeDataResp);
-  // 修改测评数据，客服权限
+  // 修改测评数据
   rpc UpdateJudgeData(UpdateJudgeDataReq) returns (UpdateJudgeDataResp);
   // 获取题目的测评数据，返回minio对象名称，可缓存
   rpc GetJudgeData(GetJudgeDataReq) returns (GetJudgeDataResp);
@@ -267,8 +251,7 @@ message JudgeDataInfo {
   string outputObjectName = 3;
 }
 message AddJudgeDataReq {
-  int64 operatorId = 1;
-  int64 problemId = 2;
+  int64 problemId = 1;
   // 输入数据内容
   string input = 3;
   // 输出数据内容
@@ -278,17 +261,15 @@ message AddJudgeDataResp {
   int64 id = 1;
 }
 message DeleteJudgeDataReq {
-  int64 operatorId = 1;
-  int64 judgeDataId = 2;
+  int64 judgeDataId = 1;
 }
 message DeleteJudgeDataResp {}
 message UpdateJudgeDataReq {
-  int64 operatorId = 1;
-  int64 judgeDataId = 2;
+  int64 judgeDataId = 1;
   // 输入数据内容
-  string input = 3;
+  string input = 2;
   // 输出数据内容
-  string output = 4;
+  string output = 3;
 }
 message UpdateJudgeDataResp {}
 message GetJudgeDataReq {
@@ -300,11 +281,11 @@ message GetJudgeDataResp {
 
 // 编程语言
 service Language {
-  // 添加语言，客服权限
+  // 添加语言
   rpc AddLanguage(AddLanguageReq) returns (AddLanguageResp);
-  // 删除语言，客服权限
+  // 删除语言
   rpc DeleteLanguage(DeleteLanguageReq) returns (DeleteLanguageResp);
-  // 更新语言，客服权限
+  // 更新语言
   rpc UpdateLanguage(UpdateLanguageReq) returns (UpdateLanguageResp);
   // 获取所有语言
   rpc GetLanguage(GetLanguageReq) returns (GetLanguageResp);
@@ -316,22 +297,19 @@ message LanguageInfo {
 }
 message AddLanguageReq {
   // 操作者id
-  int64 operatorId = 1;
-  string name = 2;
-  string version = 3;
+  string name = 1;
+  string version = 2;
 }
 message AddLanguageResp {
   int64 id = 1;
 }
 message DeleteLanguageReq {
   // 操作者id
-  int64 operatorId = 1;
-  int64 languageId = 2;
+  int64 languageId = 1;
 }
 message DeleteLanguageResp {}
 message UpdateLanguageReq {
-  int64 operatorId = 1;
-  LanguageInfo language = 2;
+  LanguageInfo language = 1;
 }
 message UpdateLanguageResp {}
 message GetLanguageReq {}

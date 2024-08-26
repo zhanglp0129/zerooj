@@ -22,19 +22,19 @@ func NewLanguageServer(svcCtx *svc.ServiceContext) *LanguageServer {
 	}
 }
 
-// 添加语言，客服权限
+// 添加语言
 func (s *LanguageServer) AddLanguage(ctx context.Context, in *problemset.AddLanguageReq) (*problemset.AddLanguageResp, error) {
 	l := languagelogic.NewAddLanguageLogic(ctx, s.svcCtx)
 	return l.AddLanguage(in)
 }
 
-// 删除语言，客服权限
+// 删除语言
 func (s *LanguageServer) DeleteLanguage(ctx context.Context, in *problemset.DeleteLanguageReq) (*problemset.DeleteLanguageResp, error) {
 	l := languagelogic.NewDeleteLanguageLogic(ctx, s.svcCtx)
 	return l.DeleteLanguage(in)
 }
 
-// 更新语言，客服权限
+// 更新语言
 func (s *LanguageServer) UpdateLanguage(ctx context.Context, in *problemset.UpdateLanguageReq) (*problemset.UpdateLanguageResp, error) {
 	l := languagelogic.NewUpdateLanguageLogic(ctx, s.svcCtx)
 	return l.UpdateLanguage(in)

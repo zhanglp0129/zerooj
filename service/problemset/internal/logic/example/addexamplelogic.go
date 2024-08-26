@@ -23,7 +23,7 @@ func NewAddExampleLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddExa
 	}
 }
 
-// 添加样例，客服权限
+// 添加样例
 func (l *AddExampleLogic) AddExample(in *problemset.AddExampleReq) (*problemset.AddExampleResp, error) {
 	// todo: add your logic here and delete this line
 

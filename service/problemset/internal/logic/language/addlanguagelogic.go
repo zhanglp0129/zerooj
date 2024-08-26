@@ -23,7 +23,7 @@ func NewAddLanguageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddLa
 	}
 }
 
-// 添加语言，客服权限
+// 添加语言
 func (l *AddLanguageLogic) AddLanguage(in *problemset.AddLanguageReq) (*problemset.AddLanguageResp, error) {
 	// todo: add your logic here and delete this line
 

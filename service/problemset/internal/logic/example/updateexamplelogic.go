@@ -23,7 +23,7 @@ func NewUpdateExampleLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Upd
 	}
 }
 
-// 修改样例，客服权限
+// 修改样例
 func (l *UpdateExampleLogic) UpdateExample(in *problemset.UpdateExampleReq) (*problemset.UpdateExampleResp, error) {
 	// todo: add your logic here and delete this line
 

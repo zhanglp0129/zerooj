@@ -32,13 +32,13 @@ const (
 //
 // 题目
 type ProblemClient interface {
-	// 添加问题，客服权限
+	// 添加问题
 	AddProblem(ctx context.Context, in *AddProblemReq, opts ...grpc.CallOption) (*AddProblemResp, error)
-	// 删除问题，客服权限
+	// 删除问题
 	DeleteProblem(ctx context.Context, in *DeleteProblemReq, opts ...grpc.CallOption) (*DeleteProblemResp, error)
 	// 获取问题信息，可缓存
 	GetProblemContent(ctx context.Context, in *GetProblemContentReq, opts ...grpc.CallOption) (*GetProblemContentResp, error)
-	// 更新问题，客服权限
+	// 更新问题
 	UpdateProblem(ctx context.Context, in *UpdateProblemReq, opts ...grpc.CallOption) (*UpdateProblemResp, error)
 	// 分页搜索题目
 	SearchProblem(ctx context.Context, in *SearchProblemReq, opts ...grpc.CallOption) (*SearchProblemResp, error)
@@ -108,13 +108,13 @@ func (c *problemClient) SearchProblem(ctx context.Context, in *SearchProblemReq,
 //
 // 题目
 type ProblemServer interface {
-	// 添加问题，客服权限
+	// 添加问题
 	AddProblem(context.Context, *AddProblemReq) (*AddProblemResp, error)
-	// 删除问题，客服权限
+	// 删除问题
 	DeleteProblem(context.Context, *DeleteProblemReq) (*DeleteProblemResp, error)
 	// 获取问题信息，可缓存
 	GetProblemContent(context.Context, *GetProblemContentReq) (*GetProblemContentResp, error)
-	// 更新问题，客服权限
+	// 更新问题
 	UpdateProblem(context.Context, *UpdateProblemReq) (*UpdateProblemResp, error)
 	// 分页搜索题目
 	SearchProblem(context.Context, *SearchProblemReq) (*SearchProblemResp, error)
@@ -292,19 +292,19 @@ const (
 //
 // 标签
 type TagClient interface {
-	// 添加标签，客服权限
+	// 添加标签
 	AddTags(ctx context.Context, in *AddTagsReq, opts ...grpc.CallOption) (*AddTagsResp, error)
-	// 删除标签，客服权限
+	// 删除标签
 	DeleteTags(ctx context.Context, in *DeleteTagsReq, opts ...grpc.CallOption) (*DeleteTagsResp, error)
-	// 强行删除标签，管理员权限
+	// 强行删除标签
 	MustDeleteTags(ctx context.Context, in *MustDeleteTagsReq, opts ...grpc.CallOption) (*MustDeleteTagsResp, error)
-	// 更新标签，客服权限
+	// 更新标签
 	UpdateTags(ctx context.Context, in *UpdateTagsReq, opts ...grpc.CallOption) (*UpdateTagsResp, error)
 	// 获取所有标签，可缓存
 	GetAllTags(ctx context.Context, in *GetAllTagsReq, opts ...grpc.CallOption) (*GetAllTagsResp, error)
-	// 给题目添加标签，最多5个，客服权限
+	// 给题目添加标签，最多5个
 	ProblemAddTags(ctx context.Context, in *ProblemAddTagsReq, opts ...grpc.CallOption) (*ProblemAddTagsResp, error)
-	// 给题目删除标签，客服权限
+	// 给题目删除标签
 	ProblemDeleteTags(ctx context.Context, in *ProblemDeleteTagsReq, opts ...grpc.CallOption) (*ProblemDeleteTagsResp, error)
 	// 获取一个题目的所有标签，可缓存
 	GetProblemTags(ctx context.Context, in *GetProblemTagsReq, opts ...grpc.CallOption) (*GetProblemTagsResp, error)
@@ -404,19 +404,19 @@ func (c *tagClient) GetProblemTags(ctx context.Context, in *GetProblemTagsReq, o
 //
 // 标签
 type TagServer interface {
-	// 添加标签，客服权限
+	// 添加标签
 	AddTags(context.Context, *AddTagsReq) (*AddTagsResp, error)
-	// 删除标签，客服权限
+	// 删除标签
 	DeleteTags(context.Context, *DeleteTagsReq) (*DeleteTagsResp, error)
-	// 强行删除标签，管理员权限
+	// 强行删除标签
 	MustDeleteTags(context.Context, *MustDeleteTagsReq) (*MustDeleteTagsResp, error)
-	// 更新标签，客服权限
+	// 更新标签
 	UpdateTags(context.Context, *UpdateTagsReq) (*UpdateTagsResp, error)
 	// 获取所有标签，可缓存
 	GetAllTags(context.Context, *GetAllTagsReq) (*GetAllTagsResp, error)
-	// 给题目添加标签，最多5个，客服权限
+	// 给题目添加标签，最多5个
 	ProblemAddTags(context.Context, *ProblemAddTagsReq) (*ProblemAddTagsResp, error)
-	// 给题目删除标签，客服权限
+	// 给题目删除标签
 	ProblemDeleteTags(context.Context, *ProblemDeleteTagsReq) (*ProblemDeleteTagsResp, error)
 	// 获取一个题目的所有标签，可缓存
 	GetProblemTags(context.Context, *GetProblemTagsReq) (*GetProblemTagsResp, error)
@@ -666,11 +666,11 @@ const (
 //
 // 样例
 type ExampleClient interface {
-	// 添加样例，客服权限
+	// 添加样例
 	AddExample(ctx context.Context, in *AddExampleReq, opts ...grpc.CallOption) (*AddExampleResp, error)
-	// 删除样例，客服权限
+	// 删除样例
 	DeleteExample(ctx context.Context, in *DeleteExampleReq, opts ...grpc.CallOption) (*DeleteExampleResp, error)
-	// 修改样例，客服权限
+	// 修改样例
 	UpdateExample(ctx context.Context, in *UpdateExampleReq, opts ...grpc.CallOption) (*UpdateExampleResp, error)
 	// 获取样例
 	GetExample(ctx context.Context, in *GetExampleReq, opts ...grpc.CallOption) (*GetExampleResp, error)
@@ -742,11 +742,11 @@ func (c *exampleClient) GetProblemExamples(ctx context.Context, in *GetProblemEx
 //
 // 样例
 type ExampleServer interface {
-	// 添加样例，客服权限
+	// 添加样例
 	AddExample(context.Context, *AddExampleReq) (*AddExampleResp, error)
-	// 删除样例，客服权限
+	// 删除样例
 	DeleteExample(context.Context, *DeleteExampleReq) (*DeleteExampleResp, error)
-	// 修改样例，客服权限
+	// 修改样例
 	UpdateExample(context.Context, *UpdateExampleReq) (*UpdateExampleResp, error)
 	// 获取样例
 	GetExample(context.Context, *GetExampleReq) (*GetExampleResp, error)
@@ -923,11 +923,11 @@ const (
 //
 // 提示
 type HintClient interface {
-	// 添加提示，客服权限
+	// 添加提示
 	AddHint(ctx context.Context, in *AddHintReq, opts ...grpc.CallOption) (*AddHintResp, error)
-	// 删除提示，客服权限
+	// 删除提示
 	DeleteHint(ctx context.Context, in *DeleteHintReq, opts ...grpc.CallOption) (*DeleteHintResp, error)
-	// 修改提示，客服权限
+	// 修改提示
 	UpdateHint(ctx context.Context, in *UpdateHintReq, opts ...grpc.CallOption) (*UpdateHintResp, error)
 	// 获取提示
 	GetHint(ctx context.Context, in *GetHintReq, opts ...grpc.CallOption) (*GetHintResp, error)
@@ -999,11 +999,11 @@ func (c *hintClient) GetProblemHints(ctx context.Context, in *GetProblemHintsReq
 //
 // 提示
 type HintServer interface {
-	// 添加提示，客服权限
+	// 添加提示
 	AddHint(context.Context, *AddHintReq) (*AddHintResp, error)
-	// 删除提示，客服权限
+	// 删除提示
 	DeleteHint(context.Context, *DeleteHintReq) (*DeleteHintResp, error)
-	// 修改提示，客服权限
+	// 修改提示
 	UpdateHint(context.Context, *UpdateHintReq) (*UpdateHintResp, error)
 	// 获取提示
 	GetHint(context.Context, *GetHintReq) (*GetHintResp, error)
@@ -1179,11 +1179,11 @@ const (
 //
 // 评测数据
 type JudgeDataClient interface {
-	// 添加测评数据，客服权限
+	// 添加测评数据
 	AddJudgeData(ctx context.Context, in *AddJudgeDataReq, opts ...grpc.CallOption) (*AddJudgeDataResp, error)
-	// 删除测评数据，客服权限
+	// 删除测评数据
 	DeleteJudgeData(ctx context.Context, in *DeleteJudgeDataReq, opts ...grpc.CallOption) (*DeleteJudgeDataResp, error)
-	// 修改测评数据，客服权限
+	// 修改测评数据
 	UpdateJudgeData(ctx context.Context, in *UpdateJudgeDataReq, opts ...grpc.CallOption) (*UpdateJudgeDataResp, error)
 	// 获取题目的测评数据，返回minio对象名称，可缓存
 	GetJudgeData(ctx context.Context, in *GetJudgeDataReq, opts ...grpc.CallOption) (*GetJudgeDataResp, error)
@@ -1243,11 +1243,11 @@ func (c *judgeDataClient) GetJudgeData(ctx context.Context, in *GetJudgeDataReq,
 //
 // 评测数据
 type JudgeDataServer interface {
-	// 添加测评数据，客服权限
+	// 添加测评数据
 	AddJudgeData(context.Context, *AddJudgeDataReq) (*AddJudgeDataResp, error)
-	// 删除测评数据，客服权限
+	// 删除测评数据
 	DeleteJudgeData(context.Context, *DeleteJudgeDataReq) (*DeleteJudgeDataResp, error)
-	// 修改测评数据，客服权限
+	// 修改测评数据
 	UpdateJudgeData(context.Context, *UpdateJudgeDataReq) (*UpdateJudgeDataResp, error)
 	// 获取题目的测评数据，返回minio对象名称，可缓存
 	GetJudgeData(context.Context, *GetJudgeDataReq) (*GetJudgeDataResp, error)
@@ -1396,11 +1396,11 @@ const (
 //
 // 编程语言
 type LanguageClient interface {
-	// 添加语言，客服权限
+	// 添加语言
 	AddLanguage(ctx context.Context, in *AddLanguageReq, opts ...grpc.CallOption) (*AddLanguageResp, error)
-	// 删除语言，客服权限
+	// 删除语言
 	DeleteLanguage(ctx context.Context, in *DeleteLanguageReq, opts ...grpc.CallOption) (*DeleteLanguageResp, error)
-	// 更新语言，客服权限
+	// 更新语言
 	UpdateLanguage(ctx context.Context, in *UpdateLanguageReq, opts ...grpc.CallOption) (*UpdateLanguageResp, error)
 	// 获取所有语言
 	GetLanguage(ctx context.Context, in *GetLanguageReq, opts ...grpc.CallOption) (*GetLanguageResp, error)
@@ -1460,11 +1460,11 @@ func (c *languageClient) GetLanguage(ctx context.Context, in *GetLanguageReq, op
 //
 // 编程语言
 type LanguageServer interface {
-	// 添加语言，客服权限
+	// 添加语言
 	AddLanguage(context.Context, *AddLanguageReq) (*AddLanguageResp, error)
-	// 删除语言，客服权限
+	// 删除语言
 	DeleteLanguage(context.Context, *DeleteLanguageReq) (*DeleteLanguageResp, error)
-	// 更新语言，客服权限
+	// 更新语言
 	UpdateLanguage(context.Context, *UpdateLanguageReq) (*UpdateLanguageResp, error)
 	// 获取所有语言
 	GetLanguage(context.Context, *GetLanguageReq) (*GetLanguageResp, error)

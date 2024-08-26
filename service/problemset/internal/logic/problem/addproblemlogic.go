@@ -23,7 +23,7 @@ func NewAddProblemLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddPro
 	}
 }
 
-// 添加问题，客服权限
+// 添加问题
 func (l *AddProblemLogic) AddProblem(in *problemset.AddProblemReq) (*problemset.AddProblemResp, error) {
 	// todo: add your logic here and delete this line
 

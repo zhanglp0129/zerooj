@@ -23,7 +23,7 @@ func NewDeleteLanguageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *De
 	}
 }
 
-// 删除语言，客服权限
+// 删除语言
 func (l *DeleteLanguageLogic) DeleteLanguage(in *problemset.DeleteLanguageReq) (*problemset.DeleteLanguageResp, error) {
 	// todo: add your logic here and delete this line
 

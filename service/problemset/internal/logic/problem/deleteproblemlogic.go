@@ -23,7 +23,7 @@ func NewDeleteProblemLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Del
 	}
 }
 
-// 删除问题，客服权限
+// 删除问题
 func (l *DeleteProblemLogic) DeleteProblem(in *problemset.DeleteProblemReq) (*problemset.DeleteProblemResp, error) {
 	// todo: add your logic here and delete this line
 

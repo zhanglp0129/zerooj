@@ -23,7 +23,7 @@ func NewAddJudgeDataLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddJ
 	}
 }
 
-// 添加测评数据，客服权限
+// 添加测评数据
 func (l *AddJudgeDataLogic) AddJudgeData(in *problemset.AddJudgeDataReq) (*problemset.AddJudgeDataResp, error) {
 	// todo: add your logic here and delete this line
 

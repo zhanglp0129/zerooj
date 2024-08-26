@@ -23,7 +23,7 @@ func NewDeleteHintLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Delete
 	}
 }
 
-// 删除提示，客服权限
+// 删除提示
 func (l *DeleteHintLogic) DeleteHint(in *problemset.DeleteHintReq) (*problemset.DeleteHintResp, error) {
 	// todo: add your logic here and delete this line
 

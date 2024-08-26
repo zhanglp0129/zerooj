@@ -23,7 +23,7 @@ func NewUpdateLanguageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Up
 	}
 }
 
-// 更新语言，客服权限
+// 更新语言
 func (l *UpdateLanguageLogic) UpdateLanguage(in *problemset.UpdateLanguageReq) (*problemset.UpdateLanguageResp, error) {
 	// todo: add your logic here and delete this line
 

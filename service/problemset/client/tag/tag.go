@@ -93,19 +93,19 @@ type (
 	UpdateTagsResp            = problemset.UpdateTagsResp
 
 	Tag interface {
-		// 添加标签，客服权限
+		// 添加标签
 		AddTags(ctx context.Context, in *AddTagsReq, opts ...grpc.CallOption) (*AddTagsResp, error)
-		// 删除标签，客服权限
+		// 删除标签
 		DeleteTags(ctx context.Context, in *DeleteTagsReq, opts ...grpc.CallOption) (*DeleteTagsResp, error)
-		// 强行删除标签，管理员权限
+		// 强行删除标签
 		MustDeleteTags(ctx context.Context, in *MustDeleteTagsReq, opts ...grpc.CallOption) (*MustDeleteTagsResp, error)
-		// 更新标签，客服权限
+		// 更新标签
 		UpdateTags(ctx context.Context, in *UpdateTagsReq, opts ...grpc.CallOption) (*UpdateTagsResp, error)
 		// 获取所有标签，可缓存
 		GetAllTags(ctx context.Context, in *GetAllTagsReq, opts ...grpc.CallOption) (*GetAllTagsResp, error)
-		// 给题目添加标签，最多5个，客服权限
+		// 给题目添加标签，最多5个
 		ProblemAddTags(ctx context.Context, in *ProblemAddTagsReq, opts ...grpc.CallOption) (*ProblemAddTagsResp, error)
-		// 给题目删除标签，客服权限
+		// 给题目删除标签
 		ProblemDeleteTags(ctx context.Context, in *ProblemDeleteTagsReq, opts ...grpc.CallOption) (*ProblemDeleteTagsResp, error)
 		// 获取一个题目的所有标签，可缓存
 		GetProblemTags(ctx context.Context, in *GetProblemTagsReq, opts ...grpc.CallOption) (*GetProblemTagsResp, error)
@@ -122,25 +122,25 @@ func NewTag(cli zrpc.Client) Tag {
 	}
 }
 
-// 添加标签，客服权限
+// 添加标签
 func (m *defaultTag) AddTags(ctx context.Context, in *AddTagsReq, opts ...grpc.CallOption) (*AddTagsResp, error) {
 	client := problemset.NewTagClient(m.cli.Conn())
 	return client.AddTags(ctx, in, opts...)
 }
 
-// 删除标签，客服权限
+// 删除标签
 func (m *defaultTag) DeleteTags(ctx context.Context, in *DeleteTagsReq, opts ...grpc.CallOption) (*DeleteTagsResp, error) {
 	client := problemset.NewTagClient(m.cli.Conn())
 	return client.DeleteTags(ctx, in, opts...)
 }
 
-// 强行删除标签，管理员权限
+// 强行删除标签
 func (m *defaultTag) MustDeleteTags(ctx context.Context, in *MustDeleteTagsReq, opts ...grpc.CallOption) (*MustDeleteTagsResp, error) {
 	client := problemset.NewTagClient(m.cli.Conn())
 	return client.MustDeleteTags(ctx, in, opts...)
 }
 
-// 更新标签，客服权限
+// 更新标签
 func (m *defaultTag) UpdateTags(ctx context.Context, in *UpdateTagsReq, opts ...grpc.CallOption) (*UpdateTagsResp, error) {
 	client := problemset.NewTagClient(m.cli.Conn())
 	return client.UpdateTags(ctx, in, opts...)
@@ -152,13 +152,13 @@ func (m *defaultTag) GetAllTags(ctx context.Context, in *GetAllTagsReq, opts ...
 	return client.GetAllTags(ctx, in, opts...)
 }
 
-// 给题目添加标签，最多5个，客服权限
+// 给题目添加标签，最多5个
 func (m *defaultTag) ProblemAddTags(ctx context.Context, in *ProblemAddTagsReq, opts ...grpc.CallOption) (*ProblemAddTagsResp, error) {
 	client := problemset.NewTagClient(m.cli.Conn())
 	return client.ProblemAddTags(ctx, in, opts...)
 }
 
-// 给题目删除标签，客服权限
+// 给题目删除标签
 func (m *defaultTag) ProblemDeleteTags(ctx context.Context, in *ProblemDeleteTagsReq, opts ...grpc.CallOption) (*ProblemDeleteTagsResp, error) {
 	client := problemset.NewTagClient(m.cli.Conn())
 	return client.ProblemDeleteTags(ctx, in, opts...)

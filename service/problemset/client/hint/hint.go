@@ -93,11 +93,11 @@ type (
 	UpdateTagsResp            = problemset.UpdateTagsResp
 
 	Hint interface {
-		// 添加提示，客服权限
+		// 添加提示
 		AddHint(ctx context.Context, in *AddHintReq, opts ...grpc.CallOption) (*AddHintResp, error)
-		// 删除提示，客服权限
+		// 删除提示
 		DeleteHint(ctx context.Context, in *DeleteHintReq, opts ...grpc.CallOption) (*DeleteHintResp, error)
-		// 修改提示，客服权限
+		// 修改提示
 		UpdateHint(ctx context.Context, in *UpdateHintReq, opts ...grpc.CallOption) (*UpdateHintResp, error)
 		// 获取提示
 		GetHint(ctx context.Context, in *GetHintReq, opts ...grpc.CallOption) (*GetHintResp, error)
@@ -116,19 +116,19 @@ func NewHint(cli zrpc.Client) Hint {
 	}
 }
 
-// 添加提示，客服权限
+// 添加提示
 func (m *defaultHint) AddHint(ctx context.Context, in *AddHintReq, opts ...grpc.CallOption) (*AddHintResp, error) {
 	client := problemset.NewHintClient(m.cli.Conn())
 	return client.AddHint(ctx, in, opts...)
 }
 
-// 删除提示，客服权限
+// 删除提示
 func (m *defaultHint) DeleteHint(ctx context.Context, in *DeleteHintReq, opts ...grpc.CallOption) (*DeleteHintResp, error) {
 	client := problemset.NewHintClient(m.cli.Conn())
 	return client.DeleteHint(ctx, in, opts...)
 }
 
-// 修改提示，客服权限
+// 修改提示
 func (m *defaultHint) UpdateHint(ctx context.Context, in *UpdateHintReq, opts ...grpc.CallOption) (*UpdateHintResp, error) {
 	client := problemset.NewHintClient(m.cli.Conn())
 	return client.UpdateHint(ctx, in, opts...)

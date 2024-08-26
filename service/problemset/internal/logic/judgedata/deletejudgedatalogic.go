@@ -23,7 +23,7 @@ func NewDeleteJudgeDataLogic(ctx context.Context, svcCtx *svc.ServiceContext) *D
 	}
 }
 
-// 删除测评数据，客服权限
+// 删除测评数据
 func (l *DeleteJudgeDataLogic) DeleteJudgeData(in *problemset.DeleteJudgeDataReq) (*problemset.DeleteJudgeDataResp, error) {
 	// todo: add your logic here and delete this line
 

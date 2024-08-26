@@ -93,11 +93,11 @@ type (
 	UpdateTagsResp            = problemset.UpdateTagsResp
 
 	Example interface {
-		// 添加样例，客服权限
+		// 添加样例
 		AddExample(ctx context.Context, in *AddExampleReq, opts ...grpc.CallOption) (*AddExampleResp, error)
-		// 删除样例，客服权限
+		// 删除样例
 		DeleteExample(ctx context.Context, in *DeleteExampleReq, opts ...grpc.CallOption) (*DeleteExampleResp, error)
-		// 修改样例，客服权限
+		// 修改样例
 		UpdateExample(ctx context.Context, in *UpdateExampleReq, opts ...grpc.CallOption) (*UpdateExampleResp, error)
 		// 获取样例
 		GetExample(ctx context.Context, in *GetExampleReq, opts ...grpc.CallOption) (*GetExampleResp, error)
@@ -116,19 +116,19 @@ func NewExample(cli zrpc.Client) Example {
 	}
 }
 
-// 添加样例，客服权限
+// 添加样例
 func (m *defaultExample) AddExample(ctx context.Context, in *AddExampleReq, opts ...grpc.CallOption) (*AddExampleResp, error) {
 	client := problemset.NewExampleClient(m.cli.Conn())
 	return client.AddExample(ctx, in, opts...)
 }
 
-// 删除样例，客服权限
+// 删除样例
 func (m *defaultExample) DeleteExample(ctx context.Context, in *DeleteExampleReq, opts ...grpc.CallOption) (*DeleteExampleResp, error) {
 	client := problemset.NewExampleClient(m.cli.Conn())
 	return client.DeleteExample(ctx, in, opts...)
 }
 
-// 修改样例，客服权限
+// 修改样例
 func (m *defaultExample) UpdateExample(ctx context.Context, in *UpdateExampleReq, opts ...grpc.CallOption) (*UpdateExampleResp, error) {
 	client := problemset.NewExampleClient(m.cli.Conn())
 	return client.UpdateExample(ctx, in, opts...)

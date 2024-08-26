@@ -22,13 +22,13 @@ func NewProblemServer(svcCtx *svc.ServiceContext) *ProblemServer {
 	}
 }
 
-// 添加问题，客服权限
+// 添加问题
 func (s *ProblemServer) AddProblem(ctx context.Context, in *problemset.AddProblemReq) (*problemset.AddProblemResp, error) {
 	l := problemlogic.NewAddProblemLogic(ctx, s.svcCtx)
 	return l.AddProblem(in)
 }
 
-// 删除问题，客服权限
+// 删除问题
 func (s *ProblemServer) DeleteProblem(ctx context.Context, in *problemset.DeleteProblemReq) (*problemset.DeleteProblemResp, error) {
 	l := problemlogic.NewDeleteProblemLogic(ctx, s.svcCtx)
 	return l.DeleteProblem(in)
@@ -40,7 +40,7 @@ func (s *ProblemServer) GetProblemContent(ctx context.Context, in *problemset.Ge
 	return l.GetProblemContent(in)
 }
 
-// 更新问题，客服权限
+// 更新问题
 func (s *ProblemServer) UpdateProblem(ctx context.Context, in *problemset.UpdateProblemReq) (*problemset.UpdateProblemResp, error) {
 	l := problemlogic.NewUpdateProblemLogic(ctx, s.svcCtx)
 	return l.UpdateProblem(in)

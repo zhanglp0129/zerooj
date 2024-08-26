@@ -22,19 +22,19 @@ func NewJudgeDataServer(svcCtx *svc.ServiceContext) *JudgeDataServer {
 	}
 }
 
-// 添加测评数据，客服权限
+// 添加测评数据
 func (s *JudgeDataServer) AddJudgeData(ctx context.Context, in *problemset.AddJudgeDataReq) (*problemset.AddJudgeDataResp, error) {
 	l := judgedatalogic.NewAddJudgeDataLogic(ctx, s.svcCtx)
 	return l.AddJudgeData(in)
 }
 
-// 删除测评数据，客服权限
+// 删除测评数据
 func (s *JudgeDataServer) DeleteJudgeData(ctx context.Context, in *problemset.DeleteJudgeDataReq) (*problemset.DeleteJudgeDataResp, error) {
 	l := judgedatalogic.NewDeleteJudgeDataLogic(ctx, s.svcCtx)
 	return l.DeleteJudgeData(in)
 }
 
-// 修改测评数据，客服权限
+// 修改测评数据
 func (s *JudgeDataServer) UpdateJudgeData(ctx context.Context, in *problemset.UpdateJudgeDataReq) (*problemset.UpdateJudgeDataResp, error) {
 	l := judgedatalogic.NewUpdateJudgeDataLogic(ctx, s.svcCtx)
 	return l.UpdateJudgeData(in)
