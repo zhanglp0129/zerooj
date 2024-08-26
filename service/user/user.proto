@@ -50,6 +50,8 @@ service BaseInfo {
   rpc UpdateEmail(UpdateEmailReq) returns (UpdateEmailResp);
   // 修改用户权限
   rpc UpdatePermission(UpdatePermissionReq) returns (UpdatePermissionResp);
+  // 获取用户权限
+  rpc GetPermission(GetPermissionReq) returns (GetPermissionResp);
 }
 message GetBaseInfoReq {
   int64 id = 1;
@@ -107,6 +109,12 @@ message UpdatePermissionReq {
 }
 message UpdatePermissionResp {
   uint32 oldPermission = 1;
+}
+message GetPermissionReq {
+  int64 id = 1;
+}
+message GetPermissionResp {
+  uint32 permission = 1;
 }
 
 // 用户简介

@@ -36,6 +36,8 @@ type (
 	GetFansResp                   = user.GetFansResp
 	GetFollowingsReq              = user.GetFollowingsReq
 	GetFollowingsResp             = user.GetFollowingsResp
+	GetPermissionReq              = user.GetPermissionReq
+	GetPermissionResp             = user.GetPermissionResp
 	GetUserProfileReq             = user.GetUserProfileReq
 	GetUserProfileResp            = user.GetUserProfileResp
 	MustDeleteSkillReq            = user.MustDeleteSkillReq

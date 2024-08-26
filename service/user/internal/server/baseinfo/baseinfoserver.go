@@ -63,3 +63,9 @@ func (s *BaseInfoServer) UpdatePermission(ctx context.Context, in *user.UpdatePe
 	l := baseinfologic.NewUpdatePermissionLogic(ctx, s.svcCtx)
 	return l.UpdatePermission(in)
 }
+
+// 获取用户权限
+func (s *BaseInfoServer) GetPermission(ctx context.Context, in *user.GetPermissionReq) (*user.GetPermissionResp, error) {
+	l := baseinfologic.NewGetPermissionLogic(ctx, s.svcCtx)
+	return l.GetPermission(in)
+}

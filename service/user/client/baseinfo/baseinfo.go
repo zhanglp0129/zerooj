@@ -36,6 +36,8 @@ type (
 	GetFansResp                   = user.GetFansResp
 	GetFollowingsReq              = user.GetFollowingsReq
 	GetFollowingsResp             = user.GetFollowingsResp
+	GetPermissionReq              = user.GetPermissionReq
+	GetPermissionResp             = user.GetPermissionResp
 	GetUserProfileReq             = user.GetUserProfileReq
 	GetUserProfileResp            = user.GetUserProfileResp
 	MustDeleteSkillReq            = user.MustDeleteSkillReq
@@ -80,6 +82,8 @@ type (
 		UpdateEmail(ctx context.Context, in *UpdateEmailReq, opts ...grpc.CallOption) (*UpdateEmailResp, error)
 		// 修改用户权限
 		UpdatePermission(ctx context.Context, in *UpdatePermissionReq, opts ...grpc.CallOption) (*UpdatePermissionResp, error)
+		// 获取用户权限
+		GetPermission(ctx context.Context, in *GetPermissionReq, opts ...grpc.CallOption) (*GetPermissionResp, error)
 	}
 
 	defaultBaseInfo struct {
@@ -133,4 +137,10 @@ func (m *defaultBaseInfo) UpdateEmail(ctx context.Context, in *UpdateEmailReq, o
 func (m *defaultBaseInfo) UpdatePermission(ctx context.Context, in *UpdatePermissionReq, opts ...grpc.CallOption) (*UpdatePermissionResp, error) {
 	client := user.NewBaseInfoClient(m.cli.Conn())
 	return client.UpdatePermission(ctx, in, opts...)
+}
+
+// 获取用户权限
+func (m *defaultBaseInfo) GetPermission(ctx context.Context, in *GetPermissionReq, opts ...grpc.CallOption) (*GetPermissionResp, error) {
+	client := user.NewBaseInfoClient(m.cli.Conn())
+	return client.GetPermission(ctx, in, opts...)
 }

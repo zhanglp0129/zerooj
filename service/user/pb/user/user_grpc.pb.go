@@ -163,6 +163,7 @@ const (
 	BaseInfo_ForgetPassword_FullMethodName   = "/user.BaseInfo/ForgetPassword"
 	BaseInfo_UpdateEmail_FullMethodName      = "/user.BaseInfo/UpdateEmail"
 	BaseInfo_UpdatePermission_FullMethodName = "/user.BaseInfo/UpdatePermission"
+	BaseInfo_GetPermission_FullMethodName    = "/user.BaseInfo/GetPermission"
 )
 
 // BaseInfoClient is the client API for BaseInfo service.
@@ -185,6 +186,8 @@ type BaseInfoClient interface {
 	UpdateEmail(ctx context.Context, in *UpdateEmailReq, opts ...grpc.CallOption) (*UpdateEmailResp, error)
 	// 修改用户权限
 	UpdatePermission(ctx context.Context, in *UpdatePermissionReq, opts ...grpc.CallOption) (*UpdatePermissionResp, error)
+	// 获取用户权限
+	GetPermission(ctx context.Context, in *GetPermissionReq, opts ...grpc.CallOption) (*GetPermissionResp, error)
 }
 
 type baseInfoClient struct {
@@ -265,6 +268,16 @@ func (c *baseInfoClient) UpdatePermission(ctx context.Context, in *UpdatePermiss
 	return out, nil
 }
 
+func (c *baseInfoClient) GetPermission(ctx context.Context, in *GetPermissionReq, opts ...grpc.CallOption) (*GetPermissionResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetPermissionResp)
+	err := c.cc.Invoke(ctx, BaseInfo_GetPermission_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BaseInfoServer is the server API for BaseInfo service.
 // All implementations must embed UnimplementedBaseInfoServer
 // for forward compatibility
@@ -285,6 +298,8 @@ type BaseInfoServer interface {
 	UpdateEmail(context.Context, *UpdateEmailReq) (*UpdateEmailResp, error)
 	// 修改用户权限
 	UpdatePermission(context.Context, *UpdatePermissionReq) (*UpdatePermissionResp, error)
+	// 获取用户权限
+	GetPermission(context.Context, *GetPermissionReq) (*GetPermissionResp, error)
 	mustEmbedUnimplementedBaseInfoServer()
 }
 
@@ -312,6 +327,9 @@ func (UnimplementedBaseInfoServer) UpdateEmail(context.Context, *UpdateEmailReq)
 }
 func (UnimplementedBaseInfoServer) UpdatePermission(context.Context, *UpdatePermissionReq) (*UpdatePermissionResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdatePermission not implemented")
+}
+func (UnimplementedBaseInfoServer) GetPermission(context.Context, *GetPermissionReq) (*GetPermissionResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPermission not implemented")
 }
 func (UnimplementedBaseInfoServer) mustEmbedUnimplementedBaseInfoServer() {}
 
@@ -452,6 +470,24 @@ func _BaseInfo_UpdatePermission_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BaseInfo_GetPermission_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPermissionReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseInfoServer).GetPermission(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BaseInfo_GetPermission_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseInfoServer).GetPermission(ctx, req.(*GetPermissionReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BaseInfo_ServiceDesc is the grpc.ServiceDesc for BaseInfo service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -486,6 +522,10 @@ var BaseInfo_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdatePermission",
 			Handler:    _BaseInfo_UpdatePermission_Handler,
+		},
+		{
+			MethodName: "GetPermission",
+			Handler:    _BaseInfo_GetPermission_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
