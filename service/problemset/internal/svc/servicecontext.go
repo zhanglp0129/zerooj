@@ -18,7 +18,7 @@ type ServiceContext struct {
 	Config             config.Config
 	DB                 *gorm.DB
 	RDB                redis.UniversalClient
-	RW                 *redis_snowflake.RedisWorker
+	RW                 snowflake.WorkerInterface
 	UserBaseInfoClient user.BaseInfoClient
 }
 
@@ -48,10 +48,9 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	}
 
 	// 创建雪花算法节点
-	var machineId int64 = 0
-	snowflakeKey := fmt.Sprintf("/snowflake/user/%d", machineId)
-	snowflakeLockKey := fmt.Sprintf("/snowflake/user/lock/%d", machineId)
-	rw, err := redis_snowflake.NewRedisWorker(rdb, snowflakeKey, snowflakeLockKey, snowflake.NewDefaultConfigWithStartTime(constant.StartTime), machineId)
+	machineId := c.Database.DataSource[0].MachineId
+	snowflakeKey := fmt.Sprintf("/snowflake/problemset/%d", machineId)
+	rw, err := redis_snowflake.NewRedisWorkerNoLock(rdb, snowflakeKey, snowflake.NewDefaultConfigWithStartTime(constant.StartTime), machineId)
 	if err != nil {
 		panic(err)
 	}
