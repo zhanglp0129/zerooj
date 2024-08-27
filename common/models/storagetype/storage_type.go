@@ -3,6 +3,7 @@ package storagetype
 import (
 	"bytes"
 	"context"
+	"github.com/google/uuid"
 	"github.com/minio/minio-go/v7"
 	"io"
 	"net/http"
@@ -21,7 +22,7 @@ const (
 	CloudStorage
 )
 
-// GetContent 获取实际存储内容
+// GetContent 获取实际存储内容。推荐直接存储和云存储使用
 func GetContent(st StorageType, value []byte, options ...Option) ([]byte, error) {
 	cfg := loadConfig(options...)
 
@@ -30,13 +31,13 @@ func GetContent(st StorageType, value []byte, options ...Option) ([]byte, error)
 	case DirectStorage:
 		return value, nil
 	case ObjectStorage:
-		reader, err := useObjectStorage(cfg, string(value))
+		reader, err := readObjectStorage(cfg, string(value))
 		if err != nil {
 			return nil, err
 		}
 		return io.ReadAll(reader)
 	case CloudStorage:
-		reader, err := useCloudStorage(cfg, string(value))
+		reader, err := readCloudStorage(cfg, string(value))
 		if err != nil {
 			return nil, err
 		}
@@ -48,7 +49,7 @@ func GetContent(st StorageType, value []byte, options ...Option) ([]byte, error)
 
 }
 
-// GetContentReader 获取实际存储内容，返回reader
+// GetContentReader 获取实际存储内容，返回reader。推荐直接存储和对象存储使用
 func GetContentReader(st StorageType, value []byte, options ...Option) (io.Reader, error) {
 	cfg := loadConfig(options...)
 
@@ -57,9 +58,9 @@ func GetContentReader(st StorageType, value []byte, options ...Option) (io.Reade
 	case DirectStorage:
 		return bytes.NewBuffer(value), nil
 	case ObjectStorage:
-		return useObjectStorage(cfg, string(value))
+		return readObjectStorage(cfg, string(value))
 	case CloudStorage:
-		reader, err := useCloudStorage(cfg, string(value))
+		reader, err := readCloudStorage(cfg, string(value))
 		if err != nil {
 			return nil, err
 		}
@@ -75,7 +76,32 @@ func GetContentReader(st StorageType, value []byte, options ...Option) (io.Reade
 	}
 }
 
-func useObjectStorage(c *config, objectName string) (io.Reader, error) {
+// Storage 存储内容。如果小于等于255字节，直接存储；大于255字节，对象存储，并返回对象名
+func Storage(content []byte, mc *minio.Client, bucketName string) ([]byte, StorageType, error) {
+	if len(content) <= 255 {
+		return content, DirectStorage, nil
+	}
+
+	objectName := uuid.New().String()
+	_, err := mc.PutObject(context.Background(), bucketName, objectName, bytes.NewBuffer(content), int64(len(content)), minio.PutObjectOptions{})
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return []byte(objectName), ObjectStorage, nil
+}
+
+// StorageObject 存储对象，并返回对象名
+func StorageObject(content io.Reader, mc *minio.Client, bucketName string) (string, StorageType, error) {
+	objectName := uuid.New().String()
+	_, err := mc.PutObject(context.Background(), bucketName, objectName, content, -1, minio.PutObjectOptions{})
+	if err != nil {
+		return "", 0, err
+	}
+	return objectName, ObjectStorage, nil
+}
+
+func readObjectStorage(c *config, objectName string) (io.Reader, error) {
 	obj, err := c.mc.GetObject(context.Background(), c.bucket, objectName, minio.GetObjectOptions{})
 	if err != nil {
 		return nil, err
@@ -83,7 +109,7 @@ func useObjectStorage(c *config, objectName string) (io.Reader, error) {
 	return obj, nil
 }
 
-func useCloudStorage(c *config, url string) (io.ReadCloser, error) {
+func readCloudStorage(c *config, url string) (io.ReadCloser, error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
