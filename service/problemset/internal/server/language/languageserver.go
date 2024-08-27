@@ -41,7 +41,31 @@ func (s *LanguageServer) UpdateLanguage(ctx context.Context, in *problemset.Upda
 }
 
 // 获取所有语言
-func (s *LanguageServer) GetLanguage(ctx context.Context, in *problemset.GetLanguageReq) (*problemset.GetLanguageResp, error) {
-	l := languagelogic.NewGetLanguageLogic(ctx, s.svcCtx)
-	return l.GetLanguage(in)
+func (s *LanguageServer) GetLanguages(ctx context.Context, in *problemset.GetLanguagesReq) (*problemset.GetLanguagesResp, error) {
+	l := languagelogic.NewGetLanguagesLogic(ctx, s.svcCtx)
+	return l.GetLanguages(in)
+}
+
+// 根据id获取语言
+func (s *LanguageServer) GetLanguageById(ctx context.Context, in *problemset.GetLanguageByIdReq) (*problemset.GetLanguageByIdResp, error) {
+	l := languagelogic.NewGetLanguageByIdLogic(ctx, s.svcCtx)
+	return l.GetLanguageById(in)
+}
+
+// 给题目增加语言
+func (s *LanguageServer) ProblemAddLanguages(ctx context.Context, in *problemset.ProblemAddLanguagesReq) (*problemset.ProblemAddLanguagesResp, error) {
+	l := languagelogic.NewProblemAddLanguagesLogic(ctx, s.svcCtx)
+	return l.ProblemAddLanguages(in)
+}
+
+// 题目删除语言
+func (s *LanguageServer) ProblemDeleteLanguages(ctx context.Context, in *problemset.ProblemDeleteLanguagesReq) (*problemset.ProblemDeleteLanguagesResp, error) {
+	l := languagelogic.NewProblemDeleteLanguagesLogic(ctx, s.svcCtx)
+	return l.ProblemDeleteLanguages(in)
+}
+
+// 获取题目的所有语言
+func (s *LanguageServer) GetProblemLanguages(ctx context.Context, in *problemset.GetProblemLanguagesReq) (*problemset.GetProblemLanguagesResp, error) {
+	l := languagelogic.NewGetProblemLanguagesLogic(ctx, s.svcCtx)
+	return l.GetProblemLanguages(in)
 }

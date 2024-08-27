@@ -35,6 +35,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		&models.JudgeData{},
 		&models.Tag{},
 		&models.Language{},
+		&models.ProblemLanguage{},
 		&models.Submit{},
 	)
 	if err != nil {

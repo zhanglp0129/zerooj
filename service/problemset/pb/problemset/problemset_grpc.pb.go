@@ -1384,10 +1384,14 @@ var JudgeData_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	Language_AddLanguage_FullMethodName    = "/problemset.Language/AddLanguage"
-	Language_DeleteLanguage_FullMethodName = "/problemset.Language/DeleteLanguage"
-	Language_UpdateLanguage_FullMethodName = "/problemset.Language/UpdateLanguage"
-	Language_GetLanguage_FullMethodName    = "/problemset.Language/GetLanguage"
+	Language_AddLanguage_FullMethodName            = "/problemset.Language/AddLanguage"
+	Language_DeleteLanguage_FullMethodName         = "/problemset.Language/DeleteLanguage"
+	Language_UpdateLanguage_FullMethodName         = "/problemset.Language/UpdateLanguage"
+	Language_GetLanguages_FullMethodName           = "/problemset.Language/GetLanguages"
+	Language_GetLanguageById_FullMethodName        = "/problemset.Language/GetLanguageById"
+	Language_ProblemAddLanguages_FullMethodName    = "/problemset.Language/ProblemAddLanguages"
+	Language_ProblemDeleteLanguages_FullMethodName = "/problemset.Language/ProblemDeleteLanguages"
+	Language_GetProblemLanguages_FullMethodName    = "/problemset.Language/GetProblemLanguages"
 )
 
 // LanguageClient is the client API for Language service.
@@ -1403,7 +1407,15 @@ type LanguageClient interface {
 	// 更新语言
 	UpdateLanguage(ctx context.Context, in *UpdateLanguageReq, opts ...grpc.CallOption) (*UpdateLanguageResp, error)
 	// 获取所有语言
-	GetLanguage(ctx context.Context, in *GetLanguageReq, opts ...grpc.CallOption) (*GetLanguageResp, error)
+	GetLanguages(ctx context.Context, in *GetLanguagesReq, opts ...grpc.CallOption) (*GetLanguagesResp, error)
+	// 根据id获取语言
+	GetLanguageById(ctx context.Context, in *GetLanguageByIdReq, opts ...grpc.CallOption) (*GetLanguageByIdResp, error)
+	// 给题目增加语言
+	ProblemAddLanguages(ctx context.Context, in *ProblemAddLanguagesReq, opts ...grpc.CallOption) (*ProblemAddLanguagesResp, error)
+	// 题目删除语言
+	ProblemDeleteLanguages(ctx context.Context, in *ProblemDeleteLanguagesReq, opts ...grpc.CallOption) (*ProblemDeleteLanguagesResp, error)
+	// 获取题目的所有语言
+	GetProblemLanguages(ctx context.Context, in *GetProblemLanguagesReq, opts ...grpc.CallOption) (*GetProblemLanguagesResp, error)
 }
 
 type languageClient struct {
@@ -1444,10 +1456,50 @@ func (c *languageClient) UpdateLanguage(ctx context.Context, in *UpdateLanguageR
 	return out, nil
 }
 
-func (c *languageClient) GetLanguage(ctx context.Context, in *GetLanguageReq, opts ...grpc.CallOption) (*GetLanguageResp, error) {
+func (c *languageClient) GetLanguages(ctx context.Context, in *GetLanguagesReq, opts ...grpc.CallOption) (*GetLanguagesResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetLanguageResp)
-	err := c.cc.Invoke(ctx, Language_GetLanguage_FullMethodName, in, out, cOpts...)
+	out := new(GetLanguagesResp)
+	err := c.cc.Invoke(ctx, Language_GetLanguages_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *languageClient) GetLanguageById(ctx context.Context, in *GetLanguageByIdReq, opts ...grpc.CallOption) (*GetLanguageByIdResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetLanguageByIdResp)
+	err := c.cc.Invoke(ctx, Language_GetLanguageById_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *languageClient) ProblemAddLanguages(ctx context.Context, in *ProblemAddLanguagesReq, opts ...grpc.CallOption) (*ProblemAddLanguagesResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ProblemAddLanguagesResp)
+	err := c.cc.Invoke(ctx, Language_ProblemAddLanguages_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *languageClient) ProblemDeleteLanguages(ctx context.Context, in *ProblemDeleteLanguagesReq, opts ...grpc.CallOption) (*ProblemDeleteLanguagesResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ProblemDeleteLanguagesResp)
+	err := c.cc.Invoke(ctx, Language_ProblemDeleteLanguages_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *languageClient) GetProblemLanguages(ctx context.Context, in *GetProblemLanguagesReq, opts ...grpc.CallOption) (*GetProblemLanguagesResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetProblemLanguagesResp)
+	err := c.cc.Invoke(ctx, Language_GetProblemLanguages_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1467,7 +1519,15 @@ type LanguageServer interface {
 	// 更新语言
 	UpdateLanguage(context.Context, *UpdateLanguageReq) (*UpdateLanguageResp, error)
 	// 获取所有语言
-	GetLanguage(context.Context, *GetLanguageReq) (*GetLanguageResp, error)
+	GetLanguages(context.Context, *GetLanguagesReq) (*GetLanguagesResp, error)
+	// 根据id获取语言
+	GetLanguageById(context.Context, *GetLanguageByIdReq) (*GetLanguageByIdResp, error)
+	// 给题目增加语言
+	ProblemAddLanguages(context.Context, *ProblemAddLanguagesReq) (*ProblemAddLanguagesResp, error)
+	// 题目删除语言
+	ProblemDeleteLanguages(context.Context, *ProblemDeleteLanguagesReq) (*ProblemDeleteLanguagesResp, error)
+	// 获取题目的所有语言
+	GetProblemLanguages(context.Context, *GetProblemLanguagesReq) (*GetProblemLanguagesResp, error)
 	mustEmbedUnimplementedLanguageServer()
 }
 
@@ -1484,8 +1544,20 @@ func (UnimplementedLanguageServer) DeleteLanguage(context.Context, *DeleteLangua
 func (UnimplementedLanguageServer) UpdateLanguage(context.Context, *UpdateLanguageReq) (*UpdateLanguageResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateLanguage not implemented")
 }
-func (UnimplementedLanguageServer) GetLanguage(context.Context, *GetLanguageReq) (*GetLanguageResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetLanguage not implemented")
+func (UnimplementedLanguageServer) GetLanguages(context.Context, *GetLanguagesReq) (*GetLanguagesResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLanguages not implemented")
+}
+func (UnimplementedLanguageServer) GetLanguageById(context.Context, *GetLanguageByIdReq) (*GetLanguageByIdResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLanguageById not implemented")
+}
+func (UnimplementedLanguageServer) ProblemAddLanguages(context.Context, *ProblemAddLanguagesReq) (*ProblemAddLanguagesResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ProblemAddLanguages not implemented")
+}
+func (UnimplementedLanguageServer) ProblemDeleteLanguages(context.Context, *ProblemDeleteLanguagesReq) (*ProblemDeleteLanguagesResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ProblemDeleteLanguages not implemented")
+}
+func (UnimplementedLanguageServer) GetProblemLanguages(context.Context, *GetProblemLanguagesReq) (*GetProblemLanguagesResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProblemLanguages not implemented")
 }
 func (UnimplementedLanguageServer) mustEmbedUnimplementedLanguageServer() {}
 
@@ -1554,20 +1626,92 @@ func _Language_UpdateLanguage_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Language_GetLanguage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLanguageReq)
+func _Language_GetLanguages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetLanguagesReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(LanguageServer).GetLanguage(ctx, in)
+		return srv.(LanguageServer).GetLanguages(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Language_GetLanguage_FullMethodName,
+		FullMethod: Language_GetLanguages_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LanguageServer).GetLanguage(ctx, req.(*GetLanguageReq))
+		return srv.(LanguageServer).GetLanguages(ctx, req.(*GetLanguagesReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Language_GetLanguageById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetLanguageByIdReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LanguageServer).GetLanguageById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Language_GetLanguageById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LanguageServer).GetLanguageById(ctx, req.(*GetLanguageByIdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Language_ProblemAddLanguages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProblemAddLanguagesReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LanguageServer).ProblemAddLanguages(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Language_ProblemAddLanguages_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LanguageServer).ProblemAddLanguages(ctx, req.(*ProblemAddLanguagesReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Language_ProblemDeleteLanguages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProblemDeleteLanguagesReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LanguageServer).ProblemDeleteLanguages(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Language_ProblemDeleteLanguages_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LanguageServer).ProblemDeleteLanguages(ctx, req.(*ProblemDeleteLanguagesReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Language_GetProblemLanguages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetProblemLanguagesReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LanguageServer).GetProblemLanguages(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Language_GetProblemLanguages_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LanguageServer).GetProblemLanguages(ctx, req.(*GetProblemLanguagesReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1592,8 +1736,24 @@ var Language_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Language_UpdateLanguage_Handler,
 		},
 		{
-			MethodName: "GetLanguage",
-			Handler:    _Language_GetLanguage_Handler,
+			MethodName: "GetLanguages",
+			Handler:    _Language_GetLanguages_Handler,
+		},
+		{
+			MethodName: "GetLanguageById",
+			Handler:    _Language_GetLanguageById_Handler,
+		},
+		{
+			MethodName: "ProblemAddLanguages",
+			Handler:    _Language_ProblemAddLanguages_Handler,
+		},
+		{
+			MethodName: "ProblemDeleteLanguages",
+			Handler:    _Language_ProblemDeleteLanguages_Handler,
+		},
+		{
+			MethodName: "GetProblemLanguages",
+			Handler:    _Language_GetProblemLanguages_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

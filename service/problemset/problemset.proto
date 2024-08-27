@@ -24,8 +24,6 @@ message AddProblemReq {
   string inputDescription = 4;
   string outputDescription = 5;
   string scaleDescription = 6;
-  int64 timeLimit = 7;
-  int64 memoryLimit = 8;
 }
 message AddProblemResp {
   int64 id = 1;
@@ -288,15 +286,27 @@ service Language {
   // 更新语言
   rpc UpdateLanguage(UpdateLanguageReq) returns (UpdateLanguageResp);
   // 获取所有语言
-  rpc GetLanguage(GetLanguageReq) returns (GetLanguageResp);
+  rpc GetLanguages(GetLanguagesReq) returns (GetLanguagesResp);
+  // 根据id获取语言
+  rpc GetLanguageById(GetLanguageByIdReq) returns (GetLanguageByIdResp);
+  // 给题目增加语言
+  rpc ProblemAddLanguages (ProblemAddLanguagesReq) returns (ProblemAddLanguagesResp);
+  // 题目删除语言
+  rpc ProblemDeleteLanguages (ProblemDeleteLanguagesReq) returns (ProblemDeleteLanguagesResp);
+  // 获取题目的所有语言
+  rpc GetProblemLanguages (GetProblemLanguagesReq) returns (GetProblemLanguagesResp);
 }
 message LanguageInfo {
   int64 languageId = 1;
   string name = 2;
   string version = 3;
 }
+message ProblemLanguagesModel {
+  int64 languageId = 1;
+  int64 timeLimit = 2;
+  int64 memoryLimit = 3;
+}
 message AddLanguageReq {
-  // 操作者id
   string name = 1;
   string version = 2;
 }
@@ -304,7 +314,6 @@ message AddLanguageResp {
   int64 id = 1;
 }
 message DeleteLanguageReq {
-  // 操作者id
   int64 languageId = 1;
 }
 message DeleteLanguageResp {}
@@ -312,9 +321,33 @@ message UpdateLanguageReq {
   LanguageInfo language = 1;
 }
 message UpdateLanguageResp {}
-message GetLanguageReq {}
-message GetLanguageResp {
+message GetLanguagesReq {}
+message GetLanguagesResp {
   repeated LanguageInfo language = 1;
+}
+message GetLanguageByIdReq {
+  int64 languageId = 1;
+}
+message GetLanguageByIdResp {
+  LanguageInfo language = 1;
+}
+message ProblemAddLanguagesReq {
+  int64 problemId = 1;
+  // 数据模型
+  repeated ProblemLanguagesModel model = 2;
+}
+message ProblemAddLanguagesResp {}
+message ProblemDeleteLanguagesReq {
+  int64 problemId = 1;
+  repeated int64 languageIds = 2;
+}
+message ProblemDeleteLanguagesResp {}
+message GetProblemLanguagesReq {
+  int64 problemId = 1;
+}
+message GetProblemLanguagesResp {
+  // 数据模型
+  repeated ProblemLanguagesModel model = 1;
 }
 
 // 提交

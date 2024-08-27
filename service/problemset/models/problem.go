@@ -1,7 +1,6 @@
 package models
 
 import (
-	"time"
 	"zerooj/common/models"
 )
 
@@ -13,11 +12,11 @@ type Problem struct {
 	InputDescription      string            `gorm:"size:1000;comment:输入描述"`
 	OutputDescription     string            `gorm:"size:1000;comment:输出描述"`
 	ScaleDescription      string            `gorm:"size:1000;comment:数据规模说明"`
-	TimeLimit             time.Duration     `gorm:"comment:时间限制，单位为纳秒"`
-	MemoryLimit           models.Memory     `gorm:"comment:内存限制，单位为字节"`
 	Examples              []Example
 	Hints                 []Hint
 	JudgeData             []JudgeData
-	Tags                  []Tag `gorm:"many2many:problem_tags"`
+	Tags                  []Tag      `gorm:"many2many:problem_tags"`
+	Languages             []Language `gorm:"many2many:problem_languages"`
+	ProblemLanguages      []ProblemLanguage
 	Submits               []Submit
 }

@@ -9,23 +9,23 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type GetLanguageLogic struct {
+type GetLanguageByIdLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewGetLanguageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetLanguageLogic {
-	return &GetLanguageLogic{
+func NewGetLanguageByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetLanguageByIdLogic {
+	return &GetLanguageByIdLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-// 获取所有语言
-func (l *GetLanguageLogic) GetLanguage(in *problemset.GetLanguageReq) (*problemset.GetLanguageResp, error) {
+// 根据id获取语言
+func (l *GetLanguageByIdLogic) GetLanguageById(in *problemset.GetLanguageByIdReq) (*problemset.GetLanguageByIdResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &problemset.GetLanguageResp{}, nil
+	return &problemset.GetLanguageByIdResp{}, nil
 }
