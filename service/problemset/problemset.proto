@@ -18,8 +18,8 @@ service Problem {
   rpc SearchProblem(SearchProblemReq) returns (SearchProblemResp);
 }
 message AddProblemReq {
-  string title = 1;
-  uint32 difficulty = 2;
+  string title = 2;
+  uint32 difficulty = 1;
   string description = 3;
   string inputDescription = 4;
   string outputDescription = 5;
@@ -36,25 +36,31 @@ message GetProblemContentReq {
   int64 problemId = 1;
 }
 message GetProblemContentResp {
-  string title = 1;
-  uint32 difficulty = 2;
-  // 题目描述在minio的对象名
-  string descriptionObjectName = 3;
-  string inputDescription = 4;
-  string outputDescription = 5;
-  string scaleDescription = 6;
-  int64 timeLimit = 7;
-  int64 memoryLimit = 8;
+  string title = 8;
+  uint32 difficulty = 1;
+  // 题目描述存储类型
+  uint32 descriptionStorageType = 2;
+  string description = 9;
+  // 输入描述存储类型
+  uint32 inputDescriptionStorageType = 3;
+  string inputDescription = 10;
+  // 输出描述存储类型
+  uint32 outputDescriptionStorageType = 4;
+  string outputDescription = 11;
+  // 规模描述存储类型
+  uint32 scaleDescriptionStorageType = 5;
+  string scaleDescription = 12;
+  int64 timeLimit = 6;
+  int64 memoryLimit = 7;
 }
 message UpdateProblemReq {
-  int64 problemId = 1;
-  uint32 difficulty = 2;
-  string description = 3;
-  string inputDescription = 4;
-  string outputDescription = 5;
-  string scaleDescription = 6;
-  int64 timeLimit = 7;
-  int64 memoryLimit = 8;
+  int64 problemId = 2;
+  string title =3;
+  uint32 difficulty = 1;
+  string description = 4;
+  string inputDescription = 5;
+  string outputDescription = 6;
+  string scaleDescription = 7;
 }
 message UpdateProblemResp {}
 message SearchProblemReq {
@@ -63,8 +69,8 @@ message SearchProblemReq {
   uint32 difficulty = 3;
   // 用户id，用于判断题目的状态
   int64 userId = 4;
-  // 只有当userId!=0时，状态才有效
-  uint32 status = 5;
+  // 只有当userId!=0时，题目状态才有效
+  uint32 problemStatus = 5;
   int32 pageNum = 6;
   int32 pageSize = 7;
 }
@@ -152,10 +158,14 @@ service Example {
   rpc GetProblemExamples(GetProblemExamplesReq) returns (GetProblemExamplesResp);
 }
 message ExampleInfo {
-  int64 exampleId = 1;
-  string input = 2;
-  string output = 3;
-  string explanation = 4;
+  int64 exampleId = 4;
+  int64 problemId = 5;
+  uint32 inputStorageType = 1;
+  string input = 6;
+  uint32 outputStorageType = 2;
+  string output = 7;
+  uint32 explanationStorageType = 3;
+  string explanation = 8;
 }
 message AddExampleReq {
   int64 problemId = 1;
@@ -171,7 +181,10 @@ message DeleteExampleReq {
 }
 message DeleteExampleResp {}
 message UpdateExampleReq {
-  ExampleInfo example = 1;
+  int64 exampleId = 1;
+  string input = 2;
+  string output = 3;
+  string explanation = 4;
 }
 message UpdateExampleResp {}
 message GetExampleReq {
@@ -202,7 +215,9 @@ service Hint {
 }
 message HintInfo {
   int64 hintId = 1;
-  string content = 2;
+  int64 problemId = 2;
+  uint32 contentStorageType = 3;
+  string content = 4;
 }
 message AddHintReq {
   int64 problemId = 1;
@@ -216,7 +231,8 @@ message DeleteHintReq {
 }
 message DeleteHintResp {}
 message UpdateHintReq {
-  HintInfo hint = 1;
+  int64 hintId = 1;
+  string content = 2;
 }
 message UpdateHintResp {}
 message GetHintReq {
@@ -244,9 +260,12 @@ service JudgeData {
   rpc GetJudgeData(GetJudgeDataReq) returns (GetJudgeDataResp);
 }
 message JudgeDataInfo {
-  int64 judgeDataId = 1;
-  string inputObjectName = 2;
-  string outputObjectName = 3;
+  int64 judgeDataId = 3;
+  int64 problemId = 4;
+  uint32 inputStorageType = 1;
+  string input = 5;
+  uint32 outputStorageType = 2;
+  string output = 6;
 }
 message AddJudgeDataReq {
   int64 problemId = 1;
@@ -364,15 +383,16 @@ service Submit {
   rpc GetSubmitById(GetSubmitByIdReq) returns (GetSubmitByIdResp);
 }
 message SubmitInfo {
-  int64 submitId = 1;
-  int64 userId = 2;
-  int64 problemId = 3;
-  LanguageInfo language = 4;
-  uint32 result = 5;
+  int64 submitId = 3;
+  int64 userId = 4;
+  int64 problemId = 5;
+  LanguageInfo language = 9;
+  uint32 result = 1;
+  uint32 codeStorageType =2;
   // 用户提交的代码，在minio的对象名
-  string codeObjectName = 6;
-  int64 runTime = 7;
-  int64 memoryConsumption = 8;
+  string code = 8;
+  int64 runTime = 6;
+  int64 memoryConsumption = 7;
 }
 message SubmitCodeReq {
   int64 userId = 1;
