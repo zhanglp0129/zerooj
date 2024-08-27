@@ -2,6 +2,7 @@ package svc
 
 import (
 	"fmt"
+	"github.com/minio/minio-go/v7"
 	"github.com/redis/go-redis/v9"
 	"github.com/zhanglp0129/redis_snowflake"
 	"github.com/zhanglp0129/snowflake"
@@ -17,6 +18,7 @@ type ServiceContext struct {
 	DB     *gorm.DB
 	RDB    redis.UniversalClient
 	RW     snowflake.WorkerInterface
+	MC     *minio.Client
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -53,10 +55,17 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		panic(err)
 	}
 
+	// 创建minio客户端
+	mc, err := common.InitMinio(c.Minio)
+	if err != nil {
+		panic(err)
+	}
+
 	return &ServiceContext{
 		Config: c,
 		DB:     db,
 		RDB:    rdb,
 		RW:     rw,
+		MC:     mc,
 	}
 }

@@ -9,4 +9,5 @@ type Config struct {
 	zrpc.RpcServerConf
 	Database    common.DatabaseConfig
 	RedisClient common.RedisConf
+	Minio       common.MinioConfig
 }

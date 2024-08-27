@@ -20,3 +20,9 @@ Database:
       DSN: root:1234@tcp(127.0.0.1:3306)/zerooj_problemset?charset=utf8&parseTime=True&loc=Local
       # 机器码。只能填0
       MachineId: 0
+Minio:
+  Endpoint: localhost:9000
+  AccessKeyID:
+  SecretAccessKey:
+  UseSSL: false
+  BucketName: zerooj
