@@ -3,7 +3,6 @@ package svc
 import (
 	"fmt"
 	"github.com/redis/go-redis/v9"
-	"github.com/zeromicro/go-zero/zrpc"
 	"github.com/zhanglp0129/redis_snowflake"
 	"github.com/zhanglp0129/snowflake"
 	"gorm.io/gorm"
@@ -11,15 +10,13 @@ import (
 	"zerooj/common/constant"
 	"zerooj/service/problemset/internal/config"
 	"zerooj/service/problemset/models"
-	"zerooj/service/user/pb/user"
 )
 
 type ServiceContext struct {
-	Config             config.Config
-	DB                 *gorm.DB
-	RDB                redis.UniversalClient
-	RW                 snowflake.WorkerInterface
-	UserBaseInfoClient user.BaseInfoClient
+	Config config.Config
+	DB     *gorm.DB
+	RDB    redis.UniversalClient
+	RW     snowflake.WorkerInterface
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -56,15 +53,10 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		panic(err)
 	}
 
-	// 创建用户基本信息服务客户端
-	conn := zrpc.MustNewClient(c.Client.User)
-	userBaseInfoClient := user.NewBaseInfoClient(conn.Conn())
-
 	return &ServiceContext{
-		Config:             c,
-		DB:                 db,
-		RDB:                rdb,
-		RW:                 rw,
-		UserBaseInfoClient: userBaseInfoClient,
+		Config: c,
+		DB:     db,
+		RDB:    rdb,
+		RW:     rw,
 	}
 }
