@@ -20,6 +20,7 @@ const (
 	InsufficientPermissionsError ZeroOJError = "权限不足"
 	SkillQuantityExceedsLimit    ZeroOJError = "技能数量超出限制"
 	WebsiteQuantityExceedsLimit  ZeroOJError = "个人网站数量超出限制"
+	NotSupportStorageType        ZeroOJError = "不支持的存储类型"
 )
 
 type ZeroOJError string
