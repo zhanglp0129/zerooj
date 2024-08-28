@@ -23,7 +23,7 @@ const (
 	CloudStorage
 )
 
-// GetContent 获取实际存储内容。推荐直接存储和云存储使用
+// GetContent 获取实际存储内容。推荐直接存储使用
 func GetContent(st StorageType, value []byte, options ...Option) ([]byte, error) {
 	cfg := loadConfig(options...)
 
@@ -32,11 +32,12 @@ func GetContent(st StorageType, value []byte, options ...Option) ([]byte, error)
 	case DirectStorage:
 		return value, nil
 	case ObjectStorage:
-		reader, err := readObjectStorage(cfg, string(value))
+		readCloser, err := readObjectStorage(cfg, string(value))
 		if err != nil {
 			return nil, err
 		}
-		return io.ReadAll(reader)
+		defer readCloser.Close()
+		return io.ReadAll(readCloser)
 	case CloudStorage:
 		reader, err := readCloudStorage(cfg, string(value))
 		if err != nil {
@@ -50,27 +51,18 @@ func GetContent(st StorageType, value []byte, options ...Option) ([]byte, error)
 
 }
 
-// GetContentReader 获取实际存储内容，返回reader。推荐直接存储和对象存储使用
-func GetContentReader(st StorageType, value []byte, options ...Option) (io.Reader, error) {
+// GetContentReader 获取实际存储内容，返回ReadCloser，必须手动关闭。推荐对象存储和云存储使用
+func GetContentReader(st StorageType, value []byte, options ...Option) (io.ReadCloser, error) {
 	cfg := loadConfig(options...)
 
 	// 判断存储类型
 	switch st {
 	case DirectStorage:
-		return bytes.NewBuffer(value), nil
+		return io.NopCloser(bytes.NewBuffer(value)), nil
 	case ObjectStorage:
 		return readObjectStorage(cfg, string(value))
 	case CloudStorage:
-		reader, err := readCloudStorage(cfg, string(value))
-		if err != nil {
-			return nil, err
-		}
-		defer reader.Close()
-		contentBytes, err := io.ReadAll(reader)
-		if err != nil {
-			return nil, err
-		}
-		return bytes.NewReader(contentBytes), nil
+		return readCloudStorage(cfg, string(value))
 
 	default:
 		return nil, constant.NotSupportStorageType
@@ -112,7 +104,7 @@ func StorageReadableObject(content io.Reader, mc *minio.Client, bucketName strin
 	return objectName, ObjectStorage, nil
 }
 
-func readObjectStorage(c *config, objectName string) (io.Reader, error) {
+func readObjectStorage(c *config, objectName string) (io.ReadCloser, error) {
 	obj, err := c.mc.GetObject(context.Background(), c.bucket, objectName, minio.GetObjectOptions{})
 	if err != nil {
 		return nil, err
