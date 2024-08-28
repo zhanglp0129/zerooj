@@ -2,6 +2,7 @@ package common
 
 import (
 	"context"
+	"fmt"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 )
@@ -39,7 +40,21 @@ func InitMinio(c MinioConfig) (*minio.Client, error) {
 		if err != nil {
 			return nil, err
 		}
+
+		// 设置可匿名读
+		prefix := "readonly/*"
+		err = setReadonly(minioClient, c.BucketName, prefix)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return minioClient, nil
+}
+
+func setReadonly(mc *minio.Client, bucketName, prefix string) error {
+	policy := fmt.Sprintf(`{"Version": "2012-10-17","Statement": [{"Effect": "Allow","Principal": {"AWS": ["*"]},"Action": ["s3:GetObject"],"Resource": ["arn:aws:s3:::%s/%s"]}]}`, bucketName, prefix)
+	err := mc.SetBucketPolicy(context.Background(), bucketName, policy)
+
+	return err
 }

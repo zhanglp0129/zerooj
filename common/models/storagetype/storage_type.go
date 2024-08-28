@@ -3,6 +3,7 @@ package storagetype
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"github.com/google/uuid"
 	"github.com/minio/minio-go/v7"
 	"io"
@@ -94,6 +95,16 @@ func Storage(content []byte, mc *minio.Client, bucketName string) ([]byte, Stora
 // StorageObject 存储对象，并返回对象名
 func StorageObject(content io.Reader, mc *minio.Client, bucketName string) (string, StorageType, error) {
 	objectName := uuid.New().String()
+	_, err := mc.PutObject(context.Background(), bucketName, objectName, content, -1, minio.PutObjectOptions{})
+	if err != nil {
+		return "", 0, err
+	}
+	return objectName, ObjectStorage, nil
+}
+
+// StorageReadableObject 存储可匿名读对象，并返回对象名
+func StorageReadableObject(content io.Reader, mc *minio.Client, bucketName string) (string, StorageType, error) {
+	objectName := fmt.Sprintf("readonly/%s", uuid.New().String())
 	_, err := mc.PutObject(context.Background(), bucketName, objectName, content, -1, minio.PutObjectOptions{})
 	if err != nil {
 		return "", 0, err
