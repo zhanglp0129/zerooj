@@ -4,7 +4,7 @@ import (
 	"context"
 	"gorm.io/gorm"
 	"zerooj/common/constant"
-	common_models "zerooj/common/models"
+	commonmodels "zerooj/common/models"
 	profilelogic "zerooj/service/user/internal/logic/profile"
 	"zerooj/service/user/models"
 
@@ -43,7 +43,7 @@ func (l *AddUserSkillLogic) AddUserSkill(in *user.AddUserSkillReq) (*user.AddUse
 	err := db.Transaction(func(tx *gorm.DB) error {
 		skills := make([]models.Skill, 0, len(in.SkillIds))
 		for _, skillId := range in.SkillIds {
-			skills = append(skills, models.Skill{Model: common_models.Model{ID: skillId}})
+			skills = append(skills, models.Skill{Model: commonmodels.Model{ID: skillId}})
 		}
 		err := tx.Model(&u).Association("Skills").Append(skills)
 		if err != nil {

@@ -3,7 +3,7 @@ package skilllogic
 import (
 	"context"
 	"gorm.io/gorm"
-	common_models "zerooj/common/models"
+	commonmodels "zerooj/common/models"
 	profilelogic "zerooj/service/user/internal/logic/profile"
 	"zerooj/service/user/models"
 
@@ -35,7 +35,7 @@ func (l *DeleteUserSkillLogic) DeleteUserSkill(in *user.DeleteUserSkillReq) (*us
 		u.ID = in.UserId
 		skills := make([]models.Skill, 0, len(in.SkillIds))
 		for _, skillId := range in.SkillIds {
-			skills = append(skills, models.Skill{Model: common_models.Model{ID: skillId}})
+			skills = append(skills, models.Skill{Model: commonmodels.Model{ID: skillId}})
 		}
 		err := tx.Model(&u).Association("Skills").Delete(&skills)
 		if err != nil {

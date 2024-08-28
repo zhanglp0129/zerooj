@@ -3,7 +3,7 @@ package profilelogic
 import (
 	"context"
 	"gorm.io/gorm"
-	common_models "zerooj/common/models"
+	commonmodels "zerooj/common/models"
 	"zerooj/service/user/models"
 
 	"zerooj/service/user/internal/svc"
@@ -33,7 +33,7 @@ func (l *UpdateUserProfileLogic) UpdateUserProfile(in *user.UpdateUserProfileReq
 		UserID:               in.UserId,
 		Nickname:             in.Nickname,
 		AvatarURL:            in.AvatarURL,
-		Gender:               common_models.Gender(in.Gender),
+		Gender:               commonmodels.Gender(in.Gender),
 		Birthday:             in.Birthday.AsTime(),
 		PersonalIntroduction: in.PersonalIntroduction,
 	}
