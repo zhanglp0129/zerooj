@@ -24,8 +24,8 @@ func NewUpdateHintLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Update
 }
 
 // 修改提示
-func (l *UpdateHintLogic) UpdateHint(in *problemset.UpdateHintReq) (*problemset.UpdateHintResp, error) {
+func (l *UpdateHintLogic) UpdateHint(stream problemset.Hint_UpdateHintServer) error {
 	// todo: add your logic here and delete this line
 
-	return &problemset.UpdateHintResp{}, nil
+	return nil
 }

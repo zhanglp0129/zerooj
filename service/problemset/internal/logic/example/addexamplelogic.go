@@ -24,8 +24,8 @@ func NewAddExampleLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddExa
 }
 
 // 添加样例
-func (l *AddExampleLogic) AddExample(in *problemset.AddExampleReq) (*problemset.AddExampleResp, error) {
+func (l *AddExampleLogic) AddExample(stream problemset.Example_AddExampleServer) error {
 	// todo: add your logic here and delete this line
 
-	return &problemset.AddExampleResp{}, nil
+	return nil
 }

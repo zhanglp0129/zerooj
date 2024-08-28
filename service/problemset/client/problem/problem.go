@@ -81,6 +81,7 @@ type (
 	ProblemDeleteLanguagesResp = problemset.ProblemDeleteLanguagesResp
 	ProblemDeleteTagsReq       = problemset.ProblemDeleteTagsReq
 	ProblemDeleteTagsResp      = problemset.ProblemDeleteTagsResp
+	ProblemInfo                = problemset.ProblemInfo
 	ProblemLanguagesModel      = problemset.ProblemLanguagesModel
 	SearchProblemReq           = problemset.SearchProblemReq
 	SearchProblemResp          = problemset.SearchProblemResp
@@ -103,13 +104,13 @@ type (
 
 	Problem interface {
 		// 添加问题
-		AddProblem(ctx context.Context, in *AddProblemReq, opts ...grpc.CallOption) (*AddProblemResp, error)
+		AddProblem(ctx context.Context, opts ...grpc.CallOption) (problemset.Problem_AddProblemClient, error)
 		// 删除问题
 		DeleteProblem(ctx context.Context, in *DeleteProblemReq, opts ...grpc.CallOption) (*DeleteProblemResp, error)
 		// 获取问题信息，可缓存
-		GetProblemContent(ctx context.Context, in *GetProblemContentReq, opts ...grpc.CallOption) (*GetProblemContentResp, error)
+		GetProblemContent(ctx context.Context, in *GetProblemContentReq, opts ...grpc.CallOption) (problemset.Problem_GetProblemContentClient, error)
 		// 更新问题
-		UpdateProblem(ctx context.Context, in *UpdateProblemReq, opts ...grpc.CallOption) (*UpdateProblemResp, error)
+		UpdateProblem(ctx context.Context, opts ...grpc.CallOption) (problemset.Problem_UpdateProblemClient, error)
 		// 分页搜索题目
 		SearchProblem(ctx context.Context, in *SearchProblemReq, opts ...grpc.CallOption) (*SearchProblemResp, error)
 	}
@@ -126,9 +127,9 @@ func NewProblem(cli zrpc.Client) Problem {
 }
 
 // 添加问题
-func (m *defaultProblem) AddProblem(ctx context.Context, in *AddProblemReq, opts ...grpc.CallOption) (*AddProblemResp, error) {
+func (m *defaultProblem) AddProblem(ctx context.Context, opts ...grpc.CallOption) (problemset.Problem_AddProblemClient, error) {
 	client := problemset.NewProblemClient(m.cli.Conn())
-	return client.AddProblem(ctx, in, opts...)
+	return client.AddProblem(ctx, opts...)
 }
 
 // 删除问题
@@ -138,15 +139,15 @@ func (m *defaultProblem) DeleteProblem(ctx context.Context, in *DeleteProblemReq
 }
 
 // 获取问题信息，可缓存
-func (m *defaultProblem) GetProblemContent(ctx context.Context, in *GetProblemContentReq, opts ...grpc.CallOption) (*GetProblemContentResp, error) {
+func (m *defaultProblem) GetProblemContent(ctx context.Context, in *GetProblemContentReq, opts ...grpc.CallOption) (problemset.Problem_GetProblemContentClient, error) {
 	client := problemset.NewProblemClient(m.cli.Conn())
 	return client.GetProblemContent(ctx, in, opts...)
 }
 
 // 更新问题
-func (m *defaultProblem) UpdateProblem(ctx context.Context, in *UpdateProblemReq, opts ...grpc.CallOption) (*UpdateProblemResp, error) {
+func (m *defaultProblem) UpdateProblem(ctx context.Context, opts ...grpc.CallOption) (problemset.Problem_UpdateProblemClient, error) {
 	client := problemset.NewProblemClient(m.cli.Conn())
-	return client.UpdateProblem(ctx, in, opts...)
+	return client.UpdateProblem(ctx, opts...)
 }
 
 // 分页搜索题目

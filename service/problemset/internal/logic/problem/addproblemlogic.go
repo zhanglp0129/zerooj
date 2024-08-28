@@ -24,8 +24,8 @@ func NewAddProblemLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddPro
 }
 
 // 添加问题
-func (l *AddProblemLogic) AddProblem(in *problemset.AddProblemReq) (*problemset.AddProblemResp, error) {
+func (l *AddProblemLogic) AddProblem(stream problemset.Problem_AddProblemServer) error {
 	// todo: add your logic here and delete this line
 
-	return &problemset.AddProblemResp{}, nil
+	return nil
 }

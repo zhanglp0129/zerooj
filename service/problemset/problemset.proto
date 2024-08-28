@@ -7,15 +7,24 @@ option go_package = "./problemset";
 // 题目
 service Problem {
   // 添加问题
-  rpc AddProblem(AddProblemReq) returns (AddProblemResp);
+  rpc AddProblem(stream AddProblemReq) returns (AddProblemResp);
   // 删除问题
   rpc DeleteProblem(DeleteProblemReq) returns (DeleteProblemResp);
   // 获取问题信息，可缓存
-  rpc GetProblemContent(GetProblemContentReq) returns (GetProblemContentResp);
+  rpc GetProblemContent(GetProblemContentReq) returns (stream GetProblemContentResp);
   // 更新问题
-  rpc UpdateProblem(UpdateProblemReq) returns (UpdateProblemResp);
+  rpc UpdateProblem(stream UpdateProblemReq) returns (UpdateProblemResp);
   // 分页搜索题目
   rpc SearchProblem(SearchProblemReq) returns (SearchProblemResp);
+}
+message ProblemInfo {
+  int64 problemId = 2;
+  string title =3;
+  uint32 difficulty = 1;
+  string description = 4;
+  string inputDescription = 5;
+  string outputDescription = 6;
+  string scaleDescription = 7;
 }
 message AddProblemReq {
   string title = 2;
@@ -36,31 +45,10 @@ message GetProblemContentReq {
   int64 problemId = 1;
 }
 message GetProblemContentResp {
-  string title = 8;
-  uint32 difficulty = 1;
-  // 题目描述存储类型
-  uint32 descriptionStorageType = 2;
-  string description = 9;
-  // 输入描述存储类型
-  uint32 inputDescriptionStorageType = 3;
-  string inputDescription = 10;
-  // 输出描述存储类型
-  uint32 outputDescriptionStorageType = 4;
-  string outputDescription = 11;
-  // 规模描述存储类型
-  uint32 scaleDescriptionStorageType = 5;
-  string scaleDescription = 12;
-  int64 timeLimit = 6;
-  int64 memoryLimit = 7;
+  ProblemInfo problem = 1;
 }
 message UpdateProblemReq {
-  int64 problemId = 2;
-  string title =3;
-  uint32 difficulty = 1;
-  string description = 4;
-  string inputDescription = 5;
-  string outputDescription = 6;
-  string scaleDescription = 7;
+  ProblemInfo problem = 1;
 }
 message UpdateProblemResp {}
 message SearchProblemReq {
@@ -147,25 +135,22 @@ message GetProblemTagsResp {
 // 样例
 service Example {
   // 添加样例
-  rpc AddExample(AddExampleReq) returns (AddExampleResp);
+  rpc AddExample(stream AddExampleReq) returns (AddExampleResp);
   // 删除样例
   rpc DeleteExample(DeleteExampleReq) returns (DeleteExampleResp);
   // 修改样例
-  rpc UpdateExample(UpdateExampleReq) returns (UpdateExampleResp);
+  rpc UpdateExample(stream UpdateExampleReq) returns (UpdateExampleResp);
   // 获取样例
-  rpc GetExample(GetExampleReq) returns (GetExampleResp);
+  rpc GetExample(GetExampleReq) returns (stream GetExampleResp);
   // 获取题目的所有样例
-  rpc GetProblemExamples(GetProblemExamplesReq) returns (GetProblemExamplesResp);
+  rpc GetProblemExamples(GetProblemExamplesReq) returns (stream GetProblemExamplesResp);
 }
 message ExampleInfo {
-  int64 exampleId = 4;
-  int64 problemId = 5;
-  uint32 inputStorageType = 1;
-  string input = 6;
-  uint32 outputStorageType = 2;
-  string output = 7;
-  uint32 explanationStorageType = 3;
-  string explanation = 8;
+  int64 exampleId = 1;
+  int64 problemId = 2;
+  string input = 3;
+  string output = 4;
+  string explanation = 5;
 }
 message AddExampleReq {
   int64 problemId = 1;
@@ -181,10 +166,7 @@ message DeleteExampleReq {
 }
 message DeleteExampleResp {}
 message UpdateExampleReq {
-  int64 exampleId = 1;
-  string input = 2;
-  string output = 3;
-  string explanation = 4;
+  ExampleInfo example = 1;
 }
 message UpdateExampleResp {}
 message GetExampleReq {
@@ -203,21 +185,20 @@ message GetProblemExamplesResp {
 // 提示
 service Hint {
   // 添加提示
-  rpc AddHint(AddHintReq) returns (AddHintResp);
+  rpc AddHint(stream AddHintReq) returns (AddHintResp);
   // 删除提示
   rpc DeleteHint(DeleteHintReq) returns (DeleteHintResp);
   // 修改提示
-  rpc UpdateHint(UpdateHintReq) returns (UpdateHintResp);
+  rpc UpdateHint(stream UpdateHintReq) returns (UpdateHintResp);
   // 获取提示
-  rpc GetHint(GetHintReq) returns (GetHintResp);
+  rpc GetHint(GetHintReq) returns (stream GetHintResp);
   // 获取题目所有提示
-  rpc GetProblemHints(GetProblemHintsReq) returns (GetProblemHintsResp);
+  rpc GetProblemHints(GetProblemHintsReq) returns (stream GetProblemHintsResp);
 }
 message HintInfo {
   int64 hintId = 1;
   int64 problemId = 2;
-  uint32 contentStorageType = 3;
-  string content = 4;
+  string content = 3;
 }
 message AddHintReq {
   int64 problemId = 1;
@@ -231,8 +212,7 @@ message DeleteHintReq {
 }
 message DeleteHintResp {}
 message UpdateHintReq {
-  int64 hintId = 1;
-  string content = 2;
+  HintInfo hint = 1;
 }
 message UpdateHintResp {}
 message GetHintReq {
@@ -251,28 +231,28 @@ message GetProblemHintsResp {
 // 评测数据
 service JudgeData {
   // 添加测评数据
-  rpc AddJudgeData(AddJudgeDataReq) returns (AddJudgeDataResp);
+  rpc AddJudgeData(stream AddJudgeDataReq) returns (AddJudgeDataResp);
   // 删除测评数据
   rpc DeleteJudgeData(DeleteJudgeDataReq) returns (DeleteJudgeDataResp);
   // 修改测评数据
-  rpc UpdateJudgeData(UpdateJudgeDataReq) returns (UpdateJudgeDataResp);
+  rpc UpdateJudgeData(stream UpdateJudgeDataReq) returns (UpdateJudgeDataResp);
   // 获取题目的测评数据，返回minio对象名称，可缓存
-  rpc GetJudgeData(GetJudgeDataReq) returns (GetJudgeDataResp);
+  rpc GetJudgeData(GetJudgeDataReq) returns (stream GetJudgeDataResp);
 }
 message JudgeDataInfo {
-  int64 judgeDataId = 3;
-  int64 problemId = 4;
-  uint32 inputStorageType = 1;
-  string input = 5;
-  uint32 outputStorageType = 2;
-  string output = 6;
-}
-message AddJudgeDataReq {
-  int64 problemId = 1;
+  int64 judgeDataId = 1;
+  int64 problemId = 2;
   // 输入数据内容
   string input = 3;
   // 输出数据内容
   string output = 4;
+}
+message AddJudgeDataReq {
+  int64 problemId = 1;
+  // 输入数据内容
+  string input = 2;
+  // 输出数据内容
+  string output = 3;
 }
 message AddJudgeDataResp {
   int64 id = 1;
@@ -282,11 +262,7 @@ message DeleteJudgeDataReq {
 }
 message DeleteJudgeDataResp {}
 message UpdateJudgeDataReq {
-  int64 judgeDataId = 1;
-  // 输入数据内容
-  string input = 2;
-  // 输出数据内容
-  string output = 3;
+  JudgeDataInfo judgeData = 1;
 }
 message UpdateJudgeDataResp {}
 message GetJudgeDataReq {
@@ -372,33 +348,30 @@ message GetProblemLanguagesResp {
 // 提交
 service Submit {
   // 用户提交代码
-  rpc SubmitCode(SubmitCodeReq) returns (SubmitCodeResp);
+  rpc SubmitCode(stream SubmitCodeReq) returns (SubmitCodeResp);
   // 获取题目的提交数
   rpc GetProblemSubmitCount(GetProblemSubmitCountReq) returns (GetProblemSubmitCountResp);
   // 分页获取用户提交
-  rpc GetUserSubmit(GetUserSubmitReq) returns (GetUserSubmitResp);
+  rpc GetUserSubmit(GetUserSubmitReq) returns (stream GetUserSubmitResp);
   // 获取用户某一道题的全部提交
-  rpc GetUserProblemSubmit(GetUserProblemSubmitReq) returns (GetUserProblemSubmitResp);
+  rpc GetUserProblemSubmit(GetUserProblemSubmitReq) returns (stream GetUserProblemSubmitResp);
   // 获取通过id提交记录
-  rpc GetSubmitById(GetSubmitByIdReq) returns (GetSubmitByIdResp);
+  rpc GetSubmitById(GetSubmitByIdReq) returns (stream GetSubmitByIdResp);
 }
 message SubmitInfo {
-  int64 submitId = 3;
-  int64 userId = 4;
-  int64 problemId = 5;
-  LanguageInfo language = 9;
+  int64 submitId = 2;
+  int64 userId = 3;
+  int64 problemId = 4;
+  LanguageInfo language = 8;
   uint32 result = 1;
-  uint32 codeStorageType =2;
-  // 用户提交的代码，在minio的对象名
-  string code = 8;
-  int64 runTime = 6;
-  int64 memoryConsumption = 7;
+  string code = 7;
+  int64 runTime = 5;
+  int64 memoryConsumption = 6;
 }
 message SubmitCodeReq {
   int64 userId = 1;
   int64 problemId = 2;
   int64 languageId = 3;
-  // 代码原文
   string code = 4;
 }
 message SubmitCodeResp {

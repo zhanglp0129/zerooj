@@ -81,6 +81,7 @@ type (
 	ProblemDeleteLanguagesResp = problemset.ProblemDeleteLanguagesResp
 	ProblemDeleteTagsReq       = problemset.ProblemDeleteTagsReq
 	ProblemDeleteTagsResp      = problemset.ProblemDeleteTagsResp
+	ProblemInfo                = problemset.ProblemInfo
 	ProblemLanguagesModel      = problemset.ProblemLanguagesModel
 	SearchProblemReq           = problemset.SearchProblemReq
 	SearchProblemResp          = problemset.SearchProblemResp
@@ -103,15 +104,15 @@ type (
 
 	Submit interface {
 		// 用户提交代码
-		SubmitCode(ctx context.Context, in *SubmitCodeReq, opts ...grpc.CallOption) (*SubmitCodeResp, error)
+		SubmitCode(ctx context.Context, opts ...grpc.CallOption) (problemset.Submit_SubmitCodeClient, error)
 		// 获取题目的提交数
 		GetProblemSubmitCount(ctx context.Context, in *GetProblemSubmitCountReq, opts ...grpc.CallOption) (*GetProblemSubmitCountResp, error)
 		// 分页获取用户提交
-		GetUserSubmit(ctx context.Context, in *GetUserSubmitReq, opts ...grpc.CallOption) (*GetUserSubmitResp, error)
+		GetUserSubmit(ctx context.Context, in *GetUserSubmitReq, opts ...grpc.CallOption) (problemset.Submit_GetUserSubmitClient, error)
 		// 获取用户某一道题的全部提交
-		GetUserProblemSubmit(ctx context.Context, in *GetUserProblemSubmitReq, opts ...grpc.CallOption) (*GetUserProblemSubmitResp, error)
+		GetUserProblemSubmit(ctx context.Context, in *GetUserProblemSubmitReq, opts ...grpc.CallOption) (problemset.Submit_GetUserProblemSubmitClient, error)
 		// 获取通过id提交记录
-		GetSubmitById(ctx context.Context, in *GetSubmitByIdReq, opts ...grpc.CallOption) (*GetSubmitByIdResp, error)
+		GetSubmitById(ctx context.Context, in *GetSubmitByIdReq, opts ...grpc.CallOption) (problemset.Submit_GetSubmitByIdClient, error)
 	}
 
 	defaultSubmit struct {
@@ -126,9 +127,9 @@ func NewSubmit(cli zrpc.Client) Submit {
 }
 
 // 用户提交代码
-func (m *defaultSubmit) SubmitCode(ctx context.Context, in *SubmitCodeReq, opts ...grpc.CallOption) (*SubmitCodeResp, error) {
+func (m *defaultSubmit) SubmitCode(ctx context.Context, opts ...grpc.CallOption) (problemset.Submit_SubmitCodeClient, error) {
 	client := problemset.NewSubmitClient(m.cli.Conn())
-	return client.SubmitCode(ctx, in, opts...)
+	return client.SubmitCode(ctx, opts...)
 }
 
 // 获取题目的提交数
@@ -138,19 +139,19 @@ func (m *defaultSubmit) GetProblemSubmitCount(ctx context.Context, in *GetProble
 }
 
 // 分页获取用户提交
-func (m *defaultSubmit) GetUserSubmit(ctx context.Context, in *GetUserSubmitReq, opts ...grpc.CallOption) (*GetUserSubmitResp, error) {
+func (m *defaultSubmit) GetUserSubmit(ctx context.Context, in *GetUserSubmitReq, opts ...grpc.CallOption) (problemset.Submit_GetUserSubmitClient, error) {
 	client := problemset.NewSubmitClient(m.cli.Conn())
 	return client.GetUserSubmit(ctx, in, opts...)
 }
 
 // 获取用户某一道题的全部提交
-func (m *defaultSubmit) GetUserProblemSubmit(ctx context.Context, in *GetUserProblemSubmitReq, opts ...grpc.CallOption) (*GetUserProblemSubmitResp, error) {
+func (m *defaultSubmit) GetUserProblemSubmit(ctx context.Context, in *GetUserProblemSubmitReq, opts ...grpc.CallOption) (problemset.Submit_GetUserProblemSubmitClient, error) {
 	client := problemset.NewSubmitClient(m.cli.Conn())
 	return client.GetUserProblemSubmit(ctx, in, opts...)
 }
 
 // 获取通过id提交记录
-func (m *defaultSubmit) GetSubmitById(ctx context.Context, in *GetSubmitByIdReq, opts ...grpc.CallOption) (*GetSubmitByIdResp, error) {
+func (m *defaultSubmit) GetSubmitById(ctx context.Context, in *GetSubmitByIdReq, opts ...grpc.CallOption) (problemset.Submit_GetSubmitByIdClient, error) {
 	client := problemset.NewSubmitClient(m.cli.Conn())
 	return client.GetSubmitById(ctx, in, opts...)
 }

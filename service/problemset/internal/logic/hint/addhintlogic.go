@@ -24,8 +24,8 @@ func NewAddHintLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddHintLo
 }
 
 // 添加提示
-func (l *AddHintLogic) AddHint(in *problemset.AddHintReq) (*problemset.AddHintResp, error) {
+func (l *AddHintLogic) AddHint(stream problemset.Hint_AddHintServer) error {
 	// todo: add your logic here and delete this line
 
-	return &problemset.AddHintResp{}, nil
+	return nil
 }

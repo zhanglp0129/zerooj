@@ -24,8 +24,8 @@ func NewGetHintLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetHintLo
 }
 
 // 获取提示
-func (l *GetHintLogic) GetHint(in *problemset.GetHintReq) (*problemset.GetHintResp, error) {
+func (l *GetHintLogic) GetHint(in *problemset.GetHintReq, stream problemset.Hint_GetHintServer) error {
 	// todo: add your logic here and delete this line
 
-	return &problemset.GetHintResp{}, nil
+	return nil
 }

@@ -24,8 +24,8 @@ func NewUpdateProblemLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Upd
 }
 
 // 更新问题
-func (l *UpdateProblemLogic) UpdateProblem(in *problemset.UpdateProblemReq) (*problemset.UpdateProblemResp, error) {
+func (l *UpdateProblemLogic) UpdateProblem(stream problemset.Problem_UpdateProblemServer) error {
 	// todo: add your logic here and delete this line
 
-	return &problemset.UpdateProblemResp{}, nil
+	return nil
 }

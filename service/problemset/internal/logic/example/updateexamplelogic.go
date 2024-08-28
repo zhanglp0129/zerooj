@@ -24,8 +24,8 @@ func NewUpdateExampleLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Upd
 }
 
 // 修改样例
-func (l *UpdateExampleLogic) UpdateExample(in *problemset.UpdateExampleReq) (*problemset.UpdateExampleResp, error) {
+func (l *UpdateExampleLogic) UpdateExample(stream problemset.Example_UpdateExampleServer) error {
 	// todo: add your logic here and delete this line
 
-	return &problemset.UpdateExampleResp{}, nil
+	return nil
 }

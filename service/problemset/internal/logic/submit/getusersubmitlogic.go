@@ -24,8 +24,8 @@ func NewGetUserSubmitLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 }
 
 // 分页获取用户提交
-func (l *GetUserSubmitLogic) GetUserSubmit(in *problemset.GetUserSubmitReq) (*problemset.GetUserSubmitResp, error) {
+func (l *GetUserSubmitLogic) GetUserSubmit(in *problemset.GetUserSubmitReq, stream problemset.Submit_GetUserSubmitServer) error {
 	// todo: add your logic here and delete this line
 
-	return &problemset.GetUserSubmitResp{}, nil
+	return nil
 }

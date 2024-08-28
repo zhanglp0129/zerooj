@@ -24,8 +24,8 @@ func NewGetProblemHintsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 }
 
 // 获取题目所有提示
-func (l *GetProblemHintsLogic) GetProblemHints(in *problemset.GetProblemHintsReq) (*problemset.GetProblemHintsResp, error) {
+func (l *GetProblemHintsLogic) GetProblemHints(in *problemset.GetProblemHintsReq, stream problemset.Hint_GetProblemHintsServer) error {
 	// todo: add your logic here and delete this line
 
-	return &problemset.GetProblemHintsResp{}, nil
+	return nil
 }

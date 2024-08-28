@@ -81,6 +81,7 @@ type (
 	ProblemDeleteLanguagesResp = problemset.ProblemDeleteLanguagesResp
 	ProblemDeleteTagsReq       = problemset.ProblemDeleteTagsReq
 	ProblemDeleteTagsResp      = problemset.ProblemDeleteTagsResp
+	ProblemInfo                = problemset.ProblemInfo
 	ProblemLanguagesModel      = problemset.ProblemLanguagesModel
 	SearchProblemReq           = problemset.SearchProblemReq
 	SearchProblemResp          = problemset.SearchProblemResp
@@ -103,15 +104,15 @@ type (
 
 	Example interface {
 		// 添加样例
-		AddExample(ctx context.Context, in *AddExampleReq, opts ...grpc.CallOption) (*AddExampleResp, error)
+		AddExample(ctx context.Context, opts ...grpc.CallOption) (problemset.Example_AddExampleClient, error)
 		// 删除样例
 		DeleteExample(ctx context.Context, in *DeleteExampleReq, opts ...grpc.CallOption) (*DeleteExampleResp, error)
 		// 修改样例
-		UpdateExample(ctx context.Context, in *UpdateExampleReq, opts ...grpc.CallOption) (*UpdateExampleResp, error)
+		UpdateExample(ctx context.Context, opts ...grpc.CallOption) (problemset.Example_UpdateExampleClient, error)
 		// 获取样例
-		GetExample(ctx context.Context, in *GetExampleReq, opts ...grpc.CallOption) (*GetExampleResp, error)
+		GetExample(ctx context.Context, in *GetExampleReq, opts ...grpc.CallOption) (problemset.Example_GetExampleClient, error)
 		// 获取题目的所有样例
-		GetProblemExamples(ctx context.Context, in *GetProblemExamplesReq, opts ...grpc.CallOption) (*GetProblemExamplesResp, error)
+		GetProblemExamples(ctx context.Context, in *GetProblemExamplesReq, opts ...grpc.CallOption) (problemset.Example_GetProblemExamplesClient, error)
 	}
 
 	defaultExample struct {
@@ -126,9 +127,9 @@ func NewExample(cli zrpc.Client) Example {
 }
 
 // 添加样例
-func (m *defaultExample) AddExample(ctx context.Context, in *AddExampleReq, opts ...grpc.CallOption) (*AddExampleResp, error) {
+func (m *defaultExample) AddExample(ctx context.Context, opts ...grpc.CallOption) (problemset.Example_AddExampleClient, error) {
 	client := problemset.NewExampleClient(m.cli.Conn())
-	return client.AddExample(ctx, in, opts...)
+	return client.AddExample(ctx, opts...)
 }
 
 // 删除样例
@@ -138,19 +139,19 @@ func (m *defaultExample) DeleteExample(ctx context.Context, in *DeleteExampleReq
 }
 
 // 修改样例
-func (m *defaultExample) UpdateExample(ctx context.Context, in *UpdateExampleReq, opts ...grpc.CallOption) (*UpdateExampleResp, error) {
+func (m *defaultExample) UpdateExample(ctx context.Context, opts ...grpc.CallOption) (problemset.Example_UpdateExampleClient, error) {
 	client := problemset.NewExampleClient(m.cli.Conn())
-	return client.UpdateExample(ctx, in, opts...)
+	return client.UpdateExample(ctx, opts...)
 }
 
 // 获取样例
-func (m *defaultExample) GetExample(ctx context.Context, in *GetExampleReq, opts ...grpc.CallOption) (*GetExampleResp, error) {
+func (m *defaultExample) GetExample(ctx context.Context, in *GetExampleReq, opts ...grpc.CallOption) (problemset.Example_GetExampleClient, error) {
 	client := problemset.NewExampleClient(m.cli.Conn())
 	return client.GetExample(ctx, in, opts...)
 }
 
 // 获取题目的所有样例
-func (m *defaultExample) GetProblemExamples(ctx context.Context, in *GetProblemExamplesReq, opts ...grpc.CallOption) (*GetProblemExamplesResp, error) {
+func (m *defaultExample) GetProblemExamples(ctx context.Context, in *GetProblemExamplesReq, opts ...grpc.CallOption) (problemset.Example_GetProblemExamplesClient, error) {
 	client := problemset.NewExampleClient(m.cli.Conn())
 	return client.GetProblemExamples(ctx, in, opts...)
 }

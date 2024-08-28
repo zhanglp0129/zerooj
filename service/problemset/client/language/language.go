@@ -81,6 +81,7 @@ type (
 	ProblemDeleteLanguagesResp = problemset.ProblemDeleteLanguagesResp
 	ProblemDeleteTagsReq       = problemset.ProblemDeleteTagsReq
 	ProblemDeleteTagsResp      = problemset.ProblemDeleteTagsResp
+	ProblemInfo                = problemset.ProblemInfo
 	ProblemLanguagesModel      = problemset.ProblemLanguagesModel
 	SearchProblemReq           = problemset.SearchProblemReq
 	SearchProblemResp          = problemset.SearchProblemResp

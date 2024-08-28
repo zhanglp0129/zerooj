@@ -24,8 +24,8 @@ func NewUpdateJudgeDataLogic(ctx context.Context, svcCtx *svc.ServiceContext) *U
 }
 
 // 修改测评数据
-func (l *UpdateJudgeDataLogic) UpdateJudgeData(in *problemset.UpdateJudgeDataReq) (*problemset.UpdateJudgeDataResp, error) {
+func (l *UpdateJudgeDataLogic) UpdateJudgeData(stream problemset.JudgeData_UpdateJudgeDataServer) error {
 	// todo: add your logic here and delete this line
 
-	return &problemset.UpdateJudgeDataResp{}, nil
+	return nil
 }

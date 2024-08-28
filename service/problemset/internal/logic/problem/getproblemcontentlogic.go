@@ -24,8 +24,8 @@ func NewGetProblemContentLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 }
 
 // 获取问题信息，可缓存
-func (l *GetProblemContentLogic) GetProblemContent(in *problemset.GetProblemContentReq) (*problemset.GetProblemContentResp, error) {
+func (l *GetProblemContentLogic) GetProblemContent(in *problemset.GetProblemContentReq, stream problemset.Problem_GetProblemContentServer) error {
 	// todo: add your logic here and delete this line
 
-	return &problemset.GetProblemContentResp{}, nil
+	return nil
 }

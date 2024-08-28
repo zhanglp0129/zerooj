@@ -24,8 +24,8 @@ func NewAddJudgeDataLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddJ
 }
 
 // 添加测评数据
-func (l *AddJudgeDataLogic) AddJudgeData(in *problemset.AddJudgeDataReq) (*problemset.AddJudgeDataResp, error) {
+func (l *AddJudgeDataLogic) AddJudgeData(stream problemset.JudgeData_AddJudgeDataServer) error {
 	// todo: add your logic here and delete this line
 
-	return &problemset.AddJudgeDataResp{}, nil
+	return nil
 }

@@ -23,9 +23,9 @@ func NewSubmitServer(svcCtx *svc.ServiceContext) *SubmitServer {
 }
 
 // 用户提交代码
-func (s *SubmitServer) SubmitCode(ctx context.Context, in *problemset.SubmitCodeReq) (*problemset.SubmitCodeResp, error) {
-	l := submitlogic.NewSubmitCodeLogic(ctx, s.svcCtx)
-	return l.SubmitCode(in)
+func (s *SubmitServer) SubmitCode(stream problemset.Submit_SubmitCodeServer) error {
+	l := submitlogic.NewSubmitCodeLogic(stream.Context(), s.svcCtx)
+	return l.SubmitCode(stream)
 }
 
 // 获取题目的提交数
@@ -35,19 +35,19 @@ func (s *SubmitServer) GetProblemSubmitCount(ctx context.Context, in *problemset
 }
 
 // 分页获取用户提交
-func (s *SubmitServer) GetUserSubmit(ctx context.Context, in *problemset.GetUserSubmitReq) (*problemset.GetUserSubmitResp, error) {
-	l := submitlogic.NewGetUserSubmitLogic(ctx, s.svcCtx)
-	return l.GetUserSubmit(in)
+func (s *SubmitServer) GetUserSubmit(in *problemset.GetUserSubmitReq, stream problemset.Submit_GetUserSubmitServer) error {
+	l := submitlogic.NewGetUserSubmitLogic(stream.Context(), s.svcCtx)
+	return l.GetUserSubmit(in, stream)
 }
 
 // 获取用户某一道题的全部提交
-func (s *SubmitServer) GetUserProblemSubmit(ctx context.Context, in *problemset.GetUserProblemSubmitReq) (*problemset.GetUserProblemSubmitResp, error) {
-	l := submitlogic.NewGetUserProblemSubmitLogic(ctx, s.svcCtx)
-	return l.GetUserProblemSubmit(in)
+func (s *SubmitServer) GetUserProblemSubmit(in *problemset.GetUserProblemSubmitReq, stream problemset.Submit_GetUserProblemSubmitServer) error {
+	l := submitlogic.NewGetUserProblemSubmitLogic(stream.Context(), s.svcCtx)
+	return l.GetUserProblemSubmit(in, stream)
 }
 
 // 获取通过id提交记录
-func (s *SubmitServer) GetSubmitById(ctx context.Context, in *problemset.GetSubmitByIdReq) (*problemset.GetSubmitByIdResp, error) {
-	l := submitlogic.NewGetSubmitByIdLogic(ctx, s.svcCtx)
-	return l.GetSubmitById(in)
+func (s *SubmitServer) GetSubmitById(in *problemset.GetSubmitByIdReq, stream problemset.Submit_GetSubmitByIdServer) error {
+	l := submitlogic.NewGetSubmitByIdLogic(stream.Context(), s.svcCtx)
+	return l.GetSubmitById(in, stream)
 }

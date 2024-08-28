@@ -23,9 +23,9 @@ func NewProblemServer(svcCtx *svc.ServiceContext) *ProblemServer {
 }
 
 // 添加问题
-func (s *ProblemServer) AddProblem(ctx context.Context, in *problemset.AddProblemReq) (*problemset.AddProblemResp, error) {
-	l := problemlogic.NewAddProblemLogic(ctx, s.svcCtx)
-	return l.AddProblem(in)
+func (s *ProblemServer) AddProblem(stream problemset.Problem_AddProblemServer) error {
+	l := problemlogic.NewAddProblemLogic(stream.Context(), s.svcCtx)
+	return l.AddProblem(stream)
 }
 
 // 删除问题
@@ -35,15 +35,15 @@ func (s *ProblemServer) DeleteProblem(ctx context.Context, in *problemset.Delete
 }
 
 // 获取问题信息，可缓存
-func (s *ProblemServer) GetProblemContent(ctx context.Context, in *problemset.GetProblemContentReq) (*problemset.GetProblemContentResp, error) {
-	l := problemlogic.NewGetProblemContentLogic(ctx, s.svcCtx)
-	return l.GetProblemContent(in)
+func (s *ProblemServer) GetProblemContent(in *problemset.GetProblemContentReq, stream problemset.Problem_GetProblemContentServer) error {
+	l := problemlogic.NewGetProblemContentLogic(stream.Context(), s.svcCtx)
+	return l.GetProblemContent(in, stream)
 }
 
 // 更新问题
-func (s *ProblemServer) UpdateProblem(ctx context.Context, in *problemset.UpdateProblemReq) (*problemset.UpdateProblemResp, error) {
-	l := problemlogic.NewUpdateProblemLogic(ctx, s.svcCtx)
-	return l.UpdateProblem(in)
+func (s *ProblemServer) UpdateProblem(stream problemset.Problem_UpdateProblemServer) error {
+	l := problemlogic.NewUpdateProblemLogic(stream.Context(), s.svcCtx)
+	return l.UpdateProblem(stream)
 }
 
 // 分页搜索题目

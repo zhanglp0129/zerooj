@@ -24,8 +24,8 @@ func NewGetJudgeDataLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetJ
 }
 
 // 获取题目的测评数据，返回minio对象名称，可缓存
-func (l *GetJudgeDataLogic) GetJudgeData(in *problemset.GetJudgeDataReq) (*problemset.GetJudgeDataResp, error) {
+func (l *GetJudgeDataLogic) GetJudgeData(in *problemset.GetJudgeDataReq, stream problemset.JudgeData_GetJudgeDataServer) error {
 	// todo: add your logic here and delete this line
 
-	return &problemset.GetJudgeDataResp{}, nil
+	return nil
 }

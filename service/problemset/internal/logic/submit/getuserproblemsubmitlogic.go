@@ -24,8 +24,8 @@ func NewGetUserProblemSubmitLogic(ctx context.Context, svcCtx *svc.ServiceContex
 }
 
 // 获取用户某一道题的全部提交
-func (l *GetUserProblemSubmitLogic) GetUserProblemSubmit(in *problemset.GetUserProblemSubmitReq) (*problemset.GetUserProblemSubmitResp, error) {
+func (l *GetUserProblemSubmitLogic) GetUserProblemSubmit(in *problemset.GetUserProblemSubmitReq, stream problemset.Submit_GetUserProblemSubmitServer) error {
 	// todo: add your logic here and delete this line
 
-	return &problemset.GetUserProblemSubmitResp{}, nil
+	return nil
 }

@@ -23,9 +23,9 @@ func NewHintServer(svcCtx *svc.ServiceContext) *HintServer {
 }
 
 // 添加提示
-func (s *HintServer) AddHint(ctx context.Context, in *problemset.AddHintReq) (*problemset.AddHintResp, error) {
-	l := hintlogic.NewAddHintLogic(ctx, s.svcCtx)
-	return l.AddHint(in)
+func (s *HintServer) AddHint(stream problemset.Hint_AddHintServer) error {
+	l := hintlogic.NewAddHintLogic(stream.Context(), s.svcCtx)
+	return l.AddHint(stream)
 }
 
 // 删除提示
@@ -35,19 +35,19 @@ func (s *HintServer) DeleteHint(ctx context.Context, in *problemset.DeleteHintRe
 }
 
 // 修改提示
-func (s *HintServer) UpdateHint(ctx context.Context, in *problemset.UpdateHintReq) (*problemset.UpdateHintResp, error) {
-	l := hintlogic.NewUpdateHintLogic(ctx, s.svcCtx)
-	return l.UpdateHint(in)
+func (s *HintServer) UpdateHint(stream problemset.Hint_UpdateHintServer) error {
+	l := hintlogic.NewUpdateHintLogic(stream.Context(), s.svcCtx)
+	return l.UpdateHint(stream)
 }
 
 // 获取提示
-func (s *HintServer) GetHint(ctx context.Context, in *problemset.GetHintReq) (*problemset.GetHintResp, error) {
-	l := hintlogic.NewGetHintLogic(ctx, s.svcCtx)
-	return l.GetHint(in)
+func (s *HintServer) GetHint(in *problemset.GetHintReq, stream problemset.Hint_GetHintServer) error {
+	l := hintlogic.NewGetHintLogic(stream.Context(), s.svcCtx)
+	return l.GetHint(in, stream)
 }
 
 // 获取题目所有提示
-func (s *HintServer) GetProblemHints(ctx context.Context, in *problemset.GetProblemHintsReq) (*problemset.GetProblemHintsResp, error) {
-	l := hintlogic.NewGetProblemHintsLogic(ctx, s.svcCtx)
-	return l.GetProblemHints(in)
+func (s *HintServer) GetProblemHints(in *problemset.GetProblemHintsReq, stream problemset.Hint_GetProblemHintsServer) error {
+	l := hintlogic.NewGetProblemHintsLogic(stream.Context(), s.svcCtx)
+	return l.GetProblemHints(in, stream)
 }

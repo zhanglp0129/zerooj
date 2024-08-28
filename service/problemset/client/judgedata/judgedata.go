@@ -81,6 +81,7 @@ type (
 	ProblemDeleteLanguagesResp = problemset.ProblemDeleteLanguagesResp
 	ProblemDeleteTagsReq       = problemset.ProblemDeleteTagsReq
 	ProblemDeleteTagsResp      = problemset.ProblemDeleteTagsResp
+	ProblemInfo                = problemset.ProblemInfo
 	ProblemLanguagesModel      = problemset.ProblemLanguagesModel
 	SearchProblemReq           = problemset.SearchProblemReq
 	SearchProblemResp          = problemset.SearchProblemResp
@@ -103,13 +104,13 @@ type (
 
 	JudgeData interface {
 		// 添加测评数据
-		AddJudgeData(ctx context.Context, in *AddJudgeDataReq, opts ...grpc.CallOption) (*AddJudgeDataResp, error)
+		AddJudgeData(ctx context.Context, opts ...grpc.CallOption) (problemset.JudgeData_AddJudgeDataClient, error)
 		// 删除测评数据
 		DeleteJudgeData(ctx context.Context, in *DeleteJudgeDataReq, opts ...grpc.CallOption) (*DeleteJudgeDataResp, error)
 		// 修改测评数据
-		UpdateJudgeData(ctx context.Context, in *UpdateJudgeDataReq, opts ...grpc.CallOption) (*UpdateJudgeDataResp, error)
+		UpdateJudgeData(ctx context.Context, opts ...grpc.CallOption) (problemset.JudgeData_UpdateJudgeDataClient, error)
 		// 获取题目的测评数据，返回minio对象名称，可缓存
-		GetJudgeData(ctx context.Context, in *GetJudgeDataReq, opts ...grpc.CallOption) (*GetJudgeDataResp, error)
+		GetJudgeData(ctx context.Context, in *GetJudgeDataReq, opts ...grpc.CallOption) (problemset.JudgeData_GetJudgeDataClient, error)
 	}
 
 	defaultJudgeData struct {
@@ -124,9 +125,9 @@ func NewJudgeData(cli zrpc.Client) JudgeData {
 }
 
 // 添加测评数据
-func (m *defaultJudgeData) AddJudgeData(ctx context.Context, in *AddJudgeDataReq, opts ...grpc.CallOption) (*AddJudgeDataResp, error) {
+func (m *defaultJudgeData) AddJudgeData(ctx context.Context, opts ...grpc.CallOption) (problemset.JudgeData_AddJudgeDataClient, error) {
 	client := problemset.NewJudgeDataClient(m.cli.Conn())
-	return client.AddJudgeData(ctx, in, opts...)
+	return client.AddJudgeData(ctx, opts...)
 }
 
 // 删除测评数据
@@ -136,13 +137,13 @@ func (m *defaultJudgeData) DeleteJudgeData(ctx context.Context, in *DeleteJudgeD
 }
 
 // 修改测评数据
-func (m *defaultJudgeData) UpdateJudgeData(ctx context.Context, in *UpdateJudgeDataReq, opts ...grpc.CallOption) (*UpdateJudgeDataResp, error) {
+func (m *defaultJudgeData) UpdateJudgeData(ctx context.Context, opts ...grpc.CallOption) (problemset.JudgeData_UpdateJudgeDataClient, error) {
 	client := problemset.NewJudgeDataClient(m.cli.Conn())
-	return client.UpdateJudgeData(ctx, in, opts...)
+	return client.UpdateJudgeData(ctx, opts...)
 }
 
 // 获取题目的测评数据，返回minio对象名称，可缓存
-func (m *defaultJudgeData) GetJudgeData(ctx context.Context, in *GetJudgeDataReq, opts ...grpc.CallOption) (*GetJudgeDataResp, error) {
+func (m *defaultJudgeData) GetJudgeData(ctx context.Context, in *GetJudgeDataReq, opts ...grpc.CallOption) (problemset.JudgeData_GetJudgeDataClient, error) {
 	client := problemset.NewJudgeDataClient(m.cli.Conn())
 	return client.GetJudgeData(ctx, in, opts...)
 }

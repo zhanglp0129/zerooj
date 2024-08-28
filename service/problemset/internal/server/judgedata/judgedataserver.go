@@ -23,9 +23,9 @@ func NewJudgeDataServer(svcCtx *svc.ServiceContext) *JudgeDataServer {
 }
 
 // 添加测评数据
-func (s *JudgeDataServer) AddJudgeData(ctx context.Context, in *problemset.AddJudgeDataReq) (*problemset.AddJudgeDataResp, error) {
-	l := judgedatalogic.NewAddJudgeDataLogic(ctx, s.svcCtx)
-	return l.AddJudgeData(in)
+func (s *JudgeDataServer) AddJudgeData(stream problemset.JudgeData_AddJudgeDataServer) error {
+	l := judgedatalogic.NewAddJudgeDataLogic(stream.Context(), s.svcCtx)
+	return l.AddJudgeData(stream)
 }
 
 // 删除测评数据
@@ -35,13 +35,13 @@ func (s *JudgeDataServer) DeleteJudgeData(ctx context.Context, in *problemset.De
 }
 
 // 修改测评数据
-func (s *JudgeDataServer) UpdateJudgeData(ctx context.Context, in *problemset.UpdateJudgeDataReq) (*problemset.UpdateJudgeDataResp, error) {
-	l := judgedatalogic.NewUpdateJudgeDataLogic(ctx, s.svcCtx)
-	return l.UpdateJudgeData(in)
+func (s *JudgeDataServer) UpdateJudgeData(stream problemset.JudgeData_UpdateJudgeDataServer) error {
+	l := judgedatalogic.NewUpdateJudgeDataLogic(stream.Context(), s.svcCtx)
+	return l.UpdateJudgeData(stream)
 }
 
 // 获取题目的测评数据，返回minio对象名称，可缓存
-func (s *JudgeDataServer) GetJudgeData(ctx context.Context, in *problemset.GetJudgeDataReq) (*problemset.GetJudgeDataResp, error) {
-	l := judgedatalogic.NewGetJudgeDataLogic(ctx, s.svcCtx)
-	return l.GetJudgeData(in)
+func (s *JudgeDataServer) GetJudgeData(in *problemset.GetJudgeDataReq, stream problemset.JudgeData_GetJudgeDataServer) error {
+	l := judgedatalogic.NewGetJudgeDataLogic(stream.Context(), s.svcCtx)
+	return l.GetJudgeData(in, stream)
 }

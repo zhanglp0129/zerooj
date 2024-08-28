@@ -24,8 +24,8 @@ func NewGetProblemExamplesLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 }
 
 // 获取题目的所有样例
-func (l *GetProblemExamplesLogic) GetProblemExamples(in *problemset.GetProblemExamplesReq) (*problemset.GetProblemExamplesResp, error) {
+func (l *GetProblemExamplesLogic) GetProblemExamples(in *problemset.GetProblemExamplesReq, stream problemset.Example_GetProblemExamplesServer) error {
 	// todo: add your logic here and delete this line
 
-	return &problemset.GetProblemExamplesResp{}, nil
+	return nil
 }

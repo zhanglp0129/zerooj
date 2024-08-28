@@ -33,13 +33,13 @@ const (
 // 题目
 type ProblemClient interface {
 	// 添加问题
-	AddProblem(ctx context.Context, in *AddProblemReq, opts ...grpc.CallOption) (*AddProblemResp, error)
+	AddProblem(ctx context.Context, opts ...grpc.CallOption) (Problem_AddProblemClient, error)
 	// 删除问题
 	DeleteProblem(ctx context.Context, in *DeleteProblemReq, opts ...grpc.CallOption) (*DeleteProblemResp, error)
 	// 获取问题信息，可缓存
-	GetProblemContent(ctx context.Context, in *GetProblemContentReq, opts ...grpc.CallOption) (*GetProblemContentResp, error)
+	GetProblemContent(ctx context.Context, in *GetProblemContentReq, opts ...grpc.CallOption) (Problem_GetProblemContentClient, error)
 	// 更新问题
-	UpdateProblem(ctx context.Context, in *UpdateProblemReq, opts ...grpc.CallOption) (*UpdateProblemResp, error)
+	UpdateProblem(ctx context.Context, opts ...grpc.CallOption) (Problem_UpdateProblemClient, error)
 	// 分页搜索题目
 	SearchProblem(ctx context.Context, in *SearchProblemReq, opts ...grpc.CallOption) (*SearchProblemResp, error)
 }
@@ -52,14 +52,39 @@ func NewProblemClient(cc grpc.ClientConnInterface) ProblemClient {
 	return &problemClient{cc}
 }
 
-func (c *problemClient) AddProblem(ctx context.Context, in *AddProblemReq, opts ...grpc.CallOption) (*AddProblemResp, error) {
+func (c *problemClient) AddProblem(ctx context.Context, opts ...grpc.CallOption) (Problem_AddProblemClient, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(AddProblemResp)
-	err := c.cc.Invoke(ctx, Problem_AddProblem_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Problem_ServiceDesc.Streams[0], Problem_AddProblem_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &problemAddProblemClient{ClientStream: stream}
+	return x, nil
+}
+
+type Problem_AddProblemClient interface {
+	Send(*AddProblemReq) error
+	CloseAndRecv() (*AddProblemResp, error)
+	grpc.ClientStream
+}
+
+type problemAddProblemClient struct {
+	grpc.ClientStream
+}
+
+func (x *problemAddProblemClient) Send(m *AddProblemReq) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *problemAddProblemClient) CloseAndRecv() (*AddProblemResp, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(AddProblemResp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *problemClient) DeleteProblem(ctx context.Context, in *DeleteProblemReq, opts ...grpc.CallOption) (*DeleteProblemResp, error) {
@@ -72,24 +97,72 @@ func (c *problemClient) DeleteProblem(ctx context.Context, in *DeleteProblemReq,
 	return out, nil
 }
 
-func (c *problemClient) GetProblemContent(ctx context.Context, in *GetProblemContentReq, opts ...grpc.CallOption) (*GetProblemContentResp, error) {
+func (c *problemClient) GetProblemContent(ctx context.Context, in *GetProblemContentReq, opts ...grpc.CallOption) (Problem_GetProblemContentClient, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetProblemContentResp)
-	err := c.cc.Invoke(ctx, Problem_GetProblemContent_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Problem_ServiceDesc.Streams[1], Problem_GetProblemContent_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &problemGetProblemContentClient{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
 }
 
-func (c *problemClient) UpdateProblem(ctx context.Context, in *UpdateProblemReq, opts ...grpc.CallOption) (*UpdateProblemResp, error) {
+type Problem_GetProblemContentClient interface {
+	Recv() (*GetProblemContentResp, error)
+	grpc.ClientStream
+}
+
+type problemGetProblemContentClient struct {
+	grpc.ClientStream
+}
+
+func (x *problemGetProblemContentClient) Recv() (*GetProblemContentResp, error) {
+	m := new(GetProblemContentResp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *problemClient) UpdateProblem(ctx context.Context, opts ...grpc.CallOption) (Problem_UpdateProblemClient, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateProblemResp)
-	err := c.cc.Invoke(ctx, Problem_UpdateProblem_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Problem_ServiceDesc.Streams[2], Problem_UpdateProblem_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &problemUpdateProblemClient{ClientStream: stream}
+	return x, nil
+}
+
+type Problem_UpdateProblemClient interface {
+	Send(*UpdateProblemReq) error
+	CloseAndRecv() (*UpdateProblemResp, error)
+	grpc.ClientStream
+}
+
+type problemUpdateProblemClient struct {
+	grpc.ClientStream
+}
+
+func (x *problemUpdateProblemClient) Send(m *UpdateProblemReq) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *problemUpdateProblemClient) CloseAndRecv() (*UpdateProblemResp, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(UpdateProblemResp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *problemClient) SearchProblem(ctx context.Context, in *SearchProblemReq, opts ...grpc.CallOption) (*SearchProblemResp, error) {
@@ -109,13 +182,13 @@ func (c *problemClient) SearchProblem(ctx context.Context, in *SearchProblemReq,
 // 题目
 type ProblemServer interface {
 	// 添加问题
-	AddProblem(context.Context, *AddProblemReq) (*AddProblemResp, error)
+	AddProblem(Problem_AddProblemServer) error
 	// 删除问题
 	DeleteProblem(context.Context, *DeleteProblemReq) (*DeleteProblemResp, error)
 	// 获取问题信息，可缓存
-	GetProblemContent(context.Context, *GetProblemContentReq) (*GetProblemContentResp, error)
+	GetProblemContent(*GetProblemContentReq, Problem_GetProblemContentServer) error
 	// 更新问题
-	UpdateProblem(context.Context, *UpdateProblemReq) (*UpdateProblemResp, error)
+	UpdateProblem(Problem_UpdateProblemServer) error
 	// 分页搜索题目
 	SearchProblem(context.Context, *SearchProblemReq) (*SearchProblemResp, error)
 	mustEmbedUnimplementedProblemServer()
@@ -125,17 +198,17 @@ type ProblemServer interface {
 type UnimplementedProblemServer struct {
 }
 
-func (UnimplementedProblemServer) AddProblem(context.Context, *AddProblemReq) (*AddProblemResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddProblem not implemented")
+func (UnimplementedProblemServer) AddProblem(Problem_AddProblemServer) error {
+	return status.Errorf(codes.Unimplemented, "method AddProblem not implemented")
 }
 func (UnimplementedProblemServer) DeleteProblem(context.Context, *DeleteProblemReq) (*DeleteProblemResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteProblem not implemented")
 }
-func (UnimplementedProblemServer) GetProblemContent(context.Context, *GetProblemContentReq) (*GetProblemContentResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetProblemContent not implemented")
+func (UnimplementedProblemServer) GetProblemContent(*GetProblemContentReq, Problem_GetProblemContentServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetProblemContent not implemented")
 }
-func (UnimplementedProblemServer) UpdateProblem(context.Context, *UpdateProblemReq) (*UpdateProblemResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateProblem not implemented")
+func (UnimplementedProblemServer) UpdateProblem(Problem_UpdateProblemServer) error {
+	return status.Errorf(codes.Unimplemented, "method UpdateProblem not implemented")
 }
 func (UnimplementedProblemServer) SearchProblem(context.Context, *SearchProblemReq) (*SearchProblemResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchProblem not implemented")
@@ -153,22 +226,30 @@ func RegisterProblemServer(s grpc.ServiceRegistrar, srv ProblemServer) {
 	s.RegisterService(&Problem_ServiceDesc, srv)
 }
 
-func _Problem_AddProblem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddProblemReq)
-	if err := dec(in); err != nil {
+func _Problem_AddProblem_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(ProblemServer).AddProblem(&problemAddProblemServer{ServerStream: stream})
+}
+
+type Problem_AddProblemServer interface {
+	SendAndClose(*AddProblemResp) error
+	Recv() (*AddProblemReq, error)
+	grpc.ServerStream
+}
+
+type problemAddProblemServer struct {
+	grpc.ServerStream
+}
+
+func (x *problemAddProblemServer) SendAndClose(m *AddProblemResp) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *problemAddProblemServer) Recv() (*AddProblemReq, error) {
+	m := new(AddProblemReq)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
-	if interceptor == nil {
-		return srv.(ProblemServer).AddProblem(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Problem_AddProblem_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProblemServer).AddProblem(ctx, req.(*AddProblemReq))
-	}
-	return interceptor(ctx, in, info, handler)
+	return m, nil
 }
 
 func _Problem_DeleteProblem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -189,40 +270,51 @@ func _Problem_DeleteProblem_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Problem_GetProblemContent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetProblemContentReq)
-	if err := dec(in); err != nil {
-		return nil, err
+func _Problem_GetProblemContent_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetProblemContentReq)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
 	}
-	if interceptor == nil {
-		return srv.(ProblemServer).GetProblemContent(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Problem_GetProblemContent_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProblemServer).GetProblemContent(ctx, req.(*GetProblemContentReq))
-	}
-	return interceptor(ctx, in, info, handler)
+	return srv.(ProblemServer).GetProblemContent(m, &problemGetProblemContentServer{ServerStream: stream})
 }
 
-func _Problem_UpdateProblem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateProblemReq)
-	if err := dec(in); err != nil {
+type Problem_GetProblemContentServer interface {
+	Send(*GetProblemContentResp) error
+	grpc.ServerStream
+}
+
+type problemGetProblemContentServer struct {
+	grpc.ServerStream
+}
+
+func (x *problemGetProblemContentServer) Send(m *GetProblemContentResp) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _Problem_UpdateProblem_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(ProblemServer).UpdateProblem(&problemUpdateProblemServer{ServerStream: stream})
+}
+
+type Problem_UpdateProblemServer interface {
+	SendAndClose(*UpdateProblemResp) error
+	Recv() (*UpdateProblemReq, error)
+	grpc.ServerStream
+}
+
+type problemUpdateProblemServer struct {
+	grpc.ServerStream
+}
+
+func (x *problemUpdateProblemServer) SendAndClose(m *UpdateProblemResp) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *problemUpdateProblemServer) Recv() (*UpdateProblemReq, error) {
+	m := new(UpdateProblemReq)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
-	if interceptor == nil {
-		return srv.(ProblemServer).UpdateProblem(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Problem_UpdateProblem_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProblemServer).UpdateProblem(ctx, req.(*UpdateProblemReq))
-	}
-	return interceptor(ctx, in, info, handler)
+	return m, nil
 }
 
 func _Problem_SearchProblem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -251,27 +343,31 @@ var Problem_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ProblemServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "AddProblem",
-			Handler:    _Problem_AddProblem_Handler,
-		},
-		{
 			MethodName: "DeleteProblem",
 			Handler:    _Problem_DeleteProblem_Handler,
-		},
-		{
-			MethodName: "GetProblemContent",
-			Handler:    _Problem_GetProblemContent_Handler,
-		},
-		{
-			MethodName: "UpdateProblem",
-			Handler:    _Problem_UpdateProblem_Handler,
 		},
 		{
 			MethodName: "SearchProblem",
 			Handler:    _Problem_SearchProblem_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "AddProblem",
+			Handler:       _Problem_AddProblem_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "GetProblemContent",
+			Handler:       _Problem_GetProblemContent_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "UpdateProblem",
+			Handler:       _Problem_UpdateProblem_Handler,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "problemset.proto",
 }
 
@@ -667,15 +763,15 @@ const (
 // 样例
 type ExampleClient interface {
 	// 添加样例
-	AddExample(ctx context.Context, in *AddExampleReq, opts ...grpc.CallOption) (*AddExampleResp, error)
+	AddExample(ctx context.Context, opts ...grpc.CallOption) (Example_AddExampleClient, error)
 	// 删除样例
 	DeleteExample(ctx context.Context, in *DeleteExampleReq, opts ...grpc.CallOption) (*DeleteExampleResp, error)
 	// 修改样例
-	UpdateExample(ctx context.Context, in *UpdateExampleReq, opts ...grpc.CallOption) (*UpdateExampleResp, error)
+	UpdateExample(ctx context.Context, opts ...grpc.CallOption) (Example_UpdateExampleClient, error)
 	// 获取样例
-	GetExample(ctx context.Context, in *GetExampleReq, opts ...grpc.CallOption) (*GetExampleResp, error)
+	GetExample(ctx context.Context, in *GetExampleReq, opts ...grpc.CallOption) (Example_GetExampleClient, error)
 	// 获取题目的所有样例
-	GetProblemExamples(ctx context.Context, in *GetProblemExamplesReq, opts ...grpc.CallOption) (*GetProblemExamplesResp, error)
+	GetProblemExamples(ctx context.Context, in *GetProblemExamplesReq, opts ...grpc.CallOption) (Example_GetProblemExamplesClient, error)
 }
 
 type exampleClient struct {
@@ -686,14 +782,39 @@ func NewExampleClient(cc grpc.ClientConnInterface) ExampleClient {
 	return &exampleClient{cc}
 }
 
-func (c *exampleClient) AddExample(ctx context.Context, in *AddExampleReq, opts ...grpc.CallOption) (*AddExampleResp, error) {
+func (c *exampleClient) AddExample(ctx context.Context, opts ...grpc.CallOption) (Example_AddExampleClient, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(AddExampleResp)
-	err := c.cc.Invoke(ctx, Example_AddExample_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Example_ServiceDesc.Streams[0], Example_AddExample_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &exampleAddExampleClient{ClientStream: stream}
+	return x, nil
+}
+
+type Example_AddExampleClient interface {
+	Send(*AddExampleReq) error
+	CloseAndRecv() (*AddExampleResp, error)
+	grpc.ClientStream
+}
+
+type exampleAddExampleClient struct {
+	grpc.ClientStream
+}
+
+func (x *exampleAddExampleClient) Send(m *AddExampleReq) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *exampleAddExampleClient) CloseAndRecv() (*AddExampleResp, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(AddExampleResp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *exampleClient) DeleteExample(ctx context.Context, in *DeleteExampleReq, opts ...grpc.CallOption) (*DeleteExampleResp, error) {
@@ -706,34 +827,105 @@ func (c *exampleClient) DeleteExample(ctx context.Context, in *DeleteExampleReq,
 	return out, nil
 }
 
-func (c *exampleClient) UpdateExample(ctx context.Context, in *UpdateExampleReq, opts ...grpc.CallOption) (*UpdateExampleResp, error) {
+func (c *exampleClient) UpdateExample(ctx context.Context, opts ...grpc.CallOption) (Example_UpdateExampleClient, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateExampleResp)
-	err := c.cc.Invoke(ctx, Example_UpdateExample_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Example_ServiceDesc.Streams[1], Example_UpdateExample_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &exampleUpdateExampleClient{ClientStream: stream}
+	return x, nil
 }
 
-func (c *exampleClient) GetExample(ctx context.Context, in *GetExampleReq, opts ...grpc.CallOption) (*GetExampleResp, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetExampleResp)
-	err := c.cc.Invoke(ctx, Example_GetExample_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+type Example_UpdateExampleClient interface {
+	Send(*UpdateExampleReq) error
+	CloseAndRecv() (*UpdateExampleResp, error)
+	grpc.ClientStream
 }
 
-func (c *exampleClient) GetProblemExamples(ctx context.Context, in *GetProblemExamplesReq, opts ...grpc.CallOption) (*GetProblemExamplesResp, error) {
+type exampleUpdateExampleClient struct {
+	grpc.ClientStream
+}
+
+func (x *exampleUpdateExampleClient) Send(m *UpdateExampleReq) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *exampleUpdateExampleClient) CloseAndRecv() (*UpdateExampleResp, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(UpdateExampleResp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *exampleClient) GetExample(ctx context.Context, in *GetExampleReq, opts ...grpc.CallOption) (Example_GetExampleClient, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetProblemExamplesResp)
-	err := c.cc.Invoke(ctx, Example_GetProblemExamples_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Example_ServiceDesc.Streams[2], Example_GetExample_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &exampleGetExampleClient{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Example_GetExampleClient interface {
+	Recv() (*GetExampleResp, error)
+	grpc.ClientStream
+}
+
+type exampleGetExampleClient struct {
+	grpc.ClientStream
+}
+
+func (x *exampleGetExampleClient) Recv() (*GetExampleResp, error) {
+	m := new(GetExampleResp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *exampleClient) GetProblemExamples(ctx context.Context, in *GetProblemExamplesReq, opts ...grpc.CallOption) (Example_GetProblemExamplesClient, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &Example_ServiceDesc.Streams[3], Example_GetProblemExamples_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &exampleGetProblemExamplesClient{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Example_GetProblemExamplesClient interface {
+	Recv() (*GetProblemExamplesResp, error)
+	grpc.ClientStream
+}
+
+type exampleGetProblemExamplesClient struct {
+	grpc.ClientStream
+}
+
+func (x *exampleGetProblemExamplesClient) Recv() (*GetProblemExamplesResp, error) {
+	m := new(GetProblemExamplesResp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 // ExampleServer is the server API for Example service.
@@ -743,15 +935,15 @@ func (c *exampleClient) GetProblemExamples(ctx context.Context, in *GetProblemEx
 // 样例
 type ExampleServer interface {
 	// 添加样例
-	AddExample(context.Context, *AddExampleReq) (*AddExampleResp, error)
+	AddExample(Example_AddExampleServer) error
 	// 删除样例
 	DeleteExample(context.Context, *DeleteExampleReq) (*DeleteExampleResp, error)
 	// 修改样例
-	UpdateExample(context.Context, *UpdateExampleReq) (*UpdateExampleResp, error)
+	UpdateExample(Example_UpdateExampleServer) error
 	// 获取样例
-	GetExample(context.Context, *GetExampleReq) (*GetExampleResp, error)
+	GetExample(*GetExampleReq, Example_GetExampleServer) error
 	// 获取题目的所有样例
-	GetProblemExamples(context.Context, *GetProblemExamplesReq) (*GetProblemExamplesResp, error)
+	GetProblemExamples(*GetProblemExamplesReq, Example_GetProblemExamplesServer) error
 	mustEmbedUnimplementedExampleServer()
 }
 
@@ -759,20 +951,20 @@ type ExampleServer interface {
 type UnimplementedExampleServer struct {
 }
 
-func (UnimplementedExampleServer) AddExample(context.Context, *AddExampleReq) (*AddExampleResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddExample not implemented")
+func (UnimplementedExampleServer) AddExample(Example_AddExampleServer) error {
+	return status.Errorf(codes.Unimplemented, "method AddExample not implemented")
 }
 func (UnimplementedExampleServer) DeleteExample(context.Context, *DeleteExampleReq) (*DeleteExampleResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteExample not implemented")
 }
-func (UnimplementedExampleServer) UpdateExample(context.Context, *UpdateExampleReq) (*UpdateExampleResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateExample not implemented")
+func (UnimplementedExampleServer) UpdateExample(Example_UpdateExampleServer) error {
+	return status.Errorf(codes.Unimplemented, "method UpdateExample not implemented")
 }
-func (UnimplementedExampleServer) GetExample(context.Context, *GetExampleReq) (*GetExampleResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetExample not implemented")
+func (UnimplementedExampleServer) GetExample(*GetExampleReq, Example_GetExampleServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetExample not implemented")
 }
-func (UnimplementedExampleServer) GetProblemExamples(context.Context, *GetProblemExamplesReq) (*GetProblemExamplesResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetProblemExamples not implemented")
+func (UnimplementedExampleServer) GetProblemExamples(*GetProblemExamplesReq, Example_GetProblemExamplesServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetProblemExamples not implemented")
 }
 func (UnimplementedExampleServer) mustEmbedUnimplementedExampleServer() {}
 
@@ -787,22 +979,30 @@ func RegisterExampleServer(s grpc.ServiceRegistrar, srv ExampleServer) {
 	s.RegisterService(&Example_ServiceDesc, srv)
 }
 
-func _Example_AddExample_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddExampleReq)
-	if err := dec(in); err != nil {
+func _Example_AddExample_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(ExampleServer).AddExample(&exampleAddExampleServer{ServerStream: stream})
+}
+
+type Example_AddExampleServer interface {
+	SendAndClose(*AddExampleResp) error
+	Recv() (*AddExampleReq, error)
+	grpc.ServerStream
+}
+
+type exampleAddExampleServer struct {
+	grpc.ServerStream
+}
+
+func (x *exampleAddExampleServer) SendAndClose(m *AddExampleResp) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *exampleAddExampleServer) Recv() (*AddExampleReq, error) {
+	m := new(AddExampleReq)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
-	if interceptor == nil {
-		return srv.(ExampleServer).AddExample(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Example_AddExample_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExampleServer).AddExample(ctx, req.(*AddExampleReq))
-	}
-	return interceptor(ctx, in, info, handler)
+	return m, nil
 }
 
 func _Example_DeleteExample_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -823,58 +1023,72 @@ func _Example_DeleteExample_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Example_UpdateExample_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateExampleReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ExampleServer).UpdateExample(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Example_UpdateExample_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExampleServer).UpdateExample(ctx, req.(*UpdateExampleReq))
-	}
-	return interceptor(ctx, in, info, handler)
+func _Example_UpdateExample_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(ExampleServer).UpdateExample(&exampleUpdateExampleServer{ServerStream: stream})
 }
 
-func _Example_GetExample_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetExampleReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ExampleServer).GetExample(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Example_GetExample_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExampleServer).GetExample(ctx, req.(*GetExampleReq))
-	}
-	return interceptor(ctx, in, info, handler)
+type Example_UpdateExampleServer interface {
+	SendAndClose(*UpdateExampleResp) error
+	Recv() (*UpdateExampleReq, error)
+	grpc.ServerStream
 }
 
-func _Example_GetProblemExamples_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetProblemExamplesReq)
-	if err := dec(in); err != nil {
+type exampleUpdateExampleServer struct {
+	grpc.ServerStream
+}
+
+func (x *exampleUpdateExampleServer) SendAndClose(m *UpdateExampleResp) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *exampleUpdateExampleServer) Recv() (*UpdateExampleReq, error) {
+	m := new(UpdateExampleReq)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
-	if interceptor == nil {
-		return srv.(ExampleServer).GetProblemExamples(ctx, in)
+	return m, nil
+}
+
+func _Example_GetExample_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetExampleReq)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
 	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Example_GetProblemExamples_FullMethodName,
+	return srv.(ExampleServer).GetExample(m, &exampleGetExampleServer{ServerStream: stream})
+}
+
+type Example_GetExampleServer interface {
+	Send(*GetExampleResp) error
+	grpc.ServerStream
+}
+
+type exampleGetExampleServer struct {
+	grpc.ServerStream
+}
+
+func (x *exampleGetExampleServer) Send(m *GetExampleResp) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _Example_GetProblemExamples_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetProblemExamplesReq)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExampleServer).GetProblemExamples(ctx, req.(*GetProblemExamplesReq))
-	}
-	return interceptor(ctx, in, info, handler)
+	return srv.(ExampleServer).GetProblemExamples(m, &exampleGetProblemExamplesServer{ServerStream: stream})
+}
+
+type Example_GetProblemExamplesServer interface {
+	Send(*GetProblemExamplesResp) error
+	grpc.ServerStream
+}
+
+type exampleGetProblemExamplesServer struct {
+	grpc.ServerStream
+}
+
+func (x *exampleGetProblemExamplesServer) Send(m *GetProblemExamplesResp) error {
+	return x.ServerStream.SendMsg(m)
 }
 
 // Example_ServiceDesc is the grpc.ServiceDesc for Example service.
@@ -885,27 +1099,32 @@ var Example_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ExampleServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "AddExample",
-			Handler:    _Example_AddExample_Handler,
-		},
-		{
 			MethodName: "DeleteExample",
 			Handler:    _Example_DeleteExample_Handler,
 		},
+	},
+	Streams: []grpc.StreamDesc{
 		{
-			MethodName: "UpdateExample",
-			Handler:    _Example_UpdateExample_Handler,
+			StreamName:    "AddExample",
+			Handler:       _Example_AddExample_Handler,
+			ClientStreams: true,
 		},
 		{
-			MethodName: "GetExample",
-			Handler:    _Example_GetExample_Handler,
+			StreamName:    "UpdateExample",
+			Handler:       _Example_UpdateExample_Handler,
+			ClientStreams: true,
 		},
 		{
-			MethodName: "GetProblemExamples",
-			Handler:    _Example_GetProblemExamples_Handler,
+			StreamName:    "GetExample",
+			Handler:       _Example_GetExample_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "GetProblemExamples",
+			Handler:       _Example_GetProblemExamples_Handler,
+			ServerStreams: true,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
 	Metadata: "problemset.proto",
 }
 
@@ -924,15 +1143,15 @@ const (
 // 提示
 type HintClient interface {
 	// 添加提示
-	AddHint(ctx context.Context, in *AddHintReq, opts ...grpc.CallOption) (*AddHintResp, error)
+	AddHint(ctx context.Context, opts ...grpc.CallOption) (Hint_AddHintClient, error)
 	// 删除提示
 	DeleteHint(ctx context.Context, in *DeleteHintReq, opts ...grpc.CallOption) (*DeleteHintResp, error)
 	// 修改提示
-	UpdateHint(ctx context.Context, in *UpdateHintReq, opts ...grpc.CallOption) (*UpdateHintResp, error)
+	UpdateHint(ctx context.Context, opts ...grpc.CallOption) (Hint_UpdateHintClient, error)
 	// 获取提示
-	GetHint(ctx context.Context, in *GetHintReq, opts ...grpc.CallOption) (*GetHintResp, error)
+	GetHint(ctx context.Context, in *GetHintReq, opts ...grpc.CallOption) (Hint_GetHintClient, error)
 	// 获取题目所有提示
-	GetProblemHints(ctx context.Context, in *GetProblemHintsReq, opts ...grpc.CallOption) (*GetProblemHintsResp, error)
+	GetProblemHints(ctx context.Context, in *GetProblemHintsReq, opts ...grpc.CallOption) (Hint_GetProblemHintsClient, error)
 }
 
 type hintClient struct {
@@ -943,14 +1162,39 @@ func NewHintClient(cc grpc.ClientConnInterface) HintClient {
 	return &hintClient{cc}
 }
 
-func (c *hintClient) AddHint(ctx context.Context, in *AddHintReq, opts ...grpc.CallOption) (*AddHintResp, error) {
+func (c *hintClient) AddHint(ctx context.Context, opts ...grpc.CallOption) (Hint_AddHintClient, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(AddHintResp)
-	err := c.cc.Invoke(ctx, Hint_AddHint_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Hint_ServiceDesc.Streams[0], Hint_AddHint_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &hintAddHintClient{ClientStream: stream}
+	return x, nil
+}
+
+type Hint_AddHintClient interface {
+	Send(*AddHintReq) error
+	CloseAndRecv() (*AddHintResp, error)
+	grpc.ClientStream
+}
+
+type hintAddHintClient struct {
+	grpc.ClientStream
+}
+
+func (x *hintAddHintClient) Send(m *AddHintReq) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *hintAddHintClient) CloseAndRecv() (*AddHintResp, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(AddHintResp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *hintClient) DeleteHint(ctx context.Context, in *DeleteHintReq, opts ...grpc.CallOption) (*DeleteHintResp, error) {
@@ -963,34 +1207,105 @@ func (c *hintClient) DeleteHint(ctx context.Context, in *DeleteHintReq, opts ...
 	return out, nil
 }
 
-func (c *hintClient) UpdateHint(ctx context.Context, in *UpdateHintReq, opts ...grpc.CallOption) (*UpdateHintResp, error) {
+func (c *hintClient) UpdateHint(ctx context.Context, opts ...grpc.CallOption) (Hint_UpdateHintClient, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateHintResp)
-	err := c.cc.Invoke(ctx, Hint_UpdateHint_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Hint_ServiceDesc.Streams[1], Hint_UpdateHint_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &hintUpdateHintClient{ClientStream: stream}
+	return x, nil
 }
 
-func (c *hintClient) GetHint(ctx context.Context, in *GetHintReq, opts ...grpc.CallOption) (*GetHintResp, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetHintResp)
-	err := c.cc.Invoke(ctx, Hint_GetHint_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+type Hint_UpdateHintClient interface {
+	Send(*UpdateHintReq) error
+	CloseAndRecv() (*UpdateHintResp, error)
+	grpc.ClientStream
 }
 
-func (c *hintClient) GetProblemHints(ctx context.Context, in *GetProblemHintsReq, opts ...grpc.CallOption) (*GetProblemHintsResp, error) {
+type hintUpdateHintClient struct {
+	grpc.ClientStream
+}
+
+func (x *hintUpdateHintClient) Send(m *UpdateHintReq) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *hintUpdateHintClient) CloseAndRecv() (*UpdateHintResp, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(UpdateHintResp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *hintClient) GetHint(ctx context.Context, in *GetHintReq, opts ...grpc.CallOption) (Hint_GetHintClient, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetProblemHintsResp)
-	err := c.cc.Invoke(ctx, Hint_GetProblemHints_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Hint_ServiceDesc.Streams[2], Hint_GetHint_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &hintGetHintClient{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Hint_GetHintClient interface {
+	Recv() (*GetHintResp, error)
+	grpc.ClientStream
+}
+
+type hintGetHintClient struct {
+	grpc.ClientStream
+}
+
+func (x *hintGetHintClient) Recv() (*GetHintResp, error) {
+	m := new(GetHintResp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *hintClient) GetProblemHints(ctx context.Context, in *GetProblemHintsReq, opts ...grpc.CallOption) (Hint_GetProblemHintsClient, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &Hint_ServiceDesc.Streams[3], Hint_GetProblemHints_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &hintGetProblemHintsClient{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Hint_GetProblemHintsClient interface {
+	Recv() (*GetProblemHintsResp, error)
+	grpc.ClientStream
+}
+
+type hintGetProblemHintsClient struct {
+	grpc.ClientStream
+}
+
+func (x *hintGetProblemHintsClient) Recv() (*GetProblemHintsResp, error) {
+	m := new(GetProblemHintsResp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 // HintServer is the server API for Hint service.
@@ -1000,15 +1315,15 @@ func (c *hintClient) GetProblemHints(ctx context.Context, in *GetProblemHintsReq
 // 提示
 type HintServer interface {
 	// 添加提示
-	AddHint(context.Context, *AddHintReq) (*AddHintResp, error)
+	AddHint(Hint_AddHintServer) error
 	// 删除提示
 	DeleteHint(context.Context, *DeleteHintReq) (*DeleteHintResp, error)
 	// 修改提示
-	UpdateHint(context.Context, *UpdateHintReq) (*UpdateHintResp, error)
+	UpdateHint(Hint_UpdateHintServer) error
 	// 获取提示
-	GetHint(context.Context, *GetHintReq) (*GetHintResp, error)
+	GetHint(*GetHintReq, Hint_GetHintServer) error
 	// 获取题目所有提示
-	GetProblemHints(context.Context, *GetProblemHintsReq) (*GetProblemHintsResp, error)
+	GetProblemHints(*GetProblemHintsReq, Hint_GetProblemHintsServer) error
 	mustEmbedUnimplementedHintServer()
 }
 
@@ -1016,20 +1331,20 @@ type HintServer interface {
 type UnimplementedHintServer struct {
 }
 
-func (UnimplementedHintServer) AddHint(context.Context, *AddHintReq) (*AddHintResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddHint not implemented")
+func (UnimplementedHintServer) AddHint(Hint_AddHintServer) error {
+	return status.Errorf(codes.Unimplemented, "method AddHint not implemented")
 }
 func (UnimplementedHintServer) DeleteHint(context.Context, *DeleteHintReq) (*DeleteHintResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteHint not implemented")
 }
-func (UnimplementedHintServer) UpdateHint(context.Context, *UpdateHintReq) (*UpdateHintResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateHint not implemented")
+func (UnimplementedHintServer) UpdateHint(Hint_UpdateHintServer) error {
+	return status.Errorf(codes.Unimplemented, "method UpdateHint not implemented")
 }
-func (UnimplementedHintServer) GetHint(context.Context, *GetHintReq) (*GetHintResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetHint not implemented")
+func (UnimplementedHintServer) GetHint(*GetHintReq, Hint_GetHintServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetHint not implemented")
 }
-func (UnimplementedHintServer) GetProblemHints(context.Context, *GetProblemHintsReq) (*GetProblemHintsResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetProblemHints not implemented")
+func (UnimplementedHintServer) GetProblemHints(*GetProblemHintsReq, Hint_GetProblemHintsServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetProblemHints not implemented")
 }
 func (UnimplementedHintServer) mustEmbedUnimplementedHintServer() {}
 
@@ -1044,22 +1359,30 @@ func RegisterHintServer(s grpc.ServiceRegistrar, srv HintServer) {
 	s.RegisterService(&Hint_ServiceDesc, srv)
 }
 
-func _Hint_AddHint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddHintReq)
-	if err := dec(in); err != nil {
+func _Hint_AddHint_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(HintServer).AddHint(&hintAddHintServer{ServerStream: stream})
+}
+
+type Hint_AddHintServer interface {
+	SendAndClose(*AddHintResp) error
+	Recv() (*AddHintReq, error)
+	grpc.ServerStream
+}
+
+type hintAddHintServer struct {
+	grpc.ServerStream
+}
+
+func (x *hintAddHintServer) SendAndClose(m *AddHintResp) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *hintAddHintServer) Recv() (*AddHintReq, error) {
+	m := new(AddHintReq)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
-	if interceptor == nil {
-		return srv.(HintServer).AddHint(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Hint_AddHint_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(HintServer).AddHint(ctx, req.(*AddHintReq))
-	}
-	return interceptor(ctx, in, info, handler)
+	return m, nil
 }
 
 func _Hint_DeleteHint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -1080,58 +1403,72 @@ func _Hint_DeleteHint_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Hint_UpdateHint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateHintReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(HintServer).UpdateHint(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Hint_UpdateHint_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(HintServer).UpdateHint(ctx, req.(*UpdateHintReq))
-	}
-	return interceptor(ctx, in, info, handler)
+func _Hint_UpdateHint_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(HintServer).UpdateHint(&hintUpdateHintServer{ServerStream: stream})
 }
 
-func _Hint_GetHint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetHintReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(HintServer).GetHint(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Hint_GetHint_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(HintServer).GetHint(ctx, req.(*GetHintReq))
-	}
-	return interceptor(ctx, in, info, handler)
+type Hint_UpdateHintServer interface {
+	SendAndClose(*UpdateHintResp) error
+	Recv() (*UpdateHintReq, error)
+	grpc.ServerStream
 }
 
-func _Hint_GetProblemHints_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetProblemHintsReq)
-	if err := dec(in); err != nil {
+type hintUpdateHintServer struct {
+	grpc.ServerStream
+}
+
+func (x *hintUpdateHintServer) SendAndClose(m *UpdateHintResp) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *hintUpdateHintServer) Recv() (*UpdateHintReq, error) {
+	m := new(UpdateHintReq)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
-	if interceptor == nil {
-		return srv.(HintServer).GetProblemHints(ctx, in)
+	return m, nil
+}
+
+func _Hint_GetHint_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetHintReq)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
 	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Hint_GetProblemHints_FullMethodName,
+	return srv.(HintServer).GetHint(m, &hintGetHintServer{ServerStream: stream})
+}
+
+type Hint_GetHintServer interface {
+	Send(*GetHintResp) error
+	grpc.ServerStream
+}
+
+type hintGetHintServer struct {
+	grpc.ServerStream
+}
+
+func (x *hintGetHintServer) Send(m *GetHintResp) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _Hint_GetProblemHints_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetProblemHintsReq)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(HintServer).GetProblemHints(ctx, req.(*GetProblemHintsReq))
-	}
-	return interceptor(ctx, in, info, handler)
+	return srv.(HintServer).GetProblemHints(m, &hintGetProblemHintsServer{ServerStream: stream})
+}
+
+type Hint_GetProblemHintsServer interface {
+	Send(*GetProblemHintsResp) error
+	grpc.ServerStream
+}
+
+type hintGetProblemHintsServer struct {
+	grpc.ServerStream
+}
+
+func (x *hintGetProblemHintsServer) Send(m *GetProblemHintsResp) error {
+	return x.ServerStream.SendMsg(m)
 }
 
 // Hint_ServiceDesc is the grpc.ServiceDesc for Hint service.
@@ -1142,27 +1479,32 @@ var Hint_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*HintServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "AddHint",
-			Handler:    _Hint_AddHint_Handler,
-		},
-		{
 			MethodName: "DeleteHint",
 			Handler:    _Hint_DeleteHint_Handler,
 		},
+	},
+	Streams: []grpc.StreamDesc{
 		{
-			MethodName: "UpdateHint",
-			Handler:    _Hint_UpdateHint_Handler,
+			StreamName:    "AddHint",
+			Handler:       _Hint_AddHint_Handler,
+			ClientStreams: true,
 		},
 		{
-			MethodName: "GetHint",
-			Handler:    _Hint_GetHint_Handler,
+			StreamName:    "UpdateHint",
+			Handler:       _Hint_UpdateHint_Handler,
+			ClientStreams: true,
 		},
 		{
-			MethodName: "GetProblemHints",
-			Handler:    _Hint_GetProblemHints_Handler,
+			StreamName:    "GetHint",
+			Handler:       _Hint_GetHint_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "GetProblemHints",
+			Handler:       _Hint_GetProblemHints_Handler,
+			ServerStreams: true,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
 	Metadata: "problemset.proto",
 }
 
@@ -1180,13 +1522,13 @@ const (
 // 评测数据
 type JudgeDataClient interface {
 	// 添加测评数据
-	AddJudgeData(ctx context.Context, in *AddJudgeDataReq, opts ...grpc.CallOption) (*AddJudgeDataResp, error)
+	AddJudgeData(ctx context.Context, opts ...grpc.CallOption) (JudgeData_AddJudgeDataClient, error)
 	// 删除测评数据
 	DeleteJudgeData(ctx context.Context, in *DeleteJudgeDataReq, opts ...grpc.CallOption) (*DeleteJudgeDataResp, error)
 	// 修改测评数据
-	UpdateJudgeData(ctx context.Context, in *UpdateJudgeDataReq, opts ...grpc.CallOption) (*UpdateJudgeDataResp, error)
+	UpdateJudgeData(ctx context.Context, opts ...grpc.CallOption) (JudgeData_UpdateJudgeDataClient, error)
 	// 获取题目的测评数据，返回minio对象名称，可缓存
-	GetJudgeData(ctx context.Context, in *GetJudgeDataReq, opts ...grpc.CallOption) (*GetJudgeDataResp, error)
+	GetJudgeData(ctx context.Context, in *GetJudgeDataReq, opts ...grpc.CallOption) (JudgeData_GetJudgeDataClient, error)
 }
 
 type judgeDataClient struct {
@@ -1197,14 +1539,39 @@ func NewJudgeDataClient(cc grpc.ClientConnInterface) JudgeDataClient {
 	return &judgeDataClient{cc}
 }
 
-func (c *judgeDataClient) AddJudgeData(ctx context.Context, in *AddJudgeDataReq, opts ...grpc.CallOption) (*AddJudgeDataResp, error) {
+func (c *judgeDataClient) AddJudgeData(ctx context.Context, opts ...grpc.CallOption) (JudgeData_AddJudgeDataClient, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(AddJudgeDataResp)
-	err := c.cc.Invoke(ctx, JudgeData_AddJudgeData_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &JudgeData_ServiceDesc.Streams[0], JudgeData_AddJudgeData_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &judgeDataAddJudgeDataClient{ClientStream: stream}
+	return x, nil
+}
+
+type JudgeData_AddJudgeDataClient interface {
+	Send(*AddJudgeDataReq) error
+	CloseAndRecv() (*AddJudgeDataResp, error)
+	grpc.ClientStream
+}
+
+type judgeDataAddJudgeDataClient struct {
+	grpc.ClientStream
+}
+
+func (x *judgeDataAddJudgeDataClient) Send(m *AddJudgeDataReq) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *judgeDataAddJudgeDataClient) CloseAndRecv() (*AddJudgeDataResp, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(AddJudgeDataResp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *judgeDataClient) DeleteJudgeData(ctx context.Context, in *DeleteJudgeDataReq, opts ...grpc.CallOption) (*DeleteJudgeDataResp, error) {
@@ -1217,24 +1584,72 @@ func (c *judgeDataClient) DeleteJudgeData(ctx context.Context, in *DeleteJudgeDa
 	return out, nil
 }
 
-func (c *judgeDataClient) UpdateJudgeData(ctx context.Context, in *UpdateJudgeDataReq, opts ...grpc.CallOption) (*UpdateJudgeDataResp, error) {
+func (c *judgeDataClient) UpdateJudgeData(ctx context.Context, opts ...grpc.CallOption) (JudgeData_UpdateJudgeDataClient, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateJudgeDataResp)
-	err := c.cc.Invoke(ctx, JudgeData_UpdateJudgeData_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &JudgeData_ServiceDesc.Streams[1], JudgeData_UpdateJudgeData_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &judgeDataUpdateJudgeDataClient{ClientStream: stream}
+	return x, nil
 }
 
-func (c *judgeDataClient) GetJudgeData(ctx context.Context, in *GetJudgeDataReq, opts ...grpc.CallOption) (*GetJudgeDataResp, error) {
+type JudgeData_UpdateJudgeDataClient interface {
+	Send(*UpdateJudgeDataReq) error
+	CloseAndRecv() (*UpdateJudgeDataResp, error)
+	grpc.ClientStream
+}
+
+type judgeDataUpdateJudgeDataClient struct {
+	grpc.ClientStream
+}
+
+func (x *judgeDataUpdateJudgeDataClient) Send(m *UpdateJudgeDataReq) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *judgeDataUpdateJudgeDataClient) CloseAndRecv() (*UpdateJudgeDataResp, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(UpdateJudgeDataResp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *judgeDataClient) GetJudgeData(ctx context.Context, in *GetJudgeDataReq, opts ...grpc.CallOption) (JudgeData_GetJudgeDataClient, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetJudgeDataResp)
-	err := c.cc.Invoke(ctx, JudgeData_GetJudgeData_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &JudgeData_ServiceDesc.Streams[2], JudgeData_GetJudgeData_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &judgeDataGetJudgeDataClient{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type JudgeData_GetJudgeDataClient interface {
+	Recv() (*GetJudgeDataResp, error)
+	grpc.ClientStream
+}
+
+type judgeDataGetJudgeDataClient struct {
+	grpc.ClientStream
+}
+
+func (x *judgeDataGetJudgeDataClient) Recv() (*GetJudgeDataResp, error) {
+	m := new(GetJudgeDataResp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 // JudgeDataServer is the server API for JudgeData service.
@@ -1244,13 +1659,13 @@ func (c *judgeDataClient) GetJudgeData(ctx context.Context, in *GetJudgeDataReq,
 // 评测数据
 type JudgeDataServer interface {
 	// 添加测评数据
-	AddJudgeData(context.Context, *AddJudgeDataReq) (*AddJudgeDataResp, error)
+	AddJudgeData(JudgeData_AddJudgeDataServer) error
 	// 删除测评数据
 	DeleteJudgeData(context.Context, *DeleteJudgeDataReq) (*DeleteJudgeDataResp, error)
 	// 修改测评数据
-	UpdateJudgeData(context.Context, *UpdateJudgeDataReq) (*UpdateJudgeDataResp, error)
+	UpdateJudgeData(JudgeData_UpdateJudgeDataServer) error
 	// 获取题目的测评数据，返回minio对象名称，可缓存
-	GetJudgeData(context.Context, *GetJudgeDataReq) (*GetJudgeDataResp, error)
+	GetJudgeData(*GetJudgeDataReq, JudgeData_GetJudgeDataServer) error
 	mustEmbedUnimplementedJudgeDataServer()
 }
 
@@ -1258,17 +1673,17 @@ type JudgeDataServer interface {
 type UnimplementedJudgeDataServer struct {
 }
 
-func (UnimplementedJudgeDataServer) AddJudgeData(context.Context, *AddJudgeDataReq) (*AddJudgeDataResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddJudgeData not implemented")
+func (UnimplementedJudgeDataServer) AddJudgeData(JudgeData_AddJudgeDataServer) error {
+	return status.Errorf(codes.Unimplemented, "method AddJudgeData not implemented")
 }
 func (UnimplementedJudgeDataServer) DeleteJudgeData(context.Context, *DeleteJudgeDataReq) (*DeleteJudgeDataResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteJudgeData not implemented")
 }
-func (UnimplementedJudgeDataServer) UpdateJudgeData(context.Context, *UpdateJudgeDataReq) (*UpdateJudgeDataResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateJudgeData not implemented")
+func (UnimplementedJudgeDataServer) UpdateJudgeData(JudgeData_UpdateJudgeDataServer) error {
+	return status.Errorf(codes.Unimplemented, "method UpdateJudgeData not implemented")
 }
-func (UnimplementedJudgeDataServer) GetJudgeData(context.Context, *GetJudgeDataReq) (*GetJudgeDataResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetJudgeData not implemented")
+func (UnimplementedJudgeDataServer) GetJudgeData(*GetJudgeDataReq, JudgeData_GetJudgeDataServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetJudgeData not implemented")
 }
 func (UnimplementedJudgeDataServer) mustEmbedUnimplementedJudgeDataServer() {}
 
@@ -1283,22 +1698,30 @@ func RegisterJudgeDataServer(s grpc.ServiceRegistrar, srv JudgeDataServer) {
 	s.RegisterService(&JudgeData_ServiceDesc, srv)
 }
 
-func _JudgeData_AddJudgeData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddJudgeDataReq)
-	if err := dec(in); err != nil {
+func _JudgeData_AddJudgeData_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(JudgeDataServer).AddJudgeData(&judgeDataAddJudgeDataServer{ServerStream: stream})
+}
+
+type JudgeData_AddJudgeDataServer interface {
+	SendAndClose(*AddJudgeDataResp) error
+	Recv() (*AddJudgeDataReq, error)
+	grpc.ServerStream
+}
+
+type judgeDataAddJudgeDataServer struct {
+	grpc.ServerStream
+}
+
+func (x *judgeDataAddJudgeDataServer) SendAndClose(m *AddJudgeDataResp) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *judgeDataAddJudgeDataServer) Recv() (*AddJudgeDataReq, error) {
+	m := new(AddJudgeDataReq)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
-	if interceptor == nil {
-		return srv.(JudgeDataServer).AddJudgeData(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: JudgeData_AddJudgeData_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(JudgeDataServer).AddJudgeData(ctx, req.(*AddJudgeDataReq))
-	}
-	return interceptor(ctx, in, info, handler)
+	return m, nil
 }
 
 func _JudgeData_DeleteJudgeData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -1319,40 +1742,51 @@ func _JudgeData_DeleteJudgeData_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
-func _JudgeData_UpdateJudgeData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateJudgeDataReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(JudgeDataServer).UpdateJudgeData(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: JudgeData_UpdateJudgeData_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(JudgeDataServer).UpdateJudgeData(ctx, req.(*UpdateJudgeDataReq))
-	}
-	return interceptor(ctx, in, info, handler)
+func _JudgeData_UpdateJudgeData_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(JudgeDataServer).UpdateJudgeData(&judgeDataUpdateJudgeDataServer{ServerStream: stream})
 }
 
-func _JudgeData_GetJudgeData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetJudgeDataReq)
-	if err := dec(in); err != nil {
+type JudgeData_UpdateJudgeDataServer interface {
+	SendAndClose(*UpdateJudgeDataResp) error
+	Recv() (*UpdateJudgeDataReq, error)
+	grpc.ServerStream
+}
+
+type judgeDataUpdateJudgeDataServer struct {
+	grpc.ServerStream
+}
+
+func (x *judgeDataUpdateJudgeDataServer) SendAndClose(m *UpdateJudgeDataResp) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *judgeDataUpdateJudgeDataServer) Recv() (*UpdateJudgeDataReq, error) {
+	m := new(UpdateJudgeDataReq)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
-	if interceptor == nil {
-		return srv.(JudgeDataServer).GetJudgeData(ctx, in)
+	return m, nil
+}
+
+func _JudgeData_GetJudgeData_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetJudgeDataReq)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
 	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: JudgeData_GetJudgeData_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(JudgeDataServer).GetJudgeData(ctx, req.(*GetJudgeDataReq))
-	}
-	return interceptor(ctx, in, info, handler)
+	return srv.(JudgeDataServer).GetJudgeData(m, &judgeDataGetJudgeDataServer{ServerStream: stream})
+}
+
+type JudgeData_GetJudgeDataServer interface {
+	Send(*GetJudgeDataResp) error
+	grpc.ServerStream
+}
+
+type judgeDataGetJudgeDataServer struct {
+	grpc.ServerStream
+}
+
+func (x *judgeDataGetJudgeDataServer) Send(m *GetJudgeDataResp) error {
+	return x.ServerStream.SendMsg(m)
 }
 
 // JudgeData_ServiceDesc is the grpc.ServiceDesc for JudgeData service.
@@ -1363,23 +1797,27 @@ var JudgeData_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*JudgeDataServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "AddJudgeData",
-			Handler:    _JudgeData_AddJudgeData_Handler,
-		},
-		{
 			MethodName: "DeleteJudgeData",
 			Handler:    _JudgeData_DeleteJudgeData_Handler,
 		},
+	},
+	Streams: []grpc.StreamDesc{
 		{
-			MethodName: "UpdateJudgeData",
-			Handler:    _JudgeData_UpdateJudgeData_Handler,
+			StreamName:    "AddJudgeData",
+			Handler:       _JudgeData_AddJudgeData_Handler,
+			ClientStreams: true,
 		},
 		{
-			MethodName: "GetJudgeData",
-			Handler:    _JudgeData_GetJudgeData_Handler,
+			StreamName:    "UpdateJudgeData",
+			Handler:       _JudgeData_UpdateJudgeData_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "GetJudgeData",
+			Handler:       _JudgeData_GetJudgeData_Handler,
+			ServerStreams: true,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
 	Metadata: "problemset.proto",
 }
 
@@ -1775,15 +2213,15 @@ const (
 // 提交
 type SubmitClient interface {
 	// 用户提交代码
-	SubmitCode(ctx context.Context, in *SubmitCodeReq, opts ...grpc.CallOption) (*SubmitCodeResp, error)
+	SubmitCode(ctx context.Context, opts ...grpc.CallOption) (Submit_SubmitCodeClient, error)
 	// 获取题目的提交数
 	GetProblemSubmitCount(ctx context.Context, in *GetProblemSubmitCountReq, opts ...grpc.CallOption) (*GetProblemSubmitCountResp, error)
 	// 分页获取用户提交
-	GetUserSubmit(ctx context.Context, in *GetUserSubmitReq, opts ...grpc.CallOption) (*GetUserSubmitResp, error)
+	GetUserSubmit(ctx context.Context, in *GetUserSubmitReq, opts ...grpc.CallOption) (Submit_GetUserSubmitClient, error)
 	// 获取用户某一道题的全部提交
-	GetUserProblemSubmit(ctx context.Context, in *GetUserProblemSubmitReq, opts ...grpc.CallOption) (*GetUserProblemSubmitResp, error)
+	GetUserProblemSubmit(ctx context.Context, in *GetUserProblemSubmitReq, opts ...grpc.CallOption) (Submit_GetUserProblemSubmitClient, error)
 	// 获取通过id提交记录
-	GetSubmitById(ctx context.Context, in *GetSubmitByIdReq, opts ...grpc.CallOption) (*GetSubmitByIdResp, error)
+	GetSubmitById(ctx context.Context, in *GetSubmitByIdReq, opts ...grpc.CallOption) (Submit_GetSubmitByIdClient, error)
 }
 
 type submitClient struct {
@@ -1794,14 +2232,39 @@ func NewSubmitClient(cc grpc.ClientConnInterface) SubmitClient {
 	return &submitClient{cc}
 }
 
-func (c *submitClient) SubmitCode(ctx context.Context, in *SubmitCodeReq, opts ...grpc.CallOption) (*SubmitCodeResp, error) {
+func (c *submitClient) SubmitCode(ctx context.Context, opts ...grpc.CallOption) (Submit_SubmitCodeClient, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SubmitCodeResp)
-	err := c.cc.Invoke(ctx, Submit_SubmitCode_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Submit_ServiceDesc.Streams[0], Submit_SubmitCode_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &submitSubmitCodeClient{ClientStream: stream}
+	return x, nil
+}
+
+type Submit_SubmitCodeClient interface {
+	Send(*SubmitCodeReq) error
+	CloseAndRecv() (*SubmitCodeResp, error)
+	grpc.ClientStream
+}
+
+type submitSubmitCodeClient struct {
+	grpc.ClientStream
+}
+
+func (x *submitSubmitCodeClient) Send(m *SubmitCodeReq) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *submitSubmitCodeClient) CloseAndRecv() (*SubmitCodeResp, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(SubmitCodeResp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *submitClient) GetProblemSubmitCount(ctx context.Context, in *GetProblemSubmitCountReq, opts ...grpc.CallOption) (*GetProblemSubmitCountResp, error) {
@@ -1814,34 +2277,103 @@ func (c *submitClient) GetProblemSubmitCount(ctx context.Context, in *GetProblem
 	return out, nil
 }
 
-func (c *submitClient) GetUserSubmit(ctx context.Context, in *GetUserSubmitReq, opts ...grpc.CallOption) (*GetUserSubmitResp, error) {
+func (c *submitClient) GetUserSubmit(ctx context.Context, in *GetUserSubmitReq, opts ...grpc.CallOption) (Submit_GetUserSubmitClient, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetUserSubmitResp)
-	err := c.cc.Invoke(ctx, Submit_GetUserSubmit_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Submit_ServiceDesc.Streams[1], Submit_GetUserSubmit_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &submitGetUserSubmitClient{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
 }
 
-func (c *submitClient) GetUserProblemSubmit(ctx context.Context, in *GetUserProblemSubmitReq, opts ...grpc.CallOption) (*GetUserProblemSubmitResp, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetUserProblemSubmitResp)
-	err := c.cc.Invoke(ctx, Submit_GetUserProblemSubmit_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+type Submit_GetUserSubmitClient interface {
+	Recv() (*GetUserSubmitResp, error)
+	grpc.ClientStream
 }
 
-func (c *submitClient) GetSubmitById(ctx context.Context, in *GetSubmitByIdReq, opts ...grpc.CallOption) (*GetSubmitByIdResp, error) {
+type submitGetUserSubmitClient struct {
+	grpc.ClientStream
+}
+
+func (x *submitGetUserSubmitClient) Recv() (*GetUserSubmitResp, error) {
+	m := new(GetUserSubmitResp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *submitClient) GetUserProblemSubmit(ctx context.Context, in *GetUserProblemSubmitReq, opts ...grpc.CallOption) (Submit_GetUserProblemSubmitClient, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetSubmitByIdResp)
-	err := c.cc.Invoke(ctx, Submit_GetSubmitById_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Submit_ServiceDesc.Streams[2], Submit_GetUserProblemSubmit_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &submitGetUserProblemSubmitClient{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Submit_GetUserProblemSubmitClient interface {
+	Recv() (*GetUserProblemSubmitResp, error)
+	grpc.ClientStream
+}
+
+type submitGetUserProblemSubmitClient struct {
+	grpc.ClientStream
+}
+
+func (x *submitGetUserProblemSubmitClient) Recv() (*GetUserProblemSubmitResp, error) {
+	m := new(GetUserProblemSubmitResp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *submitClient) GetSubmitById(ctx context.Context, in *GetSubmitByIdReq, opts ...grpc.CallOption) (Submit_GetSubmitByIdClient, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &Submit_ServiceDesc.Streams[3], Submit_GetSubmitById_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &submitGetSubmitByIdClient{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Submit_GetSubmitByIdClient interface {
+	Recv() (*GetSubmitByIdResp, error)
+	grpc.ClientStream
+}
+
+type submitGetSubmitByIdClient struct {
+	grpc.ClientStream
+}
+
+func (x *submitGetSubmitByIdClient) Recv() (*GetSubmitByIdResp, error) {
+	m := new(GetSubmitByIdResp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 // SubmitServer is the server API for Submit service.
@@ -1851,15 +2383,15 @@ func (c *submitClient) GetSubmitById(ctx context.Context, in *GetSubmitByIdReq, 
 // 提交
 type SubmitServer interface {
 	// 用户提交代码
-	SubmitCode(context.Context, *SubmitCodeReq) (*SubmitCodeResp, error)
+	SubmitCode(Submit_SubmitCodeServer) error
 	// 获取题目的提交数
 	GetProblemSubmitCount(context.Context, *GetProblemSubmitCountReq) (*GetProblemSubmitCountResp, error)
 	// 分页获取用户提交
-	GetUserSubmit(context.Context, *GetUserSubmitReq) (*GetUserSubmitResp, error)
+	GetUserSubmit(*GetUserSubmitReq, Submit_GetUserSubmitServer) error
 	// 获取用户某一道题的全部提交
-	GetUserProblemSubmit(context.Context, *GetUserProblemSubmitReq) (*GetUserProblemSubmitResp, error)
+	GetUserProblemSubmit(*GetUserProblemSubmitReq, Submit_GetUserProblemSubmitServer) error
 	// 获取通过id提交记录
-	GetSubmitById(context.Context, *GetSubmitByIdReq) (*GetSubmitByIdResp, error)
+	GetSubmitById(*GetSubmitByIdReq, Submit_GetSubmitByIdServer) error
 	mustEmbedUnimplementedSubmitServer()
 }
 
@@ -1867,20 +2399,20 @@ type SubmitServer interface {
 type UnimplementedSubmitServer struct {
 }
 
-func (UnimplementedSubmitServer) SubmitCode(context.Context, *SubmitCodeReq) (*SubmitCodeResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitCode not implemented")
+func (UnimplementedSubmitServer) SubmitCode(Submit_SubmitCodeServer) error {
+	return status.Errorf(codes.Unimplemented, "method SubmitCode not implemented")
 }
 func (UnimplementedSubmitServer) GetProblemSubmitCount(context.Context, *GetProblemSubmitCountReq) (*GetProblemSubmitCountResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProblemSubmitCount not implemented")
 }
-func (UnimplementedSubmitServer) GetUserSubmit(context.Context, *GetUserSubmitReq) (*GetUserSubmitResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUserSubmit not implemented")
+func (UnimplementedSubmitServer) GetUserSubmit(*GetUserSubmitReq, Submit_GetUserSubmitServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetUserSubmit not implemented")
 }
-func (UnimplementedSubmitServer) GetUserProblemSubmit(context.Context, *GetUserProblemSubmitReq) (*GetUserProblemSubmitResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUserProblemSubmit not implemented")
+func (UnimplementedSubmitServer) GetUserProblemSubmit(*GetUserProblemSubmitReq, Submit_GetUserProblemSubmitServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetUserProblemSubmit not implemented")
 }
-func (UnimplementedSubmitServer) GetSubmitById(context.Context, *GetSubmitByIdReq) (*GetSubmitByIdResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetSubmitById not implemented")
+func (UnimplementedSubmitServer) GetSubmitById(*GetSubmitByIdReq, Submit_GetSubmitByIdServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetSubmitById not implemented")
 }
 func (UnimplementedSubmitServer) mustEmbedUnimplementedSubmitServer() {}
 
@@ -1895,22 +2427,30 @@ func RegisterSubmitServer(s grpc.ServiceRegistrar, srv SubmitServer) {
 	s.RegisterService(&Submit_ServiceDesc, srv)
 }
 
-func _Submit_SubmitCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SubmitCodeReq)
-	if err := dec(in); err != nil {
+func _Submit_SubmitCode_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(SubmitServer).SubmitCode(&submitSubmitCodeServer{ServerStream: stream})
+}
+
+type Submit_SubmitCodeServer interface {
+	SendAndClose(*SubmitCodeResp) error
+	Recv() (*SubmitCodeReq, error)
+	grpc.ServerStream
+}
+
+type submitSubmitCodeServer struct {
+	grpc.ServerStream
+}
+
+func (x *submitSubmitCodeServer) SendAndClose(m *SubmitCodeResp) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *submitSubmitCodeServer) Recv() (*SubmitCodeReq, error) {
+	m := new(SubmitCodeReq)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
-	if interceptor == nil {
-		return srv.(SubmitServer).SubmitCode(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Submit_SubmitCode_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SubmitServer).SubmitCode(ctx, req.(*SubmitCodeReq))
-	}
-	return interceptor(ctx, in, info, handler)
+	return m, nil
 }
 
 func _Submit_GetProblemSubmitCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -1931,58 +2471,67 @@ func _Submit_GetProblemSubmitCount_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Submit_GetUserSubmit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUserSubmitReq)
-	if err := dec(in); err != nil {
-		return nil, err
+func _Submit_GetUserSubmit_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetUserSubmitReq)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
 	}
-	if interceptor == nil {
-		return srv.(SubmitServer).GetUserSubmit(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Submit_GetUserSubmit_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SubmitServer).GetUserSubmit(ctx, req.(*GetUserSubmitReq))
-	}
-	return interceptor(ctx, in, info, handler)
+	return srv.(SubmitServer).GetUserSubmit(m, &submitGetUserSubmitServer{ServerStream: stream})
 }
 
-func _Submit_GetUserProblemSubmit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUserProblemSubmitReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SubmitServer).GetUserProblemSubmit(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Submit_GetUserProblemSubmit_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SubmitServer).GetUserProblemSubmit(ctx, req.(*GetUserProblemSubmitReq))
-	}
-	return interceptor(ctx, in, info, handler)
+type Submit_GetUserSubmitServer interface {
+	Send(*GetUserSubmitResp) error
+	grpc.ServerStream
 }
 
-func _Submit_GetSubmitById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetSubmitByIdReq)
-	if err := dec(in); err != nil {
-		return nil, err
+type submitGetUserSubmitServer struct {
+	grpc.ServerStream
+}
+
+func (x *submitGetUserSubmitServer) Send(m *GetUserSubmitResp) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _Submit_GetUserProblemSubmit_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetUserProblemSubmitReq)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
 	}
-	if interceptor == nil {
-		return srv.(SubmitServer).GetSubmitById(ctx, in)
+	return srv.(SubmitServer).GetUserProblemSubmit(m, &submitGetUserProblemSubmitServer{ServerStream: stream})
+}
+
+type Submit_GetUserProblemSubmitServer interface {
+	Send(*GetUserProblemSubmitResp) error
+	grpc.ServerStream
+}
+
+type submitGetUserProblemSubmitServer struct {
+	grpc.ServerStream
+}
+
+func (x *submitGetUserProblemSubmitServer) Send(m *GetUserProblemSubmitResp) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _Submit_GetSubmitById_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetSubmitByIdReq)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
 	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Submit_GetSubmitById_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SubmitServer).GetSubmitById(ctx, req.(*GetSubmitByIdReq))
-	}
-	return interceptor(ctx, in, info, handler)
+	return srv.(SubmitServer).GetSubmitById(m, &submitGetSubmitByIdServer{ServerStream: stream})
+}
+
+type Submit_GetSubmitByIdServer interface {
+	Send(*GetSubmitByIdResp) error
+	grpc.ServerStream
+}
+
+type submitGetSubmitByIdServer struct {
+	grpc.ServerStream
+}
+
+func (x *submitGetSubmitByIdServer) Send(m *GetSubmitByIdResp) error {
+	return x.ServerStream.SendMsg(m)
 }
 
 // Submit_ServiceDesc is the grpc.ServiceDesc for Submit service.
@@ -1993,26 +2542,31 @@ var Submit_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*SubmitServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SubmitCode",
-			Handler:    _Submit_SubmitCode_Handler,
-		},
-		{
 			MethodName: "GetProblemSubmitCount",
 			Handler:    _Submit_GetProblemSubmitCount_Handler,
 		},
+	},
+	Streams: []grpc.StreamDesc{
 		{
-			MethodName: "GetUserSubmit",
-			Handler:    _Submit_GetUserSubmit_Handler,
+			StreamName:    "SubmitCode",
+			Handler:       _Submit_SubmitCode_Handler,
+			ClientStreams: true,
 		},
 		{
-			MethodName: "GetUserProblemSubmit",
-			Handler:    _Submit_GetUserProblemSubmit_Handler,
+			StreamName:    "GetUserSubmit",
+			Handler:       _Submit_GetUserSubmit_Handler,
+			ServerStreams: true,
 		},
 		{
-			MethodName: "GetSubmitById",
-			Handler:    _Submit_GetSubmitById_Handler,
+			StreamName:    "GetUserProblemSubmit",
+			Handler:       _Submit_GetUserProblemSubmit_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "GetSubmitById",
+			Handler:       _Submit_GetSubmitById_Handler,
+			ServerStreams: true,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
 	Metadata: "problemset.proto",
 }

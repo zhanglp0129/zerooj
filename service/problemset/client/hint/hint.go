@@ -81,6 +81,7 @@ type (
 	ProblemDeleteLanguagesResp = problemset.ProblemDeleteLanguagesResp
 	ProblemDeleteTagsReq       = problemset.ProblemDeleteTagsReq
 	ProblemDeleteTagsResp      = problemset.ProblemDeleteTagsResp
+	ProblemInfo                = problemset.ProblemInfo
 	ProblemLanguagesModel      = problemset.ProblemLanguagesModel
 	SearchProblemReq           = problemset.SearchProblemReq
 	SearchProblemResp          = problemset.SearchProblemResp
@@ -103,15 +104,15 @@ type (
 
 	Hint interface {
 		// 添加提示
-		AddHint(ctx context.Context, in *AddHintReq, opts ...grpc.CallOption) (*AddHintResp, error)
+		AddHint(ctx context.Context, opts ...grpc.CallOption) (problemset.Hint_AddHintClient, error)
 		// 删除提示
 		DeleteHint(ctx context.Context, in *DeleteHintReq, opts ...grpc.CallOption) (*DeleteHintResp, error)
 		// 修改提示
-		UpdateHint(ctx context.Context, in *UpdateHintReq, opts ...grpc.CallOption) (*UpdateHintResp, error)
+		UpdateHint(ctx context.Context, opts ...grpc.CallOption) (problemset.Hint_UpdateHintClient, error)
 		// 获取提示
-		GetHint(ctx context.Context, in *GetHintReq, opts ...grpc.CallOption) (*GetHintResp, error)
+		GetHint(ctx context.Context, in *GetHintReq, opts ...grpc.CallOption) (problemset.Hint_GetHintClient, error)
 		// 获取题目所有提示
-		GetProblemHints(ctx context.Context, in *GetProblemHintsReq, opts ...grpc.CallOption) (*GetProblemHintsResp, error)
+		GetProblemHints(ctx context.Context, in *GetProblemHintsReq, opts ...grpc.CallOption) (problemset.Hint_GetProblemHintsClient, error)
 	}
 
 	defaultHint struct {
@@ -126,9 +127,9 @@ func NewHint(cli zrpc.Client) Hint {
 }
 
 // 添加提示
-func (m *defaultHint) AddHint(ctx context.Context, in *AddHintReq, opts ...grpc.CallOption) (*AddHintResp, error) {
+func (m *defaultHint) AddHint(ctx context.Context, opts ...grpc.CallOption) (problemset.Hint_AddHintClient, error) {
 	client := problemset.NewHintClient(m.cli.Conn())
-	return client.AddHint(ctx, in, opts...)
+	return client.AddHint(ctx, opts...)
 }
 
 // 删除提示
@@ -138,19 +139,19 @@ func (m *defaultHint) DeleteHint(ctx context.Context, in *DeleteHintReq, opts ..
 }
 
 // 修改提示
-func (m *defaultHint) UpdateHint(ctx context.Context, in *UpdateHintReq, opts ...grpc.CallOption) (*UpdateHintResp, error) {
+func (m *defaultHint) UpdateHint(ctx context.Context, opts ...grpc.CallOption) (problemset.Hint_UpdateHintClient, error) {
 	client := problemset.NewHintClient(m.cli.Conn())
-	return client.UpdateHint(ctx, in, opts...)
+	return client.UpdateHint(ctx, opts...)
 }
 
 // 获取提示
-func (m *defaultHint) GetHint(ctx context.Context, in *GetHintReq, opts ...grpc.CallOption) (*GetHintResp, error) {
+func (m *defaultHint) GetHint(ctx context.Context, in *GetHintReq, opts ...grpc.CallOption) (problemset.Hint_GetHintClient, error) {
 	client := problemset.NewHintClient(m.cli.Conn())
 	return client.GetHint(ctx, in, opts...)
 }
 
 // 获取题目所有提示
-func (m *defaultHint) GetProblemHints(ctx context.Context, in *GetProblemHintsReq, opts ...grpc.CallOption) (*GetProblemHintsResp, error) {
+func (m *defaultHint) GetProblemHints(ctx context.Context, in *GetProblemHintsReq, opts ...grpc.CallOption) (problemset.Hint_GetProblemHintsClient, error) {
 	client := problemset.NewHintClient(m.cli.Conn())
 	return client.GetProblemHints(ctx, in, opts...)
 }

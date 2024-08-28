@@ -8,7 +8,9 @@ import (
 	exampleServer "zerooj/service/problemset/internal/server/example"
 	hintServer "zerooj/service/problemset/internal/server/hint"
 	judgedataServer "zerooj/service/problemset/internal/server/judgedata"
+	languageServer "zerooj/service/problemset/internal/server/language"
 	problemServer "zerooj/service/problemset/internal/server/problem"
+	submitServer "zerooj/service/problemset/internal/server/submit"
 	tagServer "zerooj/service/problemset/internal/server/tag"
 	"zerooj/service/problemset/internal/svc"
 	"zerooj/service/problemset/pb/problemset"
@@ -35,6 +37,8 @@ func main() {
 		problemset.RegisterExampleServer(grpcServer, exampleServer.NewExampleServer(ctx))
 		problemset.RegisterHintServer(grpcServer, hintServer.NewHintServer(ctx))
 		problemset.RegisterJudgeDataServer(grpcServer, judgedataServer.NewJudgeDataServer(ctx))
+		problemset.RegisterLanguageServer(grpcServer, languageServer.NewLanguageServer(ctx))
+		problemset.RegisterSubmitServer(grpcServer, submitServer.NewSubmitServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)

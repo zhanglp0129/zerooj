@@ -24,8 +24,8 @@ func NewGetSubmitByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 }
 
 // 获取通过id提交记录
-func (l *GetSubmitByIdLogic) GetSubmitById(in *problemset.GetSubmitByIdReq) (*problemset.GetSubmitByIdResp, error) {
+func (l *GetSubmitByIdLogic) GetSubmitById(in *problemset.GetSubmitByIdReq, stream problemset.Submit_GetSubmitByIdServer) error {
 	// todo: add your logic here and delete this line
 
-	return &problemset.GetSubmitByIdResp{}, nil
+	return nil
 }
