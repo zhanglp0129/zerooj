@@ -1,9 +1,7 @@
 package svc
 
 import (
-	"fmt"
 	"github.com/redis/go-redis/v9"
-	"github.com/zhanglp0129/redis_snowflake"
 	"github.com/zhanglp0129/snowflake"
 	"gorm.io/gorm"
 	"zerooj/common"
@@ -44,8 +42,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 
 	// 创建雪花算法节点
 	machineId := c.Database.DataSource[0].MachineId
-	snowflakeKey := fmt.Sprintf("/snowflake/user/%d", machineId)
-	rw, err := redis_snowflake.NewRedisWorkerNoLock(rdb, snowflakeKey, snowflake.NewDefaultConfigWithStartTime(constant.StartTime), machineId)
+	rw, err := snowflake.NewWorker(snowflake.NewDefaultConfigWithStartTime(constant.StartTime), machineId)
 	if err != nil {
 		panic(err)
 	}
