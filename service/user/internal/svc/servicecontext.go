@@ -4,8 +4,8 @@ import (
 	"github.com/redis/go-redis/v9"
 	"github.com/zhanglp0129/snowflake"
 	"gorm.io/gorm"
-	"zerooj/common"
 	"zerooj/common/constant"
+	common "zerooj/common/init"
 	"zerooj/service/user/internal/config"
 	"zerooj/service/user/models"
 )
@@ -41,7 +41,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	}
 
 	// 创建雪花算法节点
-	machineId := c.Database.DataSource[0].MachineId
+	machineId := c.Database.MachineId
 	rw, err := snowflake.NewWorker(snowflake.NewDefaultConfigWithStartTime(constant.StartTime), machineId)
 	if err != nil {
 		panic(err)
