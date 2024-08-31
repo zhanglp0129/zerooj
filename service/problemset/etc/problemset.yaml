@@ -10,16 +10,12 @@ RedisClient:
     - 127.0.0.1:6379
   DB: 0
 Database:
-  # 只能填node
-  Type: node
-  DataSource:
-    -
-      # 数据库驱动，目前仅支持mysql
-      Driver: mysql
-      # 数据名称。目前尚不支持分布式数据库，只能指定一个
-      DSN: root:1234@tcp(127.0.0.1:3306)/zerooj_problemset?charset=utf8&parseTime=True&loc=Local
-      # 机器码。只能填0
-      MachineId: 0
+  # 数据库驱动，目前仅支持mysql
+  Driver: mysql
+  # 数据名称。目前尚不支持分布式数据库，只能指定一个
+  DSN: root:1234@tcp(127.0.0.1:3306)/zerooj_problemset?charset=utf8&parseTime=True&loc=Local
+  # 机器码。
+  MachineId: 0
 Minio:
   Endpoint: localhost:9000
   AccessKeyID:

@@ -46,7 +46,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	}
 
 	// 创建雪花算法节点
-	machineId := c.Database.DataSource[0].MachineId
+	machineId := c.Database.MachineId
 	rw, err := snowflake.NewWorker(snowflake.NewDefaultConfigWithStartTime(constant.StartTime), machineId)
 	if err != nil {
 		panic(err)

@@ -3,7 +3,6 @@ package storagetype
 import (
 	"fmt"
 	"testing"
-	"zerooj/common"
 )
 
 func TestGetDirectContent(t *testing.T) {
