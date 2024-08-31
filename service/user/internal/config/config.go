@@ -2,7 +2,7 @@ package config
 
 import (
 	"github.com/zeromicro/go-zero/zrpc"
-	"zerooj/common"
+	common "zerooj/common/init"
 )
 
 type Config struct {

@@ -3,7 +3,6 @@ package svc
 import (
 	"github.com/go-redis/redis_rate/v10"
 	"github.com/redis/go-redis/v9"
-	"zerooj/common"
 	"zerooj/service/mail/internal/config"
 )
 
@@ -14,7 +13,7 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	rdb, err := common.InitRedis(c.RedisClient)
+	rdb, err := init.InitRedis(c.RedisClient)
 	if err != nil {
 		panic(err)
 	}
