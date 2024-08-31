@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"zerooj/common"
 	"zerooj/common/constant"
-	common_models "zerooj/common/models"
+	commonmodels "zerooj/common/models"
 	"zerooj/service/user/models"
 	"zerooj/utils"
 
@@ -49,7 +49,7 @@ func (l *UserRegisterLogic) UserRegister(in *user.UserRegisterReq) (*user.UserRe
 		Username:   in.Username,
 		Password:   pwd,
 		Email:      in.Email,
-		Permission: common_models.DefaultPermission,
+		Permission: commonmodels.DefaultPermission,
 	}
 	u.ID, err = l.svcCtx.RW.GenerateId()
 	if err != nil {
