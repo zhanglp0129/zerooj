@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package judge;
+
+option go_package = "./judge";
+
+service Judge {
+  // 测评
+  rpc Judge(JudgeReq) returns (JudgeResp);
+}
+message JudgeReq {
+  int64 problemId = 1;
+  int64 languageId = 2;
+  string code = 3;
+}
+message JudgeResp {
+  uint32 submitResult = 1;
+}
