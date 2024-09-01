@@ -2,15 +2,15 @@
 redis key相关文档，主要包括各种情况的key格式。所有键均采用蛇形命名
 
 ## 邮箱验证码
-- key格式：**/mail_check_code/服务名称/接口名称/相关信息/邮箱**
+- key格式：**mail_check_code:验证码用途:邮箱**
 - 表格
 
-|  服务  |    接口     |                  redis键                   |
-|:----:|:---------:|:-----------------------------------------:|
-| 用户服务 |   注册接口    |  /mail_check_code/user/user_register/邮箱   |
-| 用户服务 |   忘记密码    | /mail_check_code/user/forget_password/邮箱  |
-| 用户服务 | 修改邮箱(旧邮箱) | /mail_check_code/user/update_email/old/邮箱 |
-| 用户服务 | 修改邮箱(新邮箱) | /mail_check_code/user/update_email/new/邮箱 |
+|   用途    |               redis键                |
+|:-------:|:-----------------------------------:|
+|   注册    |     mail_check_code:register:邮箱     |
+|  忘记密码   | mail_check_code:forget_password:邮箱  |
+| 修改邮箱(旧) | mail_check_code:update_email_old:邮箱 |
+| 修改邮箱(新) | mail_check_code:update_email_new:邮箱 |
 
 ## 缓存
 - key格式：**/cache/服务名称/接口名称/相关信息**

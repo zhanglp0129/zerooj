@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package mail;
 
-option go_package = "./user";
+option go_package = "./mail";
 
 // 邮件验证码
 service CheckCode {
@@ -10,14 +10,12 @@ service CheckCode {
   rpc SendMailCheckCode(SendMailCheckCodeReq) returns (SendMailCheckCodeResp);
 }
 message SendMailCheckCodeReq {
-  // 存储在redis中key的前缀，除去邮箱的部分，例如：/mail_check_code/user/user_register
-  string RedisKeyPrefix = 1;
-  string Email = 2;
+  // 存储在redis中key
+  string redisKey = 1;
+  string email = 2;
   // 用户操作，例如：注册账号、忘记密码等，该字段将会被嵌入发送的邮件中
-  string UserOperation = 3;
-  // 用户ip地址，主要用于限频
-  string ip = 4;
+  string userOperation = 3;
 }
 message SendMailCheckCodeResp {
-  string CheckCode = 1;
+  string checkCode = 1;
 }
