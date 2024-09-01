@@ -7,7 +7,7 @@ import (
 	"html/template"
 	"math/rand"
 	"net/smtp"
-	"time"
+	"zerooj/common/constant"
 	"zerooj/service/mail/pb/mail"
 	"zerooj/service/mail/static"
 
@@ -38,7 +38,7 @@ func (l *SendMailCheckCodeLogic) SendMailCheckCode(in *mail.SendMailCheckCodeReq
 	sender := smtpCfg.Sender
 	recipient := in.Email
 	addr := fmt.Sprintf("%s:%d", smtpCfg.Host, smtpCfg.Port)
-	checkCode := fmt.Sprintf("%06d", rand.Int()%1000000)
+	checkCode := fmt.Sprintf("%06d", rand.Int()%1e6)
 	subject := "ZeroOJ - 验证码获取"
 
 	// 准备邮件内容
@@ -63,7 +63,7 @@ func (l *SendMailCheckCodeLogic) SendMailCheckCode(in *mail.SendMailCheckCodeReq
 	key := in.RedisKey
 	// 将验证码写入Redis，有效期5min
 	rdb := l.svcCtx.RDB
-	err = rdb.SetEx(context.Background(), key, checkCode, 5*60*time.Second).Err()
+	err = rdb.SetEx(context.Background(), key, checkCode, constant.MailCheckCodeExpirationTime).Err()
 	if err != nil {
 		return nil, err
 	}
