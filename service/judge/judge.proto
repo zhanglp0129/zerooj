@@ -6,7 +6,7 @@ option go_package = "./judge";
 
 service Judge {
   // 测评
-  rpc Judge(JudgeReq) returns (JudgeResp);
+  rpc Judge(stream JudgeReq) returns (stream JudgeResp);
 }
 message JudgeReq {
   int64 problemId = 1;

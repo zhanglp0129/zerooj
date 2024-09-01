@@ -18,7 +18,7 @@ type (
 
 	Judge interface {
 		// 测评
-		Judge(ctx context.Context, in *JudgeReq, opts ...grpc.CallOption) (*JudgeResp, error)
+		Judge(ctx context.Context, opts ...grpc.CallOption) (judge.Judge_JudgeClient, error)
 	}
 
 	defaultJudge struct {
@@ -33,7 +33,7 @@ func NewJudge(cli zrpc.Client) Judge {
 }
 
 // 测评
-func (m *defaultJudge) Judge(ctx context.Context, in *JudgeReq, opts ...grpc.CallOption) (*JudgeResp, error) {
+func (m *defaultJudge) Judge(ctx context.Context, opts ...grpc.CallOption) (judge.Judge_JudgeClient, error) {
 	client := judge.NewJudgeClient(m.cli.Conn())
-	return client.Judge(ctx, in, opts...)
+	return client.Judge(ctx, opts...)
 }

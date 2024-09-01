@@ -4,8 +4,6 @@
 package server
 
 import (
-	"context"
-
 	"zerooj/service/judge/internal/logic/judge"
 	"zerooj/service/judge/internal/svc"
 	"zerooj/service/judge/pb/judge"
@@ -23,7 +21,7 @@ func NewJudgeServer(svcCtx *svc.ServiceContext) *JudgeServer {
 }
 
 // 测评
-func (s *JudgeServer) Judge(ctx context.Context, in *judge.JudgeReq) (*judge.JudgeResp, error) {
-	l := judgelogic.NewJudgeLogic(ctx, s.svcCtx)
-	return l.Judge(in)
+func (s *JudgeServer) Judge(stream judge.Judge_JudgeServer) error {
+	l := judgelogic.NewJudgeLogic(stream.Context(), s.svcCtx)
+	return l.Judge(stream)
 }

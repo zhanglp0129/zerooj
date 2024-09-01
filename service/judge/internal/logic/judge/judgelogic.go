@@ -24,8 +24,8 @@ func NewJudgeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *JudgeLogic 
 }
 
 // 测评
-func (l *JudgeLogic) Judge(in *judge.JudgeReq) (*judge.JudgeResp, error) {
+func (l *JudgeLogic) Judge(stream judge.Judge_JudgeServer) error {
 	// todo: add your logic here and delete this line
 
-	return &judge.JudgeResp{}, nil
+	return nil
 }

@@ -27,7 +27,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type JudgeClient interface {
 	// 测评
-	Judge(ctx context.Context, in *JudgeReq, opts ...grpc.CallOption) (*JudgeResp, error)
+	Judge(ctx context.Context, opts ...grpc.CallOption) (Judge_JudgeClient, error)
 }
 
 type judgeClient struct {
@@ -38,14 +38,36 @@ func NewJudgeClient(cc grpc.ClientConnInterface) JudgeClient {
 	return &judgeClient{cc}
 }
 
-func (c *judgeClient) Judge(ctx context.Context, in *JudgeReq, opts ...grpc.CallOption) (*JudgeResp, error) {
+func (c *judgeClient) Judge(ctx context.Context, opts ...grpc.CallOption) (Judge_JudgeClient, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(JudgeResp)
-	err := c.cc.Invoke(ctx, Judge_Judge_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Judge_ServiceDesc.Streams[0], Judge_Judge_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &judgeJudgeClient{ClientStream: stream}
+	return x, nil
+}
+
+type Judge_JudgeClient interface {
+	Send(*JudgeReq) error
+	Recv() (*JudgeResp, error)
+	grpc.ClientStream
+}
+
+type judgeJudgeClient struct {
+	grpc.ClientStream
+}
+
+func (x *judgeJudgeClient) Send(m *JudgeReq) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *judgeJudgeClient) Recv() (*JudgeResp, error) {
+	m := new(JudgeResp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 // JudgeServer is the server API for Judge service.
@@ -53,7 +75,7 @@ func (c *judgeClient) Judge(ctx context.Context, in *JudgeReq, opts ...grpc.Call
 // for forward compatibility
 type JudgeServer interface {
 	// 测评
-	Judge(context.Context, *JudgeReq) (*JudgeResp, error)
+	Judge(Judge_JudgeServer) error
 	mustEmbedUnimplementedJudgeServer()
 }
 
@@ -61,8 +83,8 @@ type JudgeServer interface {
 type UnimplementedJudgeServer struct {
 }
 
-func (UnimplementedJudgeServer) Judge(context.Context, *JudgeReq) (*JudgeResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Judge not implemented")
+func (UnimplementedJudgeServer) Judge(Judge_JudgeServer) error {
+	return status.Errorf(codes.Unimplemented, "method Judge not implemented")
 }
 func (UnimplementedJudgeServer) mustEmbedUnimplementedJudgeServer() {}
 
@@ -77,22 +99,30 @@ func RegisterJudgeServer(s grpc.ServiceRegistrar, srv JudgeServer) {
 	s.RegisterService(&Judge_ServiceDesc, srv)
 }
 
-func _Judge_Judge_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(JudgeReq)
-	if err := dec(in); err != nil {
+func _Judge_Judge_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(JudgeServer).Judge(&judgeJudgeServer{ServerStream: stream})
+}
+
+type Judge_JudgeServer interface {
+	Send(*JudgeResp) error
+	Recv() (*JudgeReq, error)
+	grpc.ServerStream
+}
+
+type judgeJudgeServer struct {
+	grpc.ServerStream
+}
+
+func (x *judgeJudgeServer) Send(m *JudgeResp) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *judgeJudgeServer) Recv() (*JudgeReq, error) {
+	m := new(JudgeReq)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
-	if interceptor == nil {
-		return srv.(JudgeServer).Judge(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Judge_Judge_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(JudgeServer).Judge(ctx, req.(*JudgeReq))
-	}
-	return interceptor(ctx, in, info, handler)
+	return m, nil
 }
 
 // Judge_ServiceDesc is the grpc.ServiceDesc for Judge service.
@@ -101,12 +131,14 @@ func _Judge_Judge_Handler(srv interface{}, ctx context.Context, dec func(interfa
 var Judge_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "judge.Judge",
 	HandlerType: (*JudgeServer)(nil),
-	Methods: []grpc.MethodDesc{
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
 		{
-			MethodName: "Judge",
-			Handler:    _Judge_Judge_Handler,
+			StreamName:    "Judge",
+			Handler:       _Judge_Judge_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
 	Metadata: "judge.proto",
 }
