@@ -29,7 +29,7 @@ func NewSearchByUsernameLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 // 根据用户名搜索用户，并缓存
 func (l *SearchByUsernameLogic) SearchByUsername(in *user.SearchByUsernameReq) (*user.SearchByUsernameResp, error) {
 	rdb := l.svcCtx.RDB
-	key := fmt.Sprintf(" /cache/user/search_by_username/%s", in.Username)
+	key := fmt.Sprintf("cache:search_by_username:%s", in.Username)
 	model := user.SearchByUsernameResp{}
 
 	_, err := redis_cache.QueryWithCache(rdb, key, &model, func() (*user.SearchByUsernameResp, error) {

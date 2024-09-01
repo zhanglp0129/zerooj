@@ -46,7 +46,7 @@ func (l *UpdatePermissionLogic) UpdatePermission(in *user.UpdatePermissionReq) (
 
 		// 删除缓存
 		rdb := l.svcCtx.RDB
-		getBaseInfoKey := fmt.Sprintf("/cache/user/get_base_info/%d", in.Id)
+		getBaseInfoKey := fmt.Sprintf("cache:user_permission:%d", in.Id)
 		return redis_cache.DeleteCache(rdb, getBaseInfoKey)
 	})
 	if err != nil {

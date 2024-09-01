@@ -28,8 +28,6 @@ type (
 	FollowUserInfo                = user.FollowUserInfo
 	FollowUserReq                 = user.FollowUserReq
 	FollowUserResp                = user.FollowUserResp
-	ForgetPasswordReq             = user.ForgetPasswordReq
-	ForgetPasswordResp            = user.ForgetPasswordResp
 	GetBaseInfoReq                = user.GetBaseInfoReq
 	GetBaseInfoResp               = user.GetBaseInfoResp
 	GetFansReq                    = user.GetFansReq
@@ -50,36 +48,26 @@ type (
 	SkillInfo                     = user.SkillInfo
 	UnfollowUserReq               = user.UnfollowUserReq
 	UnfollowUserResp              = user.UnfollowUserResp
-	UpdateEmailReq                = user.UpdateEmailReq
-	UpdateEmailResp               = user.UpdateEmailResp
-	UpdatePasswordReq             = user.UpdatePasswordReq
-	UpdatePasswordResp            = user.UpdatePasswordResp
+	UpdateBaseInfoReq             = user.UpdateBaseInfoReq
+	UpdateBaseInfoResp            = user.UpdateBaseInfoResp
 	UpdatePermissionReq           = user.UpdatePermissionReq
 	UpdatePermissionResp          = user.UpdatePermissionResp
 	UpdateSkillReq                = user.UpdateSkillReq
 	UpdateSkillResp               = user.UpdateSkillResp
 	UpdateUserProfileReq          = user.UpdateUserProfileReq
 	UpdateUserProfileResp         = user.UpdateUserProfileResp
-	UpdateUsernameReq             = user.UpdateUsernameReq
-	UpdateUsernameResp            = user.UpdateUsernameResp
 	UserLoginReq                  = user.UserLoginReq
 	UserLoginResp                 = user.UserLoginResp
 	UserRegisterReq               = user.UserRegisterReq
 	UserRegisterResp              = user.UserRegisterResp
 
 	BaseInfo interface {
-		// 获取用户基本信息，不包括密码，并缓存
+		// 获取用户基本信息，并缓存
 		GetBaseInfo(ctx context.Context, in *GetBaseInfoReq, opts ...grpc.CallOption) (*GetBaseInfoResp, error)
+		// 修改用户基本信息，字段为空表示不修改
+		UpdateBaseInfo(ctx context.Context, in *UpdateBaseInfoReq, opts ...grpc.CallOption) (*UpdateBaseInfoResp, error)
 		// 根据用户名搜索用户，并缓存
 		SearchByUsername(ctx context.Context, in *SearchByUsernameReq, opts ...grpc.CallOption) (*SearchByUsernameResp, error)
-		// 修改用户名，有7天冷却期
-		UpdateUsername(ctx context.Context, in *UpdateUsernameReq, opts ...grpc.CallOption) (*UpdateUsernameResp, error)
-		// 修改密码
-		UpdatePassword(ctx context.Context, in *UpdatePasswordReq, opts ...grpc.CallOption) (*UpdatePasswordResp, error)
-		// 忘记密码
-		ForgetPassword(ctx context.Context, in *ForgetPasswordReq, opts ...grpc.CallOption) (*ForgetPasswordResp, error)
-		// 修改用户邮箱，有7天冷却期
-		UpdateEmail(ctx context.Context, in *UpdateEmailReq, opts ...grpc.CallOption) (*UpdateEmailResp, error)
 		// 修改用户权限
 		UpdatePermission(ctx context.Context, in *UpdatePermissionReq, opts ...grpc.CallOption) (*UpdatePermissionResp, error)
 		// 获取用户权限
@@ -97,40 +85,22 @@ func NewBaseInfo(cli zrpc.Client) BaseInfo {
 	}
 }
 
-// 获取用户基本信息，不包括密码，并缓存
+// 获取用户基本信息，并缓存
 func (m *defaultBaseInfo) GetBaseInfo(ctx context.Context, in *GetBaseInfoReq, opts ...grpc.CallOption) (*GetBaseInfoResp, error) {
 	client := user.NewBaseInfoClient(m.cli.Conn())
 	return client.GetBaseInfo(ctx, in, opts...)
+}
+
+// 修改用户基本信息，字段为空表示不修改
+func (m *defaultBaseInfo) UpdateBaseInfo(ctx context.Context, in *UpdateBaseInfoReq, opts ...grpc.CallOption) (*UpdateBaseInfoResp, error) {
+	client := user.NewBaseInfoClient(m.cli.Conn())
+	return client.UpdateBaseInfo(ctx, in, opts...)
 }
 
 // 根据用户名搜索用户，并缓存
 func (m *defaultBaseInfo) SearchByUsername(ctx context.Context, in *SearchByUsernameReq, opts ...grpc.CallOption) (*SearchByUsernameResp, error) {
 	client := user.NewBaseInfoClient(m.cli.Conn())
 	return client.SearchByUsername(ctx, in, opts...)
-}
-
-// 修改用户名，有7天冷却期
-func (m *defaultBaseInfo) UpdateUsername(ctx context.Context, in *UpdateUsernameReq, opts ...grpc.CallOption) (*UpdateUsernameResp, error) {
-	client := user.NewBaseInfoClient(m.cli.Conn())
-	return client.UpdateUsername(ctx, in, opts...)
-}
-
-// 修改密码
-func (m *defaultBaseInfo) UpdatePassword(ctx context.Context, in *UpdatePasswordReq, opts ...grpc.CallOption) (*UpdatePasswordResp, error) {
-	client := user.NewBaseInfoClient(m.cli.Conn())
-	return client.UpdatePassword(ctx, in, opts...)
-}
-
-// 忘记密码
-func (m *defaultBaseInfo) ForgetPassword(ctx context.Context, in *ForgetPasswordReq, opts ...grpc.CallOption) (*ForgetPasswordResp, error) {
-	client := user.NewBaseInfoClient(m.cli.Conn())
-	return client.ForgetPassword(ctx, in, opts...)
-}
-
-// 修改用户邮箱，有7天冷却期
-func (m *defaultBaseInfo) UpdateEmail(ctx context.Context, in *UpdateEmailReq, opts ...grpc.CallOption) (*UpdateEmailResp, error) {
-	client := user.NewBaseInfoClient(m.cli.Conn())
-	return client.UpdateEmail(ctx, in, opts...)
 }
 
 // 修改用户权限

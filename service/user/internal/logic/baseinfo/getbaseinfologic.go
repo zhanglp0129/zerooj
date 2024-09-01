@@ -33,7 +33,7 @@ func (l *GetBaseInfoLogic) GetBaseInfo(in *user.GetBaseInfoReq) (*user.GetBaseIn
 // GetBaseInfo 获取用户基础信息。方便复用代码
 func GetBaseInfo(svcCtx *svc.ServiceContext, userId int64) (*user.GetBaseInfoResp, error) {
 	// 带着缓存查询
-	key := fmt.Sprintf("/cache/user/get_base_info/%d", userId)
+	key := fmt.Sprintf("cache:user_base_info:%d", userId)
 	rdb := svcCtx.RDB
 	model := user.GetBaseInfoResp{}
 	_, err := redis_cache.QueryWithCache(rdb, key, &model, func() (*user.GetBaseInfoResp, error) {
@@ -44,9 +44,8 @@ func GetBaseInfo(svcCtx *svc.ServiceContext, userId int64) (*user.GetBaseInfoRes
 			return nil, err
 		}
 		return &user.GetBaseInfoResp{
-			Username:   u.Username,
-			Email:      u.Email,
-			Permission: uint32(u.Permission),
+			Username: u.Username,
+			Email:    u.Email,
 		}, nil
 	})
 

@@ -38,7 +38,7 @@ func (l *GetUserProfileLogic) GetUserProfile(in *user.GetUserProfileReq) (*user.
 func GetUserProfile(svcCtx *svc.ServiceContext, userId int64) (*user.GetUserProfileResp, error) {
 	// 带着缓存查询
 	rdb := svcCtx.RDB
-	key := fmt.Sprintf("/cache/user/get_user_profile/%d", userId)
+	key := fmt.Sprintf("cache:user_profile:%d", userId)
 	var model user.GetUserProfileResp
 	_, err := redis_cache.QueryWithCache(rdb, key, &model, func() (*user.GetUserProfileResp, error) {
 		// 先查找用户简介表
@@ -106,7 +106,7 @@ func GetUserProfile(svcCtx *svc.ServiceContext, userId int64) (*user.GetUserProf
 func DeleteUserProfileCache(svcCtx *svc.ServiceContext, userId int64) error {
 	// 删除缓存
 	rdb := svcCtx.RDB
-	key := fmt.Sprintf("/cache/user/get_user_profile/%d", userId)
+	key := fmt.Sprintf("cache:user_profile:%d", userId)
 	err := redis_cache.DeleteCache(rdb, key)
 	return err
 }

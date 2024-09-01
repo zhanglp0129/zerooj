@@ -55,8 +55,8 @@ func (l *FollowUserLogic) FollowUser(in *user.FollowUserReq) (*user.FollowUserRe
 		if rows > 0 {
 			// 修改缓存
 			rdb := l.svcCtx.RDB
-			followingKey := fmt.Sprintf("/cache/user/get_followings/count/%d", in.FollowerId)
-			fanKey := fmt.Sprintf("/cache/user/get_fans/count/%d", in.FollowedId)
+			followingKey := fmt.Sprintf("cache:user_followings_count:%d", in.FollowerId)
+			fanKey := fmt.Sprintf("cache:user_fans_count:%d", in.FollowedId)
 			err = rdb.Watch(context.Background(), func(rtx *redis.Tx) error {
 				pipe := rtx.Pipeline()
 				redis_cache.CacheIncrByToPipe(pipe, followingKey, rows)
