@@ -2,6 +2,9 @@ package baseinfologic
 
 import (
 	"context"
+	"fmt"
+	"github.com/zhanglp0129/redis_cache"
+	"zerooj/service/user/models"
 
 	"zerooj/service/user/internal/svc"
 	"zerooj/service/user/pb/user"
@@ -23,15 +26,28 @@ func NewGetPermissionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 	}
 }
 
-// 获取用户权限
+// 获取用户权限，并缓存
 func (l *GetPermissionLogic) GetPermission(in *user.GetPermissionReq) (*user.GetPermissionResp, error) {
-	// 获取用户基本信息
-	baseInfo, err := GetBaseInfo(l.svcCtx, in.Id)
-	if err != nil {
-		return nil, err
-	}
+	return GetPermission(l.svcCtx, in.Id)
+}
 
-	return &user.GetPermissionResp{
-		Permission: baseInfo.Permission,
-	}, nil
+// GetPermission 获取用户权限。方便复用代码
+func GetPermission(svcCtx *svc.ServiceContext, userId int64) (*user.GetPermissionResp, error) {
+	// 带着缓存查询
+	key := fmt.Sprintf("cache:user_permission:%d", userId)
+	rdb := svcCtx.RDB
+	model := user.GetPermissionResp{}
+	_, err := redis_cache.QueryWithCache(rdb, key, &model, func() (*user.GetPermissionResp, error) {
+		db := svcCtx.DB
+		u := models.User{}
+		err := db.Select("permission").Take(&u, userId).Error
+		if err != nil {
+			return nil, err
+		}
+		return &user.GetPermissionResp{
+			Permission: uint32(u.Permission),
+		}, nil
+	})
+
+	return &model, err
 }

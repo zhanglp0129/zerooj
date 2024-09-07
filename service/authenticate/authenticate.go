@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	"zerooj/service/mail/internal/config"
-	checkcodeServer "zerooj/service/mail/internal/server/checkcode"
-	"zerooj/service/mail/internal/svc"
-	"zerooj/service/mail/pb/mail"
+	"zerooj/service/authenticate/internal/config"
+	mailcheckcodeServer "zerooj/service/authenticate/internal/server/mailcheckcode"
+	"zerooj/service/authenticate/internal/svc"
+	"zerooj/service/authenticate/pb/authenticate"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
@@ -16,7 +16,7 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var configFile = flag.String("f", "etc/mail.yaml", "the config file")
+var configFile = flag.String("f", "etc/authenticate.yaml", "the config file")
 
 func main() {
 	flag.Parse()
@@ -26,7 +26,7 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		mail.RegisterCheckCodeServer(grpcServer, checkcodeServer.NewCheckCodeServer(ctx))
+		authenticate.RegisterMailCheckCodeServer(grpcServer, mailcheckcodeServer.NewMailCheckCodeServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)

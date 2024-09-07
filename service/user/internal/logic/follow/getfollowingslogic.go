@@ -29,12 +29,12 @@ func NewGetFollowingsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 	}
 }
 
-// 获取所有关注，分页查询
+// 获取所有关注，分页查询，缓存总数
 func (l *GetFollowingsLogic) GetFollowings(in *user.GetFollowingsReq) (*user.GetFollowingsResp, error) {
 	db := l.svcCtx.DB
 	rdb := l.svcCtx.RDB
 	var count int64
-	key := fmt.Sprintf("/cache/user/get_followings/count/%d", in.UserId)
+	key := fmt.Sprintf("cache:user_followings_count:%d", in.UserId)
 	// 获取总数
 	_, err := redis_cache.QueryWithCache(rdb, key, &count, func() (*int64, error) {
 		var total int64

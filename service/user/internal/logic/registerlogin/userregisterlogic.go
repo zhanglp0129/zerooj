@@ -2,9 +2,6 @@ package registerloginlogic
 
 import (
 	"context"
-	"fmt"
-	"zerooj/common"
-	"zerooj/common/constant"
 	commonmodels "zerooj/common/models"
 	"zerooj/service/user/models"
 	"zerooj/utils"
@@ -31,14 +28,6 @@ func NewUserRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *User
 
 // 用户注册
 func (l *UserRegisterLogic) UserRegister(in *user.UserRegisterReq) (*user.UserRegisterResp, error) {
-	// 先校验邮箱验证码
-	rdb := l.svcCtx.RDB
-	key := fmt.Sprintf("/mail_check_code/user/user_register/%s", in.Email)
-	trueCheckCode, err := rdb.Get(context.Background(), key).Result()
-	if err != nil || in.EmailCheckCode != trueCheckCode {
-		return nil, constant.MailCheckCodeError
-	}
-
 	pwd, err := utils.PasswordEncrypt(in.Password)
 	if err != nil {
 		return nil, err
@@ -58,8 +47,6 @@ func (l *UserRegisterLogic) UserRegister(in *user.UserRegisterReq) (*user.UserRe
 	if err = db.Create(&u).Error; err != nil {
 		return nil, err
 	}
-
-	go common.FinishMailCheck(rdb, key)
 
 	return &user.UserRegisterResp{Id: u.ID}, nil
 }

@@ -22,13 +22,13 @@ func NewFollowServer(svcCtx *svc.ServiceContext) *FollowServer {
 	}
 }
 
-// 获取所有关注，分页查询
+// 获取所有关注，分页查询，缓存总数
 func (s *FollowServer) GetFollowings(ctx context.Context, in *user.GetFollowingsReq) (*user.GetFollowingsResp, error) {
 	l := followlogic.NewGetFollowingsLogic(ctx, s.svcCtx)
 	return l.GetFollowings(in)
 }
 
-// 获取所有粉丝，分页查询
+// 获取所有粉丝，分页查询，缓存总数
 func (s *FollowServer) GetFans(ctx context.Context, in *user.GetFansReq) (*user.GetFansResp, error) {
 	l := followlogic.NewGetFansLogic(ctx, s.svcCtx)
 	return l.GetFans(in)

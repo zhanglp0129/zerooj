@@ -29,12 +29,12 @@ func NewGetFansLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetFansLo
 	}
 }
 
-// 获取所有粉丝，分页查询
+// 获取所有粉丝，分页查询，缓存总数
 func (l *GetFansLogic) GetFans(in *user.GetFansReq) (*user.GetFansResp, error) {
 	db := l.svcCtx.DB
 	rdb := l.svcCtx.RDB
 	var count int64
-	key := fmt.Sprintf("/cache/user/get_fans/count/%d", in.UserId)
+	key := fmt.Sprintf("cache:user_fans_count:%d", in.UserId)
 	// 获取总数
 	_, err := redis_cache.QueryWithCache(rdb, key, &count, func() (*int64, error) {
 		var total int64

@@ -7,7 +7,7 @@ import (
 // User 用户基本信息，用于登录
 type User struct {
 	models.Model
-	Username   string            `gorm:"size:32;not null;unique"`
+	Username   string            `gorm:"size:32;not null;unique;uniqueIndex"`
 	Password   string            `gorm:"size:64;not null;comment:加密后的密码"`
 	Email      string            `gorm:"size:128;not null;unique"`
 	Permission models.Permission `gorm:"not null;comment:用户权限"`
