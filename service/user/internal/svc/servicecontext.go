@@ -4,7 +4,7 @@ import (
 	"github.com/redis/go-redis/v9"
 	"github.com/zhanglp0129/snowflake"
 	"gorm.io/gorm"
-	common2 "zerooj/common"
+	"zerooj/common"
 	"zerooj/common/constant"
 	"zerooj/service/user/internal/config"
 	"zerooj/service/user/models"
@@ -18,7 +18,7 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	db, err := common2.InitGorm(c.Database)
+	db, err := common.InitGorm(c.Database)
 	if err != nil {
 		panic(err)
 	}
@@ -35,7 +35,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	}
 
 	// 初始化redis
-	rdb, err := common2.InitRedis(c.RedisClient)
+	rdb, err := common.InitRedis(c.RedisClient)
 	if err != nil {
 		panic(err)
 	}

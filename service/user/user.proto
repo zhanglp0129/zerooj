@@ -17,8 +17,6 @@ message UserRegisterReq {
   string username = 1;
   string password = 2;
   string email = 3;
-  // 邮箱验证码
-  string emailCheckCode = 4;
 }
 message UserRegisterResp {
   int64 id = 1;
@@ -36,21 +34,15 @@ message UserLoginResp {
 
 // 用户基本信息
 service BaseInfo {
-  // 获取用户基本信息，不包括密码，并缓存
+  // 获取用户基本信息
   rpc GetBaseInfo(GetBaseInfoReq) returns (GetBaseInfoResp);
-  // 根据用户名搜索用户，并缓存
+  // 更新用户基本信息
+  rpc UpdateBaseInfo(UpdateBaseInfoReq) returns (UpdateBaseInfoResp);
+  // 根据用户名搜索用户
   rpc SearchByUsername(SearchByUsernameReq) returns (SearchByUsernameResp);
-  // 修改用户名，有7天冷却期
-  rpc UpdateUsername(UpdateUsernameReq) returns (UpdateUsernameResp);
-  // 修改密码
-  rpc UpdatePassword(UpdatePasswordReq) returns (UpdatePasswordResp);
-  // 忘记密码
-  rpc ForgetPassword(ForgetPasswordReq) returns (ForgetPasswordResp);
-  // 修改用户邮箱，有7天冷却期
-  rpc UpdateEmail(UpdateEmailReq) returns (UpdateEmailResp);
-  // 修改用户权限
+  // 修改用户权限，需要删除缓存
   rpc UpdatePermission(UpdatePermissionReq) returns (UpdatePermissionResp);
-  // 获取用户权限
+  // 获取用户权限，并缓存
   rpc GetPermission(GetPermissionReq) returns (GetPermissionResp);
 }
 message GetBaseInfoReq {
@@ -59,57 +51,29 @@ message GetBaseInfoReq {
 message GetBaseInfoResp {
   string username = 1;
   string email = 2;
-  uint32 permission = 3;
+  // 加密后的密码
+  string encryptedPassword = 3;
 }
+message UpdateBaseInfoReq {
+  int64 id = 1;
+  string username = 2;
+  string email = 3;
+  // 密码明文
+  string password = 4;
+}
+message UpdateBaseInfoResp {}
 message SearchByUsernameReq {
   string username = 1;
 }
 message SearchByUsernameResp {
   int64 id = 1;
 }
-message UpdateUsernameReq {
-  int64 id = 1;
-  // 修改后的用户名
-  string username = 2;
-}
-message UpdateUsernameResp {
-  string oldUsername = 1;
-}
-message UpdatePasswordReq {
-  int64 id = 1;
-  string oldPassword = 2;
-  string newPassword = 3;
-}
-message UpdatePasswordResp {}
-message ForgetPasswordReq {
-  int64 id = 1;
-  string newPassword = 2;
-  // 邮箱验证码
-  string emailCheckCode = 3;
-}
-message ForgetPasswordResp {}
-message UpdateEmailReq {
-  int64 id = 1;
-  // 旧邮箱验证码
-  string oldEmailCheckCode = 2;
-  // 旧密码。与 旧邮箱验证码 只需一个即可
-  string oldPassword = 3;
-  // 修改后的邮箱
-  string email = 4;
-  // 修改后邮箱的验证码
-  string emailCheckCode = 5;
-}
-message UpdateEmailResp {
-  string oldEmail = 1;
-}
 message UpdatePermissionReq {
   // 被修改者id
   int64 id = 1;
   uint32 permission = 2;
 }
-message UpdatePermissionResp {
-  uint32 oldPermission = 1;
-}
+message UpdatePermissionResp {}
 message GetPermissionReq {
   int64 id = 1;
 }
@@ -172,9 +136,9 @@ message DeleteUserPersonalWebsiteResp {}
 
 // 关注
 service Follow {
-  // 获取所有关注，分页查询
+  // 获取所有关注，分页查询，缓存总数
   rpc GetFollowings(GetFollowingsReq) returns (GetFollowingsResp);
-  // 获取所有粉丝，分页查询
+  // 获取所有粉丝，分页查询，缓存总数
   rpc GetFans(GetFansReq) returns (GetFansResp);
   // 关注其他用户
   rpc FollowUser(FollowUserReq) returns (FollowUserResp);

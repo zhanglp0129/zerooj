@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package authenticate;
+
+option go_package = "./authenticate";
+
+// 邮箱验证码校验
+service MailCheckCode {
+  // 校验
+  rpc VerifyMailCheckCode(VerifyMailCheckCodeReq) returns (VerifyMailCheckCodeResp);
+  // 邮箱验证码校验完毕
+  rpc FinishMailCheck(FinishMailCheckReq) returns (FinishMailCheckResp);
+}
+message VerifyMailCheckCodeReq {
+  // 验证码存储在redis中的key
+  string redisKey = 1;
+  // 用户输入的验证码
+  string checkCode = 2;
+}
+message VerifyMailCheckCodeResp {}
+message FinishMailCheckReq {
+  // 验证码存储在redis中的key
+  string redisKey = 1;
+}
+message FinishMailCheckResp {}
+
+// 修改用户基本信息鉴权
+
+// API权限校验

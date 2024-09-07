@@ -8,12 +8,12 @@ import (
 
 	"zerooj/service/mail/internal/logic/checkcode"
 	"zerooj/service/mail/internal/svc"
-	"zerooj/service/mail/pb/user"
+	"zerooj/service/mail/pb/mail"
 )
 
 type CheckCodeServer struct {
 	svcCtx *svc.ServiceContext
-	user.UnimplementedCheckCodeServer
+	mail.UnimplementedCheckCodeServer
 }
 
 func NewCheckCodeServer(svcCtx *svc.ServiceContext) *CheckCodeServer {
@@ -23,7 +23,7 @@ func NewCheckCodeServer(svcCtx *svc.ServiceContext) *CheckCodeServer {
 }
 
 // 发送邮箱验证码
-func (s *CheckCodeServer) SendMailCheckCode(ctx context.Context, in *user.SendMailCheckCodeReq) (*user.SendMailCheckCodeResp, error) {
+func (s *CheckCodeServer) SendMailCheckCode(ctx context.Context, in *mail.SendMailCheckCodeReq) (*mail.SendMailCheckCodeResp, error) {
 	l := checkcodelogic.NewSendMailCheckCodeLogic(ctx, s.svcCtx)
 	return l.SendMailCheckCode(in)
 }

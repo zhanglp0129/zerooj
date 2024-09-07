@@ -2,7 +2,6 @@ package profilelogic
 
 import (
 	"context"
-	"gorm.io/gorm"
 	commonmodels "zerooj/common/models"
 	"zerooj/service/user/models"
 
@@ -37,16 +36,7 @@ func (l *UpdateUserProfileLogic) UpdateUserProfile(in *user.UpdateUserProfileReq
 		Birthday:             in.Birthday.AsTime(),
 		PersonalIntroduction: in.PersonalIntroduction,
 	}
-	err := db.Transaction(func(tx *gorm.DB) error {
-		// 修改数据
-		err := tx.Select("*").Omit("ID", "CreatedAt", "UserID").Where("user_id = ?", in.UserId).Updates(&p).Error
-		if err != nil {
-			return err
-		}
-
-		// 删除缓存
-		return DeleteUserProfileCache(l.svcCtx, in.UserId)
-	})
+	err := db.Select("*").Omit("ID", "CreatedAt", "UserID").Where("user_id = ?", in.UserId).Updates(&p).Error
 	if err != nil {
 		return nil, err
 	}
