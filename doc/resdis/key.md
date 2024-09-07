@@ -16,8 +16,9 @@ redis key相关文档，主要包括各种情况的key格式。所有键均采�
 - key格式：**cache:缓存描述:相关标识**
 - 表格
 
-|   缓存描述    |              redis键               |
-|:---------:|:---------------------------------:|
-|   用户权限    |     cache:user_permission:id      |
-|  用户关注数量   |  cache:user_followings_count:id   |
-|  用户粉丝数量   |     cache:user_fans_count:id      |
+|  缓存描述  |             redis键             |
+|:------:|:------------------------------:|
+|  用户权限  |    cache:user_permission:id    |
+| 用户关注数量 | cache:user_followings_count:id |
+| 用户粉丝数量 |    cache:user_fans_count:id    |
+|  问题信息  |    cache:problem_content:id    |
