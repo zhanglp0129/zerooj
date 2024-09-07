@@ -10,11 +10,9 @@ service CheckCode {
   rpc SendMailCheckCode(SendMailCheckCodeReq) returns (SendMailCheckCodeResp);
 }
 message SendMailCheckCodeReq {
-  // 存储在redis中key
-  string redisKey = 1;
-  string email = 2;
+  string email = 1;
   // 用户操作，例如：注册账号、忘记密码等，该字段将会被嵌入发送的邮件中
-  string userOperation = 3;
+  string userOperation = 2;
 }
 message SendMailCheckCodeResp {
   string checkCode = 1;

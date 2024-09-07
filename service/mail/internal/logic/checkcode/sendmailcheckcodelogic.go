@@ -7,7 +7,6 @@ import (
 	"html/template"
 	"math/rand"
 	"net/smtp"
-	"zerooj/common/constant"
 	"zerooj/service/mail/pb/mail"
 	"zerooj/service/mail/static"
 
@@ -56,14 +55,6 @@ func (l *SendMailCheckCodeLogic) SendMailCheckCode(in *mail.SendMailCheckCodeReq
 		"UserOperation": in.UserOperation,
 		"CheckCode":     checkCode,
 	})
-	if err != nil {
-		return nil, err
-	}
-
-	key := in.RedisKey
-	// 将验证码写入Redis，有效期5min
-	rdb := l.svcCtx.RDB
-	err = rdb.SetEx(context.Background(), key, checkCode, constant.MailCheckCodeExpirationTime).Err()
 	if err != nil {
 		return nil, err
 	}
