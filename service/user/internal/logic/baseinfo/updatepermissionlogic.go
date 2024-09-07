@@ -27,19 +27,12 @@ func NewUpdatePermissionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 	}
 }
 
-// 修改用户权限
+// 修改用户权限，需要删除缓存
 func (l *UpdatePermissionLogic) UpdatePermission(in *user.UpdatePermissionReq) (*user.UpdatePermissionResp, error) {
 	db := l.svcCtx.DB
-	// 获取旧权限
-	u := models.User{}
-	err := db.Select("permission").Take(&u, in.Id).Error
-	if err != nil {
-		return nil, err
-	}
-
-	err = db.Transaction(func(tx *gorm.DB) error {
+	err := db.Transaction(func(tx *gorm.DB) error {
 		// 修改数据
-		err = tx.Model(&models.User{}).Where("id = ?", in.Id).Update("permission", in.Permission).Error
+		err := tx.Model(&models.User{}).Where("id = ?", in.Id).Update("permission", in.Permission).Error
 		if err != nil {
 			return err
 		}
@@ -53,7 +46,5 @@ func (l *UpdatePermissionLogic) UpdatePermission(in *user.UpdatePermissionReq) (
 		return nil, err
 	}
 
-	return &user.UpdatePermissionResp{
-		OldPermission: uint32(u.Permission),
-	}, nil
+	return &user.UpdatePermissionResp{}, nil
 }

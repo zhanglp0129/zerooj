@@ -34,15 +34,15 @@ message UserLoginResp {
 
 // 用户基本信息
 service BaseInfo {
-  // 获取用户基本信息，并缓存
+  // 获取用户基本信息
   rpc GetBaseInfo(GetBaseInfoReq) returns (GetBaseInfoResp);
-  // 修改用户基本信息，字段为空表示不修改
+  // 更新用户基本信息
   rpc UpdateBaseInfo(UpdateBaseInfoReq) returns (UpdateBaseInfoResp);
-  // 根据用户名搜索用户，并缓存
+  // 根据用户名搜索用户
   rpc SearchByUsername(SearchByUsernameReq) returns (SearchByUsernameResp);
-  // 修改用户权限
+  // 修改用户权限，需要删除缓存
   rpc UpdatePermission(UpdatePermissionReq) returns (UpdatePermissionResp);
-  // 获取用户权限
+  // 获取用户权限，并缓存
   rpc GetPermission(GetPermissionReq) returns (GetPermissionResp);
 }
 message GetBaseInfoReq {
@@ -73,9 +73,7 @@ message UpdatePermissionReq {
   int64 id = 1;
   uint32 permission = 2;
 }
-message UpdatePermissionResp {
-  uint32 oldPermission = 1;
-}
+message UpdatePermissionResp {}
 message GetPermissionReq {
   int64 id = 1;
 }
@@ -138,9 +136,9 @@ message DeleteUserPersonalWebsiteResp {}
 
 // 关注
 service Follow {
-  // 获取所有关注，分页查询
+  // 获取所有关注，分页查询，缓存总数
   rpc GetFollowings(GetFollowingsReq) returns (GetFollowingsResp);
-  // 获取所有粉丝，分页查询
+  // 获取所有粉丝，分页查询，缓存总数
   rpc GetFans(GetFansReq) returns (GetFansResp);
   // 关注其他用户
   rpc FollowUser(FollowUserReq) returns (FollowUserResp);

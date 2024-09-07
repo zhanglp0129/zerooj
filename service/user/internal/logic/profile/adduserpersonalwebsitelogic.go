@@ -2,7 +2,6 @@ package profilelogic
 
 import (
 	"context"
-	"gorm.io/gorm"
 	"zerooj/common/constant"
 	"zerooj/service/user/internal/svc"
 	"zerooj/service/user/models"
@@ -46,15 +45,7 @@ func (l *AddUserPersonalWebsiteLogic) AddUserPersonalWebsite(in *user.AddUserPer
 	if err != nil {
 		return nil, err
 	}
-	err = db.Transaction(func(tx *gorm.DB) error {
-		err := tx.Create(&w).Error
-		if err != nil {
-			return err
-		}
-
-		// 删除缓存
-		return DeleteUserProfileCache(l.svcCtx, in.UserId)
-	})
+	err = db.Create(&w).Error
 	if err != nil {
 		return nil, err
 	}

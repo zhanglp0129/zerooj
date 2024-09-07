@@ -18,9 +18,6 @@ redis key相关文档，主要包括各种情况的key格式。所有键均采�
 
 |   缓存描述    |              redis键               |
 |:---------:|:---------------------------------:|
-|  用户基本信息   |      cache:user_base_info:id      |
 |   用户权限    |     cache:user_permission:id      |
-| 根据用户名搜索用户 | cache:search_by_username:username |
-|   用户简介    |       cache:user_profile:id       |
 |  用户关注数量   |  cache:user_followings_count:id   |
 |  用户粉丝数量   |     cache:user_fans_count:id      |

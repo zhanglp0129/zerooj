@@ -26,7 +26,7 @@ func NewGetPermissionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 	}
 }
 
-// 获取用户权限
+// 获取用户权限，并缓存
 func (l *GetPermissionLogic) GetPermission(in *user.GetPermissionReq) (*user.GetPermissionResp, error) {
 	return GetPermission(l.svcCtx, in.Id)
 }

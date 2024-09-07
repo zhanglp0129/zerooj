@@ -29,7 +29,7 @@ func NewGetFansLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetFansLo
 	}
 }
 
-// 获取所有粉丝，分页查询
+// 获取所有粉丝，分页查询，缓存总数
 func (l *GetFansLogic) GetFans(in *user.GetFansReq) (*user.GetFansResp, error) {
 	db := l.svcCtx.DB
 	rdb := l.svcCtx.RDB

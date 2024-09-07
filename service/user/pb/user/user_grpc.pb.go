@@ -169,15 +169,15 @@ const (
 //
 // 用户基本信息
 type BaseInfoClient interface {
-	// 获取用户基本信息，并缓存
+	// 获取用户基本信息
 	GetBaseInfo(ctx context.Context, in *GetBaseInfoReq, opts ...grpc.CallOption) (*GetBaseInfoResp, error)
-	// 修改用户基本信息，字段为空表示不修改
+	// 更新用户基本信息
 	UpdateBaseInfo(ctx context.Context, in *UpdateBaseInfoReq, opts ...grpc.CallOption) (*UpdateBaseInfoResp, error)
-	// 根据用户名搜索用户，并缓存
+	// 根据用户名搜索用户
 	SearchByUsername(ctx context.Context, in *SearchByUsernameReq, opts ...grpc.CallOption) (*SearchByUsernameResp, error)
-	// 修改用户权限
+	// 修改用户权限，需要删除缓存
 	UpdatePermission(ctx context.Context, in *UpdatePermissionReq, opts ...grpc.CallOption) (*UpdatePermissionResp, error)
-	// 获取用户权限
+	// 获取用户权限，并缓存
 	GetPermission(ctx context.Context, in *GetPermissionReq, opts ...grpc.CallOption) (*GetPermissionResp, error)
 }
 
@@ -245,15 +245,15 @@ func (c *baseInfoClient) GetPermission(ctx context.Context, in *GetPermissionReq
 //
 // 用户基本信息
 type BaseInfoServer interface {
-	// 获取用户基本信息，并缓存
+	// 获取用户基本信息
 	GetBaseInfo(context.Context, *GetBaseInfoReq) (*GetBaseInfoResp, error)
-	// 修改用户基本信息，字段为空表示不修改
+	// 更新用户基本信息
 	UpdateBaseInfo(context.Context, *UpdateBaseInfoReq) (*UpdateBaseInfoResp, error)
-	// 根据用户名搜索用户，并缓存
+	// 根据用户名搜索用户
 	SearchByUsername(context.Context, *SearchByUsernameReq) (*SearchByUsernameResp, error)
-	// 修改用户权限
+	// 修改用户权限，需要删除缓存
 	UpdatePermission(context.Context, *UpdatePermissionReq) (*UpdatePermissionResp, error)
-	// 获取用户权限
+	// 获取用户权限，并缓存
 	GetPermission(context.Context, *GetPermissionReq) (*GetPermissionResp, error)
 	mustEmbedUnimplementedBaseInfoServer()
 }
@@ -642,9 +642,9 @@ const (
 //
 // 关注
 type FollowClient interface {
-	// 获取所有关注，分页查询
+	// 获取所有关注，分页查询，缓存总数
 	GetFollowings(ctx context.Context, in *GetFollowingsReq, opts ...grpc.CallOption) (*GetFollowingsResp, error)
-	// 获取所有粉丝，分页查询
+	// 获取所有粉丝，分页查询，缓存总数
 	GetFans(ctx context.Context, in *GetFansReq, opts ...grpc.CallOption) (*GetFansResp, error)
 	// 关注其他用户
 	FollowUser(ctx context.Context, in *FollowUserReq, opts ...grpc.CallOption) (*FollowUserResp, error)
@@ -705,9 +705,9 @@ func (c *followClient) UnfollowUser(ctx context.Context, in *UnfollowUserReq, op
 //
 // 关注
 type FollowServer interface {
-	// 获取所有关注，分页查询
+	// 获取所有关注，分页查询，缓存总数
 	GetFollowings(context.Context, *GetFollowingsReq) (*GetFollowingsResp, error)
-	// 获取所有粉丝，分页查询
+	// 获取所有粉丝，分页查询，缓存总数
 	GetFans(context.Context, *GetFansReq) (*GetFansResp, error)
 	// 关注其他用户
 	FollowUser(context.Context, *FollowUserReq) (*FollowUserResp, error)

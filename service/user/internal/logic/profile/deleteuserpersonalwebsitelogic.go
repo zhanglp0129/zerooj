@@ -2,7 +2,6 @@ package profilelogic
 
 import (
 	"context"
-	"gorm.io/gorm"
 	"zerooj/common/constant"
 	"zerooj/service/user/models"
 
@@ -38,15 +37,7 @@ func (l *DeleteUserPersonalWebsiteLogic) DeleteUserPersonalWebsite(in *user.Dele
 		return nil, constant.InsufficientPermissionsError
 	}
 
-	err = db.Transaction(func(tx *gorm.DB) error {
-		err := tx.Delete(&models.PersonalWebsite{}, in.WebsiteId).Error
-		if err != nil {
-			return err
-		}
-
-		// 删除缓存
-		return DeleteUserProfileCache(l.svcCtx, in.UserId)
-	})
+	err = db.Delete(&models.PersonalWebsite{}, in.WebsiteId).Error
 	if err != nil {
 		return nil, err
 	}

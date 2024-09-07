@@ -62,9 +62,9 @@ type (
 	UserRegisterResp              = user.UserRegisterResp
 
 	Follow interface {
-		// 获取所有关注，分页查询
+		// 获取所有关注，分页查询，缓存总数
 		GetFollowings(ctx context.Context, in *GetFollowingsReq, opts ...grpc.CallOption) (*GetFollowingsResp, error)
-		// 获取所有粉丝，分页查询
+		// 获取所有粉丝，分页查询，缓存总数
 		GetFans(ctx context.Context, in *GetFansReq, opts ...grpc.CallOption) (*GetFansResp, error)
 		// 关注其他用户
 		FollowUser(ctx context.Context, in *FollowUserReq, opts ...grpc.CallOption) (*FollowUserResp, error)
@@ -82,13 +82,13 @@ func NewFollow(cli zrpc.Client) Follow {
 	}
 }
 
-// 获取所有关注，分页查询
+// 获取所有关注，分页查询，缓存总数
 func (m *defaultFollow) GetFollowings(ctx context.Context, in *GetFollowingsReq, opts ...grpc.CallOption) (*GetFollowingsResp, error) {
 	client := user.NewFollowClient(m.cli.Conn())
 	return client.GetFollowings(ctx, in, opts...)
 }
 
-// 获取所有粉丝，分页查询
+// 获取所有粉丝，分页查询，缓存总数
 func (m *defaultFollow) GetFans(ctx context.Context, in *GetFansReq, opts ...grpc.CallOption) (*GetFansResp, error) {
 	client := user.NewFollowClient(m.cli.Conn())
 	return client.GetFans(ctx, in, opts...)

@@ -62,15 +62,15 @@ type (
 	UserRegisterResp              = user.UserRegisterResp
 
 	BaseInfo interface {
-		// 获取用户基本信息，并缓存
+		// 获取用户基本信息
 		GetBaseInfo(ctx context.Context, in *GetBaseInfoReq, opts ...grpc.CallOption) (*GetBaseInfoResp, error)
-		// 修改用户基本信息，字段为空表示不修改
+		// 更新用户基本信息
 		UpdateBaseInfo(ctx context.Context, in *UpdateBaseInfoReq, opts ...grpc.CallOption) (*UpdateBaseInfoResp, error)
-		// 根据用户名搜索用户，并缓存
+		// 根据用户名搜索用户
 		SearchByUsername(ctx context.Context, in *SearchByUsernameReq, opts ...grpc.CallOption) (*SearchByUsernameResp, error)
-		// 修改用户权限
+		// 修改用户权限，需要删除缓存
 		UpdatePermission(ctx context.Context, in *UpdatePermissionReq, opts ...grpc.CallOption) (*UpdatePermissionResp, error)
-		// 获取用户权限
+		// 获取用户权限，并缓存
 		GetPermission(ctx context.Context, in *GetPermissionReq, opts ...grpc.CallOption) (*GetPermissionResp, error)
 	}
 
@@ -85,31 +85,31 @@ func NewBaseInfo(cli zrpc.Client) BaseInfo {
 	}
 }
 
-// 获取用户基本信息，并缓存
+// 获取用户基本信息
 func (m *defaultBaseInfo) GetBaseInfo(ctx context.Context, in *GetBaseInfoReq, opts ...grpc.CallOption) (*GetBaseInfoResp, error) {
 	client := user.NewBaseInfoClient(m.cli.Conn())
 	return client.GetBaseInfo(ctx, in, opts...)
 }
 
-// 修改用户基本信息，字段为空表示不修改
+// 更新用户基本信息
 func (m *defaultBaseInfo) UpdateBaseInfo(ctx context.Context, in *UpdateBaseInfoReq, opts ...grpc.CallOption) (*UpdateBaseInfoResp, error) {
 	client := user.NewBaseInfoClient(m.cli.Conn())
 	return client.UpdateBaseInfo(ctx, in, opts...)
 }
 
-// 根据用户名搜索用户，并缓存
+// 根据用户名搜索用户
 func (m *defaultBaseInfo) SearchByUsername(ctx context.Context, in *SearchByUsernameReq, opts ...grpc.CallOption) (*SearchByUsernameResp, error) {
 	client := user.NewBaseInfoClient(m.cli.Conn())
 	return client.SearchByUsername(ctx, in, opts...)
 }
 
-// 修改用户权限
+// 修改用户权限，需要删除缓存
 func (m *defaultBaseInfo) UpdatePermission(ctx context.Context, in *UpdatePermissionReq, opts ...grpc.CallOption) (*UpdatePermissionResp, error) {
 	client := user.NewBaseInfoClient(m.cli.Conn())
 	return client.UpdatePermission(ctx, in, opts...)
 }
 
-// 获取用户权限
+// 获取用户权限，并缓存
 func (m *defaultBaseInfo) GetPermission(ctx context.Context, in *GetPermissionReq, opts ...grpc.CallOption) (*GetPermissionResp, error) {
 	client := user.NewBaseInfoClient(m.cli.Conn())
 	return client.GetPermission(ctx, in, opts...)
