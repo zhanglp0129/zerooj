@@ -294,7 +294,6 @@ service Language {
 message LanguageInfo {
   int64 languageId = 1;
   string name = 2;
-  string version = 3;
 }
 message ProblemLanguagesModel {
   int64 languageId = 1;
@@ -303,7 +302,6 @@ message ProblemLanguagesModel {
 }
 message AddLanguageReq {
   string name = 1;
-  string version = 2;
 }
 message AddLanguageResp {
   int64 id = 1;
