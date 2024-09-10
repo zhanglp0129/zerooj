@@ -23,8 +23,8 @@ type (
 	AddLanguageResp            = problemset.AddLanguageResp
 	AddProblemReq              = problemset.AddProblemReq
 	AddProblemResp             = problemset.AddProblemResp
-	AddTagsReq                 = problemset.AddTagsReq
-	AddTagsResp                = problemset.AddTagsResp
+	AddTagReq                  = problemset.AddTagReq
+	AddTagResp                 = problemset.AddTagResp
 	DeleteExampleReq           = problemset.DeleteExampleReq
 	DeleteExampleResp          = problemset.DeleteExampleResp
 	DeleteHintReq              = problemset.DeleteHintReq
@@ -35,8 +35,8 @@ type (
 	DeleteLanguageResp         = problemset.DeleteLanguageResp
 	DeleteProblemReq           = problemset.DeleteProblemReq
 	DeleteProblemResp          = problemset.DeleteProblemResp
-	DeleteTagsReq              = problemset.DeleteTagsReq
-	DeleteTagsResp             = problemset.DeleteTagsResp
+	DeleteTagReq               = problemset.DeleteTagReq
+	DeleteTagResp              = problemset.DeleteTagResp
 	ExampleInfo                = problemset.ExampleInfo
 	GetAllTagsReq              = problemset.GetAllTagsReq
 	GetAllTagsResp             = problemset.GetAllTagsResp
@@ -71,8 +71,8 @@ type (
 	HintInfo                   = problemset.HintInfo
 	JudgeDataInfo              = problemset.JudgeDataInfo
 	LanguageInfo               = problemset.LanguageInfo
-	MustDeleteTagsReq          = problemset.MustDeleteTagsReq
-	MustDeleteTagsResp         = problemset.MustDeleteTagsResp
+	MustDeleteTagReq           = problemset.MustDeleteTagReq
+	MustDeleteTagResp          = problemset.MustDeleteTagResp
 	ProblemAddLanguagesReq     = problemset.ProblemAddLanguagesReq
 	ProblemAddLanguagesResp    = problemset.ProblemAddLanguagesResp
 	ProblemAddTagsReq          = problemset.ProblemAddTagsReq
@@ -99,18 +99,18 @@ type (
 	UpdateLanguageResp         = problemset.UpdateLanguageResp
 	UpdateProblemReq           = problemset.UpdateProblemReq
 	UpdateProblemResp          = problemset.UpdateProblemResp
-	UpdateTagsReq              = problemset.UpdateTagsReq
-	UpdateTagsResp             = problemset.UpdateTagsResp
+	UpdateTagReq               = problemset.UpdateTagReq
+	UpdateTagResp              = problemset.UpdateTagResp
 
 	Tag interface {
 		// 添加标签
-		AddTags(ctx context.Context, in *AddTagsReq, opts ...grpc.CallOption) (*AddTagsResp, error)
+		AddTag(ctx context.Context, in *AddTagReq, opts ...grpc.CallOption) (*AddTagResp, error)
 		// 删除标签
-		DeleteTags(ctx context.Context, in *DeleteTagsReq, opts ...grpc.CallOption) (*DeleteTagsResp, error)
+		DeleteTag(ctx context.Context, in *DeleteTagReq, opts ...grpc.CallOption) (*DeleteTagResp, error)
 		// 强行删除标签
-		MustDeleteTags(ctx context.Context, in *MustDeleteTagsReq, opts ...grpc.CallOption) (*MustDeleteTagsResp, error)
+		MustDeleteTag(ctx context.Context, in *MustDeleteTagReq, opts ...grpc.CallOption) (*MustDeleteTagResp, error)
 		// 更新标签
-		UpdateTags(ctx context.Context, in *UpdateTagsReq, opts ...grpc.CallOption) (*UpdateTagsResp, error)
+		UpdateTag(ctx context.Context, in *UpdateTagReq, opts ...grpc.CallOption) (*UpdateTagResp, error)
 		// 获取所有标签，可缓存
 		GetAllTags(ctx context.Context, in *GetAllTagsReq, opts ...grpc.CallOption) (*GetAllTagsResp, error)
 		// 给题目添加标签，最多5个
@@ -133,27 +133,27 @@ func NewTag(cli zrpc.Client) Tag {
 }
 
 // 添加标签
-func (m *defaultTag) AddTags(ctx context.Context, in *AddTagsReq, opts ...grpc.CallOption) (*AddTagsResp, error) {
+func (m *defaultTag) AddTag(ctx context.Context, in *AddTagReq, opts ...grpc.CallOption) (*AddTagResp, error) {
 	client := problemset.NewTagClient(m.cli.Conn())
-	return client.AddTags(ctx, in, opts...)
+	return client.AddTag(ctx, in, opts...)
 }
 
 // 删除标签
-func (m *defaultTag) DeleteTags(ctx context.Context, in *DeleteTagsReq, opts ...grpc.CallOption) (*DeleteTagsResp, error) {
+func (m *defaultTag) DeleteTag(ctx context.Context, in *DeleteTagReq, opts ...grpc.CallOption) (*DeleteTagResp, error) {
 	client := problemset.NewTagClient(m.cli.Conn())
-	return client.DeleteTags(ctx, in, opts...)
+	return client.DeleteTag(ctx, in, opts...)
 }
 
 // 强行删除标签
-func (m *defaultTag) MustDeleteTags(ctx context.Context, in *MustDeleteTagsReq, opts ...grpc.CallOption) (*MustDeleteTagsResp, error) {
+func (m *defaultTag) MustDeleteTag(ctx context.Context, in *MustDeleteTagReq, opts ...grpc.CallOption) (*MustDeleteTagResp, error) {
 	client := problemset.NewTagClient(m.cli.Conn())
-	return client.MustDeleteTags(ctx, in, opts...)
+	return client.MustDeleteTag(ctx, in, opts...)
 }
 
 // 更新标签
-func (m *defaultTag) UpdateTags(ctx context.Context, in *UpdateTagsReq, opts ...grpc.CallOption) (*UpdateTagsResp, error) {
+func (m *defaultTag) UpdateTag(ctx context.Context, in *UpdateTagReq, opts ...grpc.CallOption) (*UpdateTagResp, error) {
 	client := problemset.NewTagClient(m.cli.Conn())
-	return client.UpdateTags(ctx, in, opts...)
+	return client.UpdateTag(ctx, in, opts...)
 }
 
 // 获取所有标签，可缓存

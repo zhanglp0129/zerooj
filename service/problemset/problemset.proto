@@ -52,13 +52,13 @@ message UpdateProblemReq {
 }
 message UpdateProblemResp {}
 message SearchProblemReq {
-  string problemName = 1;
+  string problemTitle = 1;
   repeated int64 tagIds = 2;
   uint32 difficulty = 3;
-  // 用户id，用于判断题目的状态
-  int64 userId = 4;
-  // 只有当userId!=0时，题目状态才有效
-  uint32 problemStatus = 5;
+//  // 用户id，用于判断题目的状态
+//  int64 userId = 4;
+//  // 只有当userId!=0时，题目状态才有效
+//  uint32 problemStatus = 5;
   int32 pageNum = 6;
   int32 pageSize = 7;
 }
@@ -70,13 +70,13 @@ message SearchProblemResp {
 // 标签
 service Tag {
   // 添加标签
-  rpc AddTags(AddTagsReq) returns (AddTagsResp);
+  rpc AddTag(AddTagReq) returns (AddTagResp);
   // 删除标签
-  rpc DeleteTags(DeleteTagsReq) returns (DeleteTagsResp);
+  rpc DeleteTag(DeleteTagReq) returns (DeleteTagResp);
   // 强行删除标签
-  rpc MustDeleteTags(MustDeleteTagsReq) returns (MustDeleteTagsResp);
+  rpc MustDeleteTag(MustDeleteTagReq) returns (MustDeleteTagResp);
   // 更新标签
-  rpc UpdateTags(UpdateTagsReq) returns (UpdateTagsResp);
+  rpc UpdateTag(UpdateTagReq) returns (UpdateTagResp);
   // 获取所有标签，可缓存
   rpc GetAllTags(GetAllTagsReq) returns (GetAllTagsResp);
   // 给题目添加标签，最多5个
@@ -86,26 +86,26 @@ service Tag {
   // 获取一个题目的所有标签，可缓存
   rpc GetProblemTags(GetProblemTagsReq) returns (GetProblemTagsResp);
 }
-message AddTagsReq {
+message AddTagReq {
   string name = 1;
 }
-message AddTagsResp {
+message AddTagResp {
   int64 id = 1;
 }
-message DeleteTagsReq {
+message DeleteTagReq {
   int64 tagId = 1;
 }
-message DeleteTagsResp {}
-message MustDeleteTagsReq {
+message DeleteTagResp {}
+message MustDeleteTagReq {
   int64 tagId = 1;
 }
-message MustDeleteTagsResp {}
-message UpdateTagsReq {
+message MustDeleteTagResp {}
+message UpdateTagReq {
   int64 tagId = 1;
   // 修改后标签名字
   string name = 2;
 }
-message UpdateTagsResp {}
+message UpdateTagResp {}
 message GetAllTagsReq {}
 // 标签信息
 message TagInfo {

@@ -22,3 +22,6 @@ redis key相关文档，主要包括各种情况的key格式。所有键均采�
 | 用户关注数量 | cache:user_followings_count:id |
 | 用户粉丝数量 |    cache:user_fans_count:id    |
 |  问题信息  |    cache:problem_content:id    |
+|  问题总数  |      cache:problem_count       |
+|  所有标签  |         cache:all_tags         |
+|  问题标签  | cache:problem_tags:problem_id  |

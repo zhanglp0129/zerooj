@@ -23,8 +23,8 @@ type (
 	AddLanguageResp            = problemset.AddLanguageResp
 	AddProblemReq              = problemset.AddProblemReq
 	AddProblemResp             = problemset.AddProblemResp
-	AddTagsReq                 = problemset.AddTagsReq
-	AddTagsResp                = problemset.AddTagsResp
+	AddTagReq                  = problemset.AddTagReq
+	AddTagResp                 = problemset.AddTagResp
 	DeleteExampleReq           = problemset.DeleteExampleReq
 	DeleteExampleResp          = problemset.DeleteExampleResp
 	DeleteHintReq              = problemset.DeleteHintReq
@@ -35,8 +35,8 @@ type (
 	DeleteLanguageResp         = problemset.DeleteLanguageResp
 	DeleteProblemReq           = problemset.DeleteProblemReq
 	DeleteProblemResp          = problemset.DeleteProblemResp
-	DeleteTagsReq              = problemset.DeleteTagsReq
-	DeleteTagsResp             = problemset.DeleteTagsResp
+	DeleteTagReq               = problemset.DeleteTagReq
+	DeleteTagResp              = problemset.DeleteTagResp
 	ExampleInfo                = problemset.ExampleInfo
 	GetAllTagsReq              = problemset.GetAllTagsReq
 	GetAllTagsResp             = problemset.GetAllTagsResp
@@ -71,8 +71,8 @@ type (
 	HintInfo                   = problemset.HintInfo
 	JudgeDataInfo              = problemset.JudgeDataInfo
 	LanguageInfo               = problemset.LanguageInfo
-	MustDeleteTagsReq          = problemset.MustDeleteTagsReq
-	MustDeleteTagsResp         = problemset.MustDeleteTagsResp
+	MustDeleteTagReq           = problemset.MustDeleteTagReq
+	MustDeleteTagResp          = problemset.MustDeleteTagResp
 	ProblemAddLanguagesReq     = problemset.ProblemAddLanguagesReq
 	ProblemAddLanguagesResp    = problemset.ProblemAddLanguagesResp
 	ProblemAddTagsReq          = problemset.ProblemAddTagsReq
@@ -99,8 +99,8 @@ type (
 	UpdateLanguageResp         = problemset.UpdateLanguageResp
 	UpdateProblemReq           = problemset.UpdateProblemReq
 	UpdateProblemResp          = problemset.UpdateProblemResp
-	UpdateTagsReq              = problemset.UpdateTagsReq
-	UpdateTagsResp             = problemset.UpdateTagsResp
+	UpdateTagReq               = problemset.UpdateTagReq
+	UpdateTagResp              = problemset.UpdateTagResp
 
 	Language interface {
 		// 添加语言

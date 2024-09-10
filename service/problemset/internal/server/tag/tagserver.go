@@ -23,27 +23,27 @@ func NewTagServer(svcCtx *svc.ServiceContext) *TagServer {
 }
 
 // 添加标签
-func (s *TagServer) AddTags(ctx context.Context, in *problemset.AddTagsReq) (*problemset.AddTagsResp, error) {
-	l := taglogic.NewAddTagsLogic(ctx, s.svcCtx)
-	return l.AddTags(in)
+func (s *TagServer) AddTag(ctx context.Context, in *problemset.AddTagReq) (*problemset.AddTagResp, error) {
+	l := taglogic.NewAddTagLogic(ctx, s.svcCtx)
+	return l.AddTag(in)
 }
 
 // 删除标签
-func (s *TagServer) DeleteTags(ctx context.Context, in *problemset.DeleteTagsReq) (*problemset.DeleteTagsResp, error) {
-	l := taglogic.NewDeleteTagsLogic(ctx, s.svcCtx)
-	return l.DeleteTags(in)
+func (s *TagServer) DeleteTag(ctx context.Context, in *problemset.DeleteTagReq) (*problemset.DeleteTagResp, error) {
+	l := taglogic.NewDeleteTagLogic(ctx, s.svcCtx)
+	return l.DeleteTag(in)
 }
 
 // 强行删除标签
-func (s *TagServer) MustDeleteTags(ctx context.Context, in *problemset.MustDeleteTagsReq) (*problemset.MustDeleteTagsResp, error) {
-	l := taglogic.NewMustDeleteTagsLogic(ctx, s.svcCtx)
-	return l.MustDeleteTags(in)
+func (s *TagServer) MustDeleteTag(ctx context.Context, in *problemset.MustDeleteTagReq) (*problemset.MustDeleteTagResp, error) {
+	l := taglogic.NewMustDeleteTagLogic(ctx, s.svcCtx)
+	return l.MustDeleteTag(in)
 }
 
 // 更新标签
-func (s *TagServer) UpdateTags(ctx context.Context, in *problemset.UpdateTagsReq) (*problemset.UpdateTagsResp, error) {
-	l := taglogic.NewUpdateTagsLogic(ctx, s.svcCtx)
-	return l.UpdateTags(in)
+func (s *TagServer) UpdateTag(ctx context.Context, in *problemset.UpdateTagReq) (*problemset.UpdateTagResp, error) {
+	l := taglogic.NewUpdateTagLogic(ctx, s.svcCtx)
+	return l.UpdateTag(in)
 }
 
 // 获取所有标签，可缓存

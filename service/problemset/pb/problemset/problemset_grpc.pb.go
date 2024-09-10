@@ -372,10 +372,10 @@ var Problem_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	Tag_AddTags_FullMethodName           = "/problemset.Tag/AddTags"
-	Tag_DeleteTags_FullMethodName        = "/problemset.Tag/DeleteTags"
-	Tag_MustDeleteTags_FullMethodName    = "/problemset.Tag/MustDeleteTags"
-	Tag_UpdateTags_FullMethodName        = "/problemset.Tag/UpdateTags"
+	Tag_AddTag_FullMethodName            = "/problemset.Tag/AddTag"
+	Tag_DeleteTag_FullMethodName         = "/problemset.Tag/DeleteTag"
+	Tag_MustDeleteTag_FullMethodName     = "/problemset.Tag/MustDeleteTag"
+	Tag_UpdateTag_FullMethodName         = "/problemset.Tag/UpdateTag"
 	Tag_GetAllTags_FullMethodName        = "/problemset.Tag/GetAllTags"
 	Tag_ProblemAddTags_FullMethodName    = "/problemset.Tag/ProblemAddTags"
 	Tag_ProblemDeleteTags_FullMethodName = "/problemset.Tag/ProblemDeleteTags"
@@ -389,13 +389,13 @@ const (
 // 标签
 type TagClient interface {
 	// 添加标签
-	AddTags(ctx context.Context, in *AddTagsReq, opts ...grpc.CallOption) (*AddTagsResp, error)
+	AddTag(ctx context.Context, in *AddTagReq, opts ...grpc.CallOption) (*AddTagResp, error)
 	// 删除标签
-	DeleteTags(ctx context.Context, in *DeleteTagsReq, opts ...grpc.CallOption) (*DeleteTagsResp, error)
+	DeleteTag(ctx context.Context, in *DeleteTagReq, opts ...grpc.CallOption) (*DeleteTagResp, error)
 	// 强行删除标签
-	MustDeleteTags(ctx context.Context, in *MustDeleteTagsReq, opts ...grpc.CallOption) (*MustDeleteTagsResp, error)
+	MustDeleteTag(ctx context.Context, in *MustDeleteTagReq, opts ...grpc.CallOption) (*MustDeleteTagResp, error)
 	// 更新标签
-	UpdateTags(ctx context.Context, in *UpdateTagsReq, opts ...grpc.CallOption) (*UpdateTagsResp, error)
+	UpdateTag(ctx context.Context, in *UpdateTagReq, opts ...grpc.CallOption) (*UpdateTagResp, error)
 	// 获取所有标签，可缓存
 	GetAllTags(ctx context.Context, in *GetAllTagsReq, opts ...grpc.CallOption) (*GetAllTagsResp, error)
 	// 给题目添加标签，最多5个
@@ -414,40 +414,40 @@ func NewTagClient(cc grpc.ClientConnInterface) TagClient {
 	return &tagClient{cc}
 }
 
-func (c *tagClient) AddTags(ctx context.Context, in *AddTagsReq, opts ...grpc.CallOption) (*AddTagsResp, error) {
+func (c *tagClient) AddTag(ctx context.Context, in *AddTagReq, opts ...grpc.CallOption) (*AddTagResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(AddTagsResp)
-	err := c.cc.Invoke(ctx, Tag_AddTags_FullMethodName, in, out, cOpts...)
+	out := new(AddTagResp)
+	err := c.cc.Invoke(ctx, Tag_AddTag_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *tagClient) DeleteTags(ctx context.Context, in *DeleteTagsReq, opts ...grpc.CallOption) (*DeleteTagsResp, error) {
+func (c *tagClient) DeleteTag(ctx context.Context, in *DeleteTagReq, opts ...grpc.CallOption) (*DeleteTagResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DeleteTagsResp)
-	err := c.cc.Invoke(ctx, Tag_DeleteTags_FullMethodName, in, out, cOpts...)
+	out := new(DeleteTagResp)
+	err := c.cc.Invoke(ctx, Tag_DeleteTag_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *tagClient) MustDeleteTags(ctx context.Context, in *MustDeleteTagsReq, opts ...grpc.CallOption) (*MustDeleteTagsResp, error) {
+func (c *tagClient) MustDeleteTag(ctx context.Context, in *MustDeleteTagReq, opts ...grpc.CallOption) (*MustDeleteTagResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(MustDeleteTagsResp)
-	err := c.cc.Invoke(ctx, Tag_MustDeleteTags_FullMethodName, in, out, cOpts...)
+	out := new(MustDeleteTagResp)
+	err := c.cc.Invoke(ctx, Tag_MustDeleteTag_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *tagClient) UpdateTags(ctx context.Context, in *UpdateTagsReq, opts ...grpc.CallOption) (*UpdateTagsResp, error) {
+func (c *tagClient) UpdateTag(ctx context.Context, in *UpdateTagReq, opts ...grpc.CallOption) (*UpdateTagResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateTagsResp)
-	err := c.cc.Invoke(ctx, Tag_UpdateTags_FullMethodName, in, out, cOpts...)
+	out := new(UpdateTagResp)
+	err := c.cc.Invoke(ctx, Tag_UpdateTag_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -501,13 +501,13 @@ func (c *tagClient) GetProblemTags(ctx context.Context, in *GetProblemTagsReq, o
 // 标签
 type TagServer interface {
 	// 添加标签
-	AddTags(context.Context, *AddTagsReq) (*AddTagsResp, error)
+	AddTag(context.Context, *AddTagReq) (*AddTagResp, error)
 	// 删除标签
-	DeleteTags(context.Context, *DeleteTagsReq) (*DeleteTagsResp, error)
+	DeleteTag(context.Context, *DeleteTagReq) (*DeleteTagResp, error)
 	// 强行删除标签
-	MustDeleteTags(context.Context, *MustDeleteTagsReq) (*MustDeleteTagsResp, error)
+	MustDeleteTag(context.Context, *MustDeleteTagReq) (*MustDeleteTagResp, error)
 	// 更新标签
-	UpdateTags(context.Context, *UpdateTagsReq) (*UpdateTagsResp, error)
+	UpdateTag(context.Context, *UpdateTagReq) (*UpdateTagResp, error)
 	// 获取所有标签，可缓存
 	GetAllTags(context.Context, *GetAllTagsReq) (*GetAllTagsResp, error)
 	// 给题目添加标签，最多5个
@@ -523,17 +523,17 @@ type TagServer interface {
 type UnimplementedTagServer struct {
 }
 
-func (UnimplementedTagServer) AddTags(context.Context, *AddTagsReq) (*AddTagsResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddTags not implemented")
+func (UnimplementedTagServer) AddTag(context.Context, *AddTagReq) (*AddTagResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddTag not implemented")
 }
-func (UnimplementedTagServer) DeleteTags(context.Context, *DeleteTagsReq) (*DeleteTagsResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteTags not implemented")
+func (UnimplementedTagServer) DeleteTag(context.Context, *DeleteTagReq) (*DeleteTagResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteTag not implemented")
 }
-func (UnimplementedTagServer) MustDeleteTags(context.Context, *MustDeleteTagsReq) (*MustDeleteTagsResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MustDeleteTags not implemented")
+func (UnimplementedTagServer) MustDeleteTag(context.Context, *MustDeleteTagReq) (*MustDeleteTagResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MustDeleteTag not implemented")
 }
-func (UnimplementedTagServer) UpdateTags(context.Context, *UpdateTagsReq) (*UpdateTagsResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateTags not implemented")
+func (UnimplementedTagServer) UpdateTag(context.Context, *UpdateTagReq) (*UpdateTagResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateTag not implemented")
 }
 func (UnimplementedTagServer) GetAllTags(context.Context, *GetAllTagsReq) (*GetAllTagsResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllTags not implemented")
@@ -560,74 +560,74 @@ func RegisterTagServer(s grpc.ServiceRegistrar, srv TagServer) {
 	s.RegisterService(&Tag_ServiceDesc, srv)
 }
 
-func _Tag_AddTags_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddTagsReq)
+func _Tag_AddTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddTagReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TagServer).AddTags(ctx, in)
+		return srv.(TagServer).AddTag(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Tag_AddTags_FullMethodName,
+		FullMethod: Tag_AddTag_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TagServer).AddTags(ctx, req.(*AddTagsReq))
+		return srv.(TagServer).AddTag(ctx, req.(*AddTagReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Tag_DeleteTags_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteTagsReq)
+func _Tag_DeleteTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteTagReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TagServer).DeleteTags(ctx, in)
+		return srv.(TagServer).DeleteTag(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Tag_DeleteTags_FullMethodName,
+		FullMethod: Tag_DeleteTag_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TagServer).DeleteTags(ctx, req.(*DeleteTagsReq))
+		return srv.(TagServer).DeleteTag(ctx, req.(*DeleteTagReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Tag_MustDeleteTags_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MustDeleteTagsReq)
+func _Tag_MustDeleteTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MustDeleteTagReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TagServer).MustDeleteTags(ctx, in)
+		return srv.(TagServer).MustDeleteTag(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Tag_MustDeleteTags_FullMethodName,
+		FullMethod: Tag_MustDeleteTag_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TagServer).MustDeleteTags(ctx, req.(*MustDeleteTagsReq))
+		return srv.(TagServer).MustDeleteTag(ctx, req.(*MustDeleteTagReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Tag_UpdateTags_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateTagsReq)
+func _Tag_UpdateTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateTagReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TagServer).UpdateTags(ctx, in)
+		return srv.(TagServer).UpdateTag(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Tag_UpdateTags_FullMethodName,
+		FullMethod: Tag_UpdateTag_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TagServer).UpdateTags(ctx, req.(*UpdateTagsReq))
+		return srv.(TagServer).UpdateTag(ctx, req.(*UpdateTagReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -712,20 +712,20 @@ var Tag_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*TagServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "AddTags",
-			Handler:    _Tag_AddTags_Handler,
+			MethodName: "AddTag",
+			Handler:    _Tag_AddTag_Handler,
 		},
 		{
-			MethodName: "DeleteTags",
-			Handler:    _Tag_DeleteTags_Handler,
+			MethodName: "DeleteTag",
+			Handler:    _Tag_DeleteTag_Handler,
 		},
 		{
-			MethodName: "MustDeleteTags",
-			Handler:    _Tag_MustDeleteTags_Handler,
+			MethodName: "MustDeleteTag",
+			Handler:    _Tag_MustDeleteTag_Handler,
 		},
 		{
-			MethodName: "UpdateTags",
-			Handler:    _Tag_UpdateTags_Handler,
+			MethodName: "UpdateTag",
+			Handler:    _Tag_UpdateTag_Handler,
 		},
 		{
 			MethodName: "GetAllTags",

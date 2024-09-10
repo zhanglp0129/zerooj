@@ -9,14 +9,14 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type UpdateTagsLogic struct {
+type UpdateTagLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewUpdateTagsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UpdateTagsLogic {
-	return &UpdateTagsLogic{
+func NewUpdateTagLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UpdateTagLogic {
+	return &UpdateTagLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
@@ -24,8 +24,8 @@ func NewUpdateTagsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Update
 }
 
 // 更新标签
-func (l *UpdateTagsLogic) UpdateTags(in *problemset.UpdateTagsReq) (*problemset.UpdateTagsResp, error) {
+func (l *UpdateTagLogic) UpdateTag(in *problemset.UpdateTagReq) (*problemset.UpdateTagResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &problemset.UpdateTagsResp{}, nil
+	return &problemset.UpdateTagResp{}, nil
 }

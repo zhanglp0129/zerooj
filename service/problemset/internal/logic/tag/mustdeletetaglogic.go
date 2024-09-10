@@ -9,23 +9,23 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type DeleteTagsLogic struct {
+type MustDeleteTagLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewDeleteTagsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DeleteTagsLogic {
-	return &DeleteTagsLogic{
+func NewMustDeleteTagLogic(ctx context.Context, svcCtx *svc.ServiceContext) *MustDeleteTagLogic {
+	return &MustDeleteTagLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-// 删除标签
-func (l *DeleteTagsLogic) DeleteTags(in *problemset.DeleteTagsReq) (*problemset.DeleteTagsResp, error) {
+// 强行删除标签
+func (l *MustDeleteTagLogic) MustDeleteTag(in *problemset.MustDeleteTagReq) (*problemset.MustDeleteTagResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &problemset.DeleteTagsResp{}, nil
+	return &problemset.MustDeleteTagResp{}, nil
 }
