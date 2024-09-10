@@ -13,12 +13,16 @@ import (
 )
 
 type (
-	JudgeReq  = judge.JudgeReq
-	JudgeResp = judge.JudgeResp
+	JudgeData        = judge.JudgeData
+	JudgeReq         = judge.JudgeReq
+	JudgeResult      = judge.JudgeResult
+	JudgeWithDataReq = judge.JudgeWithDataReq
 
 	Judge interface {
-		// 测评
+		// 测评，调用题库服务获取测评数据，并缓存
 		Judge(ctx context.Context, opts ...grpc.CallOption) (judge.Judge_JudgeClient, error)
+		// 测评，并提供测评数据
+		JudgeWithData(ctx context.Context, opts ...grpc.CallOption) (judge.Judge_JudgeWithDataClient, error)
 	}
 
 	defaultJudge struct {
@@ -32,8 +36,14 @@ func NewJudge(cli zrpc.Client) Judge {
 	}
 }
 
-// 测评
+// 测评，调用题库服务获取测评数据，并缓存
 func (m *defaultJudge) Judge(ctx context.Context, opts ...grpc.CallOption) (judge.Judge_JudgeClient, error) {
 	client := judge.NewJudgeClient(m.cli.Conn())
 	return client.Judge(ctx, opts...)
+}
+
+// 测评，并提供测评数据
+func (m *defaultJudge) JudgeWithData(ctx context.Context, opts ...grpc.CallOption) (judge.Judge_JudgeWithDataClient, error) {
+	client := judge.NewJudgeClient(m.cli.Conn())
+	return client.JudgeWithData(ctx, opts...)
 }

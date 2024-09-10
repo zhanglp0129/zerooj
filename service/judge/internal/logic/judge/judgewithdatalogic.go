@@ -9,22 +9,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type JudgeLogic struct {
+type JudgeWithDataLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewJudgeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *JudgeLogic {
-	return &JudgeLogic{
+func NewJudgeWithDataLogic(ctx context.Context, svcCtx *svc.ServiceContext) *JudgeWithDataLogic {
+	return &JudgeWithDataLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-// 测评，调用题库服务获取测评数据，并缓存
-func (l *JudgeLogic) Judge(stream judge.Judge_JudgeServer) error {
+// 测评，并提供测评数据
+func (l *JudgeWithDataLogic) JudgeWithData(stream judge.Judge_JudgeWithDataServer) error {
 	// todo: add your logic here and delete this line
 
 	return nil

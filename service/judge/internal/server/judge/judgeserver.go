@@ -20,8 +20,14 @@ func NewJudgeServer(svcCtx *svc.ServiceContext) *JudgeServer {
 	}
 }
 
-// 测评
+// 测评，调用题库服务获取测评数据，并缓存
 func (s *JudgeServer) Judge(stream judge.Judge_JudgeServer) error {
 	l := judgelogic.NewJudgeLogic(stream.Context(), s.svcCtx)
 	return l.Judge(stream)
+}
+
+// 测评，并提供测评数据
+func (s *JudgeServer) JudgeWithData(stream judge.Judge_JudgeWithDataServer) error {
+	l := judgelogic.NewJudgeWithDataLogic(stream.Context(), s.svcCtx)
+	return l.JudgeWithData(stream)
 }

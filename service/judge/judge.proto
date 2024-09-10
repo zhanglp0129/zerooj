@@ -5,14 +5,32 @@ package judge;
 option go_package = "./judge";
 
 service Judge {
-  // 测评
-  rpc Judge(stream JudgeReq) returns (stream JudgeResp);
+  // 测评，调用题库服务获取测评数据，并缓存
+  rpc Judge(stream JudgeReq) returns (JudgeResult);
+  // 测评，并提供测评数据
+  rpc JudgeWithData(stream JudgeWithDataReq) returns (JudgeResult);
 }
 message JudgeReq {
   int64 problemId = 1;
-  int64 languageId = 2;
-  string code = 3;
+  int64 timeLimit = 2;
+  int64 memoryLimit = 3;
+  string code = 4;
 }
-message JudgeResp {
-  uint32 submitResult = 1;
+message JudgeResult {
+  // 测评结果
+  uint32 result = 1;
+  // 运行时间
+  int64 runTime = 2;
+  // 消耗内存
+  int64 memoryConsumption = 3;
+}
+message JudgeData {
+  string input = 1;
+  string output = 2;
+}
+message JudgeWithDataReq {
+  repeated JudgeData judgeData = 4;
+  int64 timeLimit = 1;
+  int64 memoryLimit = 2;
+  string code = 3;
 }

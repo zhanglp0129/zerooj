@@ -9,5 +9,27 @@
 5. 测评结束后，测评服务返回测评结果；网关服务将结果写入数据库，并发送到前端
 6. 结束测评，关闭长连接
 
+## 服务注册etcd的key命名
+- 一个测评服务进程只能处理一个语言。通过etcd的key来指定处理的语言，并实现负载均衡
+- 一台服务器或docker容器内可以启动多个测评服务进程。语言的版本包含在语言名称中
+- key命名格式：judge.rpc.语言名称，不忽略大小写
+
+|    语言名称    |         key          |
+|:----------:|:--------------------:|
+|    C++     |    judge.rpc.C++     |
+|     C      |     judge.rpc.C      |
+|     C#     |     judge.rpc.C#     |
+|    Java    |    judge.rpc.Java    |
+|  Python2   |  judge.rpc.Python2   |
+|  Python3   |  judge.rpc.Python3   |
+| JavaScript | judge.rpc.JavaScript |
+| TypeScript | judge.rpc.TypeScript |
+|     Go     |     judge.rpc.Go     |
+|    Rust    |    judge.rpc.Rust    |
+|    Ruby    |    judge.rpc.Ruby    |
+|    PHP     |    judge.rpc.PHP     |
+|   Swift    |   judge.rpc.Swift    |
+
+
 ## 注意
 - 当调用测评服务返回error时，测评结果改为系统错误

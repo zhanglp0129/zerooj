@@ -19,15 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	Judge_Judge_FullMethodName = "/judge.Judge/Judge"
+	Judge_Judge_FullMethodName         = "/judge.Judge/Judge"
+	Judge_JudgeWithData_FullMethodName = "/judge.Judge/JudgeWithData"
 )
 
 // JudgeClient is the client API for Judge service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type JudgeClient interface {
-	// 测评
+	// 测评，调用题库服务获取测评数据，并缓存
 	Judge(ctx context.Context, opts ...grpc.CallOption) (Judge_JudgeClient, error)
+	// 测评，并提供测评数据
+	JudgeWithData(ctx context.Context, opts ...grpc.CallOption) (Judge_JudgeWithDataClient, error)
 }
 
 type judgeClient struct {
@@ -50,7 +53,7 @@ func (c *judgeClient) Judge(ctx context.Context, opts ...grpc.CallOption) (Judge
 
 type Judge_JudgeClient interface {
 	Send(*JudgeReq) error
-	Recv() (*JudgeResp, error)
+	CloseAndRecv() (*JudgeResult, error)
 	grpc.ClientStream
 }
 
@@ -62,8 +65,46 @@ func (x *judgeJudgeClient) Send(m *JudgeReq) error {
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *judgeJudgeClient) Recv() (*JudgeResp, error) {
-	m := new(JudgeResp)
+func (x *judgeJudgeClient) CloseAndRecv() (*JudgeResult, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(JudgeResult)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *judgeClient) JudgeWithData(ctx context.Context, opts ...grpc.CallOption) (Judge_JudgeWithDataClient, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &Judge_ServiceDesc.Streams[1], Judge_JudgeWithData_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &judgeJudgeWithDataClient{ClientStream: stream}
+	return x, nil
+}
+
+type Judge_JudgeWithDataClient interface {
+	Send(*JudgeWithDataReq) error
+	CloseAndRecv() (*JudgeResult, error)
+	grpc.ClientStream
+}
+
+type judgeJudgeWithDataClient struct {
+	grpc.ClientStream
+}
+
+func (x *judgeJudgeWithDataClient) Send(m *JudgeWithDataReq) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *judgeJudgeWithDataClient) CloseAndRecv() (*JudgeResult, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(JudgeResult)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -74,8 +115,10 @@ func (x *judgeJudgeClient) Recv() (*JudgeResp, error) {
 // All implementations must embed UnimplementedJudgeServer
 // for forward compatibility
 type JudgeServer interface {
-	// 测评
+	// 测评，调用题库服务获取测评数据，并缓存
 	Judge(Judge_JudgeServer) error
+	// 测评，并提供测评数据
+	JudgeWithData(Judge_JudgeWithDataServer) error
 	mustEmbedUnimplementedJudgeServer()
 }
 
@@ -85,6 +128,9 @@ type UnimplementedJudgeServer struct {
 
 func (UnimplementedJudgeServer) Judge(Judge_JudgeServer) error {
 	return status.Errorf(codes.Unimplemented, "method Judge not implemented")
+}
+func (UnimplementedJudgeServer) JudgeWithData(Judge_JudgeWithDataServer) error {
+	return status.Errorf(codes.Unimplemented, "method JudgeWithData not implemented")
 }
 func (UnimplementedJudgeServer) mustEmbedUnimplementedJudgeServer() {}
 
@@ -104,7 +150,7 @@ func _Judge_Judge_Handler(srv interface{}, stream grpc.ServerStream) error {
 }
 
 type Judge_JudgeServer interface {
-	Send(*JudgeResp) error
+	SendAndClose(*JudgeResult) error
 	Recv() (*JudgeReq, error)
 	grpc.ServerStream
 }
@@ -113,12 +159,38 @@ type judgeJudgeServer struct {
 	grpc.ServerStream
 }
 
-func (x *judgeJudgeServer) Send(m *JudgeResp) error {
+func (x *judgeJudgeServer) SendAndClose(m *JudgeResult) error {
 	return x.ServerStream.SendMsg(m)
 }
 
 func (x *judgeJudgeServer) Recv() (*JudgeReq, error) {
 	m := new(JudgeReq)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func _Judge_JudgeWithData_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(JudgeServer).JudgeWithData(&judgeJudgeWithDataServer{ServerStream: stream})
+}
+
+type Judge_JudgeWithDataServer interface {
+	SendAndClose(*JudgeResult) error
+	Recv() (*JudgeWithDataReq, error)
+	grpc.ServerStream
+}
+
+type judgeJudgeWithDataServer struct {
+	grpc.ServerStream
+}
+
+func (x *judgeJudgeWithDataServer) SendAndClose(m *JudgeResult) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *judgeJudgeWithDataServer) Recv() (*JudgeWithDataReq, error) {
+	m := new(JudgeWithDataReq)
 	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -136,7 +208,11 @@ var Judge_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "Judge",
 			Handler:       _Judge_Judge_Handler,
-			ServerStreams: true,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "JudgeWithData",
+			Handler:       _Judge_JudgeWithData_Handler,
 			ClientStreams: true,
 		},
 	},
